@@ -47,9 +47,12 @@ public class Main_menu {
         gbc.gridy++;
         main_menu.add(exitButton, gbc);
 
+        SplashScreen splash = new SplashScreen();
+
         // Add panels to the card panel
         CardPanel.add(main_menu, "Main Menu");
         CardPanel.add(game, "Tetris Game");
+        CardPanel.add(splash, "Splash" );
 
         // Add action listener to the play button
         playButton.addActionListener(new ActionListener() {
@@ -62,19 +65,42 @@ public class Main_menu {
         exitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.exit(0);
+                JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(exitButton);
+                parentFrame.dispose();
             }
         });
+        cardLayout.show(CardPanel, "Splash");
+        Timer timer = new Timer(500, new ActionListener() {
+            int progress = 0;
 
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                progress++;
+                splash.pbar.setValue(progress);
 
+                if(progress>=100){
+                    ((Timer) e.getSource()).stop();
+                    cardLayout.show(CardPanel, "Main Menu");
+                }
+            }
+        });
+        timer.start();
     }
+
+    private void buttonConfig(JButton btn){
+        btn.setPreferredSize(new Dimension(200, 50));
+        btn.setBackground(Color.LIGHT_GRAY);
+        btn.setForeground(Color.BLACK);
+        btn.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        btn.setFocusPainted(false);
+        btn.setBorderPainted(false);
+    };
+
 
     private JButton createButton(String text) {
         JButton button = new JButton(text);
-        button.setPreferredSize(new Dimension(200, 50));
-        button.setBackground(Color.LIGHT_GRAY);
-        button.setForeground(Color.BLACK);
-        button.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        buttonConfig(button);
+
 
         // Add mouse listener for hover effect
         button.addMouseListener(new MouseAdapter() {
@@ -85,7 +111,7 @@ public class Main_menu {
 
             @Override
             public void mouseExited(MouseEvent e) {
-                button.setBackground(Color.LIGHT_GRAY);
+                buttonConfig(button);
             }
         });
 
