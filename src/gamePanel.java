@@ -11,7 +11,7 @@ public class gamePanel extends JPanel {
         super.paintComponent(g);
 
     }
-
+    
     // Constructor for the gamePanel class
     public gamePanel() {
         // Set the layout for the game panel

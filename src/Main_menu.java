@@ -48,10 +48,10 @@ public class Main_menu {
         main_menu.add(exitButton, gbc);
 
         SplashScreen splash = new SplashScreen();
-
+        GameForm game1 = new GameForm();
         // Add panels to the card panel
         CardPanel.add(main_menu, "Main Menu");
-        CardPanel.add(game, "Tetris Game");
+        CardPanel.add(game1, "Tetris Game");
         CardPanel.add(splash, "Splash" );
 
         // Add action listener to the play button
@@ -70,7 +70,7 @@ public class Main_menu {
             }
         });
         cardLayout.show(CardPanel, "Splash");
-        Timer timer = new Timer(100, new ActionListener() {
+        Timer timer = new Timer(50, new ActionListener() {
             int progress = 0;
 
             @Override
