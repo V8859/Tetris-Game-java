@@ -31,8 +31,7 @@ public class Main {
         panel.add(lineDrawing, gbc); // Add LineDrawing to panel with constraints
 
         frame.getContentPane().add(panel);
-
-        frame.setSize(1920, 0909);
+        frame.setSize(1920, 4040);
         frame.setVisible(true);
     }
 }
