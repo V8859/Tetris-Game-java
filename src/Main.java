@@ -37,7 +37,7 @@ public class Main {
 
         frame.getContentPane().add(panel);
 
-        frame.setSize(1920, 1080);
+        frame.setSize(1920, 1090);
         frame.setVisible(true);
     }
 }
