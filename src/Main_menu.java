@@ -13,7 +13,8 @@ public class Main_menu {
         JButton Play = new JButton();
         JButton Configuration = new JButton();
         JButton Highscores  = new JButton();
-        JButton Exit =
+        JButton Exit = new JButton();
+
 
     }
 
