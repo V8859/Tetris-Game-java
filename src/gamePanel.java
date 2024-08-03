@@ -3,6 +3,15 @@ import java.awt.*;
 
 public class gamePanel extends JPanel {
 
+    // Override the paintComponent method if needed
+    @Override
+    protected void paintComponent(Graphics g) {
+        g.fillRect(0,0,100,50);
+
+        super.paintComponent(g);
+
+    }
+
     // Constructor for the gamePanel class
     public gamePanel() {
         // Set the layout for the game panel
@@ -11,12 +20,5 @@ public class gamePanel extends JPanel {
         // Create and add the LineDrawing component
         LineDrawing board = new LineDrawing();
         add(board, BorderLayout.CENTER);
-    }
-
-    // Override the paintComponent method if needed
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        // Custom drawing code here
     }
 }
