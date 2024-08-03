@@ -70,7 +70,7 @@ public class Main_menu {
             }
         });
         cardLayout.show(CardPanel, "Splash");
-        Timer timer = new Timer(500, new ActionListener() {
+        Timer timer = new Timer(100, new ActionListener() {
             int progress = 0;
 
             @Override
