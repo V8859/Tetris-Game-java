@@ -32,7 +32,7 @@ public class Main {
 
         frame.getContentPane().add(panel);
 
-        frame.setSize(1920, 1060);
+        frame.setSize(1920, 1000);
         frame.setVisible(true);
     }
 }
