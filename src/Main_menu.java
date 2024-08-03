@@ -1,14 +1,23 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-
 public class Main_menu {
     public JPanel main_menu;
+    public JPanel CardPanel;
+    public CardLayout cardLayout;
 
     // Constructor for the main menu class
     public Main_menu() {
+        cardLayout = new CardLayout();
+        CardPanel = new JPanel(cardLayout);
+
+        // Create the game panel
+        gamePanel game = new gamePanel();
+
         // Set the default properties for all buttons
         UIManager.put("Button.font", new Font("Arial", Font.BOLD, 14));
         UIManager.put("Button.background", Color.LIGHT_GRAY);
@@ -37,6 +46,27 @@ public class Main_menu {
 
         gbc.gridy++;
         main_menu.add(exitButton, gbc);
+
+        // Add panels to the card panel
+        CardPanel.add(main_menu, "Main Menu");
+        CardPanel.add(game, "Tetris Game");
+
+        // Add action listener to the play button
+        playButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cardLayout.show(CardPanel, "Tetris Game");
+            }
+        });
+
+        exitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
+        });
+
+
     }
 
     private JButton createButton(String text) {

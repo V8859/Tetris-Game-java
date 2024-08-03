@@ -8,7 +8,7 @@ public class main_menu_test {
 
                 Main_menu r = new Main_menu();
 
-                frame.add(r.main_menu);
+                frame.add(r.CardPanel);
 
                 JPanel panel = new JPanel(new GridBagLayout()); // Use GridBagLayout
 
