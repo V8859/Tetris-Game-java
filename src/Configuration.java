@@ -2,12 +2,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 public class Configuration extends JPanel {
-    private int H; // Height of game area
-    private int L; // Level of the game
-    private JLabel cWidth;
-
     public Configuration() {
         this.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
@@ -80,10 +79,37 @@ public class Configuration extends JPanel {
     }
 
     public int getH() {
-        return H;
+        JPanel heightSliderPanel = (JPanel) this.getComponent(1);
+        JSlider heightSlider = (JSlider) heightSliderPanel.getComponent(2);
+        return heightSlider.getValue();
     }
 
-    public int getL() {
-        return L;
+    public int getLvl() {
+        JPanel GameLevel = (JPanel) this.getComponent(2);
+        JSlider GameSlider = (JSlider) GameLevel.getComponent(2);
+        return GameSlider.getValue();
     }
+
+    public boolean getMusicState(){
+        JPanel MusicStatePanel = (JPanel) this.getComponent(3);
+        JCheckBox MusicState = (JCheckBox) MusicStatePanel.getComponent(1);
+        return MusicState.isSelected();
+    }
+    public boolean getSoundState(){
+        JPanel SoundStatePanel = (JPanel) this.getComponent(4);
+        JCheckBox SoundState = (JCheckBox) SoundStatePanel.getComponent(1);
+        return SoundState.isSelected();
+    }
+    public boolean getAIState(){
+        JPanel AIStatePanel = (JPanel) this.getComponent(5);
+        JCheckBox AIState = (JCheckBox) AIStatePanel.getComponent(1);
+        return AIState.isSelected();
+    }
+
+    public boolean getExtendModeState(){
+        JPanel ExtendModeStatePanel = (JPanel) this.getComponent(5);
+        JCheckBox ExtendModeState = (JCheckBox) ExtendModeStatePanel.getComponent(1);
+        return ExtendModeState.isSelected();
+    }
+
 }

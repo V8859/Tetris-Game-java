@@ -48,19 +48,25 @@ public class Main_menu {
         main_menu.add(exitButton, gbc);
 
         SplashScreen splash = new SplashScreen();
-        GameForm game1 = new GameForm();
         Configuration gameConfig = new Configuration();
         // Add panels to the card panel
         CardPanel.add(main_menu, "Main Menu");
-        CardPanel.add(game1, "Tetris Game");
         CardPanel.add(splash, "Splash" );
         CardPanel.add(gameConfig,"Config");
         // Add action listener to the play button
         playButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                GameForm game1 = new GameForm();
+                CardPanel.add(game1, "Tetris Game");
                 cardLayout.show(CardPanel, "Tetris Game");
                 System.out.println(gameConfig.getW());
+                System.out.println(gameConfig.getH());
+                System.out.println(gameConfig.getLvl());
+                System.out.println(gameConfig.getMusicState());
+                System.out.println(gameConfig.getSoundState());
+                System.out.println(gameConfig.getAIState());
+                System.out.println(gameConfig.getExtendModeState());
             }
         });
 
