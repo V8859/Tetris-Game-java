@@ -28,10 +28,10 @@ public class Main_menu {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 0, 10, 0); // Add vertical gap between buttons
 
-        JButton playButton = createButton("Play");
-        JButton configButton = createButton("Configuration");
-        JButton highscoresButton = createButton("Highscores");
-        JButton exitButton = createButton("Exit");
+        JButton playButton = UtilityA.createButton("Play");
+        JButton configButton = UtilityA.createButton("Configuration");
+        JButton highscoresButton = UtilityA.createButton("Highscores");
+        JButton exitButton = UtilityA.createButton("Exit");
 
         // Add buttons to the panel
         gbc.gridx = 0;
@@ -49,19 +49,29 @@ public class Main_menu {
 
         SplashScreen splash = new SplashScreen();
         GameForm game1 = new GameForm();
+        Configuration gameConfig = new Configuration();
         // Add panels to the card panel
         CardPanel.add(main_menu, "Main Menu");
         CardPanel.add(game1, "Tetris Game");
         CardPanel.add(splash, "Splash" );
-
+        CardPanel.add(gameConfig,"Config");
         // Add action listener to the play button
         playButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 cardLayout.show(CardPanel, "Tetris Game");
+                System.out.println(gameConfig.getW());
             }
         });
 
+
+        configButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cardLayout.show(CardPanel, "Config");
+
+            }
+        });
         exitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -70,7 +80,7 @@ public class Main_menu {
             }
         });
         cardLayout.show(CardPanel, "Splash");
-        Timer timer = new Timer(50, new ActionListener() {
+        Timer timer = new Timer(5, new ActionListener() {
             int progress = 0;
 
             @Override
@@ -85,36 +95,5 @@ public class Main_menu {
             }
         });
         timer.start();
-    }
-
-    private void buttonConfig(JButton btn){
-        btn.setPreferredSize(new Dimension(200, 50));
-        btn.setBackground(Color.LIGHT_GRAY);
-        btn.setForeground(Color.BLACK);
-        btn.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        btn.setFocusPainted(false);
-        btn.setBorderPainted(false);
-    };
-
-
-    private JButton createButton(String text) {
-        JButton button = new JButton(text);
-        buttonConfig(button);
-
-
-        // Add mouse listener for hover effect
-        button.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                button.setBackground(Color.GRAY);
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                buttonConfig(button);
-            }
-        });
-
-        return button;
     }
 }
