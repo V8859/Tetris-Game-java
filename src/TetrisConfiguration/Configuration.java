@@ -1,10 +1,11 @@
+package TetrisConfiguration;
+
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.jar.JarEntry;
 
 public class Configuration extends JPanel {
     public Configuration() {
@@ -13,30 +14,37 @@ public class Configuration extends JPanel {
         c.insets = new Insets(10, 10, 10, 10); // Add some padding around components
         c.gridx = 0;
         c.gridy = 0;
-        c.anchor = GridBagConstraints.WEST;
+        c.anchor = GridBagConstraints.CENTER;
+        JLabel ConfigTitle = new JLabel("Configuration");
+        ConfigTitle.setFont(new Font("Verdana", Font.BOLD, 24));
+        ConfigTitle.setHorizontalAlignment(SwingConstants.CENTER);
+        this.add(ConfigTitle, c);
 
+        c.gridx = 0;
+        c.gridy = 1;
+        c.anchor = GridBagConstraints.WEST;
         JPanel widthSliderPanel = UtilityA.createCustomSlider("Field Width(No. of Cells):    ", 5, 15, 5);
         this.add(widthSliderPanel, c);
 
         c.gridx=0;
-        c.gridy=1;
+        c.gridy=2;
         c.anchor = GridBagConstraints.WEST;
         JPanel heightSliderPanel = UtilityA.createCustomSlider("Field Height (No. of cells):  ", 15,30,15);
         this.add(heightSliderPanel,c);
 
         c.gridx=0;
-        c.gridy=2;
+        c.gridy=3;
 //        c.anchor=GridBagConstraints.WEST;
         JPanel GameLevel = UtilityA.createCustomSlider("Game  Level:                         ", 1,10,1);
         this.add(GameLevel,c);
 
         c.gridx = 0;
-        c.gridy = 3;
+        c.gridy = 4;
         JPanel music = UtilityA.createOptions("Music(On/Off): ");
         this.add(music, c);
 
         c.gridx = 0;
-        c.gridy = 4;
+        c.gridy = 5;
         JPanel soundEffect = UtilityA.createOptions("Sound(On/Off):");
         this.add(soundEffect, c);
 
@@ -44,20 +52,20 @@ public class Configuration extends JPanel {
 
 
         c.gridx = 0;
-        c.gridy = 5;
+        c.gridy = 6;
         JPanel AiPlay = UtilityA.createOptions("AI Play (On/Off):");
         this.add(AiPlay, c);
 
 
 
         c.gridx = 0;
-        c.gridy = 6;
+        c.gridy = 7;
         JPanel extendMode = UtilityA.createOptions("Extend Mode(On/Off):");
         this.add(extendMode, c);
 
 
         c.gridx = 0;
-        c.gridy = 7;
+        c.gridy = 8;
         c.gridwidth = 2; // Span across 2 columns
         c.fill = GridBagConstraints.HORIZONTAL;
 

@@ -1,6 +1,9 @@
+package TetrisConfiguration;
+
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.plaf.FontUIResource;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -14,6 +17,7 @@ public class UtilityA {
         btn.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
         btn.setFocusPainted(false);
         btn.setBorderPainted(false);
+        btn.setFont(new Font("Verdana", Font.BOLD, 13));
     }
 
     public static JButton createButton(String text) {

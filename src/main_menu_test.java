@@ -3,7 +3,7 @@ import java.awt.*;
 
 public class main_menu_test {
     public static void main(String[] args) {
-                JFrame frame = new JFrame("My first JFrame");
+                JFrame frame = new JFrame("Tetris");
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
                 Main_menu r = new Main_menu();
