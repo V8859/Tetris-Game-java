@@ -58,8 +58,7 @@ public class Main_menu {
         playButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                GameForm game1 = new GameForm();
-                CardPanel.add(game1, "Tetris Game");
+                CardPanel.add(game, "Tetris Game");
                 cardLayout.show(CardPanel, "Tetris Game");
                 System.out.println(gameConfig.getW());
                 System.out.println(gameConfig.getH());

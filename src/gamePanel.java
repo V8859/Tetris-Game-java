@@ -1,24 +1,33 @@
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JPanel;
+import java.awt.Graphics;
+import java.awt.Color;
+import java.awt.Font;
 
-public class gamePanel extends JPanel {
+public class gamePanel extends JPanel{
 
-    // Override the paintComponent method if needed
+    // Constructor
+    public gamePanel() {
+        // Set up the panel's properties, such as size, background color, etc.
+        setBackground(Color.BLACK);  // Example: setting the background color to black
+        setFocusable(true);           // Ensures the panel can receive keyboard inputs
+    }
+
+    // Override paintComponent method
     @Override
     protected void paintComponent(Graphics g) {
-        g.fillRect(0,0,100,50);
-
         super.paintComponent(g);
+        // Define the size of the grid cells
+        int cellSize = 30;  // Each cell is 30x30 pixels
+        int boardWidth = 10;  // Number of columns
+        int boardHeight = 20; // Number of rows
 
-    }
-    
-    // Constructor for the gamePanel class
-    public gamePanel() {
-        // Set the layout for the game panel
-        setLayout(new BorderLayout());
-
-        // Create and add the LineDrawing component
-        LineDrawing board = new LineDrawing();
-        add(board, BorderLayout.CENTER);
+        // Draw the grid
+        g.setColor(Color.GRAY);  // Set color for grid lines
+        for (int x = 0; x <= boardWidth; x++) {
+            g.drawLine(x * cellSize, 0, x * cellSize, boardHeight * cellSize); // Vertical lines
+        }
+        for (int y = 0; y <= boardHeight; y++) {
+            g.drawLine(0, y * cellSize, boardWidth * cellSize, y * cellSize); // Horizontal lines
+        }
     }
 }
