@@ -81,44 +81,43 @@ public class Configuration extends JPanel {
     }
 
     public int getW() {
-        JPanel widthSliderPanel = (JPanel) this.getComponent(0);
+        JPanel widthSliderPanel = (JPanel) this.getComponent(1);
         JSlider widthSlider = (JSlider) widthSliderPanel.getComponent(2);
         return widthSlider.getValue();
     }
 
     public int getH() {
-        JPanel heightSliderPanel = (JPanel) this.getComponent(1);
+        JPanel heightSliderPanel = (JPanel) this.getComponent(2);
         JSlider heightSlider = (JSlider) heightSliderPanel.getComponent(2);
         return heightSlider.getValue();
     }
 
     public int getLvl() {
-        JPanel GameLevel = (JPanel) this.getComponent(2);
+        JPanel GameLevel = (JPanel) this.getComponent(3);
         JSlider GameSlider = (JSlider) GameLevel.getComponent(2);
         return GameSlider.getValue();
     }
 
     public boolean getMusicState(){
-        JPanel MusicStatePanel = (JPanel) this.getComponent(3);
+        JPanel MusicStatePanel = (JPanel) this.getComponent(4);
         JCheckBox MusicState = (JCheckBox) MusicStatePanel.getComponent(1);
         return MusicState.isSelected();
     }
     public boolean getSoundState(){
-        JPanel SoundStatePanel = (JPanel) this.getComponent(4);
+        JPanel SoundStatePanel = (JPanel) this.getComponent(5);
         JCheckBox SoundState = (JCheckBox) SoundStatePanel.getComponent(1);
         return SoundState.isSelected();
     }
     public boolean getAIState(){
-        JPanel AIStatePanel = (JPanel) this.getComponent(5);
+        JPanel AIStatePanel = (JPanel) this.getComponent(6);
         JCheckBox AIState = (JCheckBox) AIStatePanel.getComponent(1);
         return AIState.isSelected();
     }
 
     public boolean getExtendModeState(){
-        JPanel ExtendModeStatePanel = (JPanel) this.getComponent(5);
+        JPanel ExtendModeStatePanel = (JPanel) this.getComponent(7);
         JCheckBox ExtendModeState = (JCheckBox) ExtendModeStatePanel.getComponent(1);
         return ExtendModeState.isSelected();
     }
-
 }
 //complete

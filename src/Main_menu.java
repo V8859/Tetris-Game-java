@@ -17,7 +17,6 @@ public class Main_menu {
         CardPanel = new JPanel(cardLayout);
 
         // Create the game panel
-        gamePanel game = new gamePanel(25, 25);
 
         // Set the default properties for all buttons
         UIManager.put("Button.font", new Font("Arial", Font.BOLD, 14));
@@ -58,6 +57,7 @@ public class Main_menu {
         playButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                gamePanel game = new gamePanel(gameConfig.getW(), gameConfig.getH());
                 CardPanel.add(game, "Tetris Game");
                 cardLayout.show(CardPanel, "Tetris Game");
                 System.out.println(gameConfig.getW());
