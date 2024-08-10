@@ -6,7 +6,7 @@ import java.awt.Font;
 public class gamePanel extends JPanel{
     private int boardWidth;
     private int boardHeight;
-
+    private int gridCellSize;
 
     // Constructor
     public gamePanel(int width, int height) {
@@ -15,6 +15,8 @@ public class gamePanel extends JPanel{
         setFocusable(true); // Ensures the panel can receive keyboard inputs
         this.boardWidth = width;
         this.boardHeight = height;
+        this.gridCellSize = 25;
+
     }
 
     // Override paintComponent method
@@ -25,25 +27,27 @@ public class gamePanel extends JPanel{
         drawScore(g);
         // Example: Drawing a sample piece at a fixed position
         int[][] currentPiece = {
-                {1, 1},
-                {1, 1}
+                {1, 0, 1},
+                {1, 1, 1}
         };
-        int pieceX = 4;  // Position on the board (column)
+        int pieceX = 2;  // Position on the board (column)
         int pieceY = 0;  // Position on the board (row)
 
         drawPiece(g, currentPiece, pieceX, pieceY);
     }
 
     private void drawBoard(Graphics g) {
-        int cellSize = 30;  // Each cell is 30x30 pixels
+        int xOffset = (getWidth() - boardWidth * gridCellSize) / 2;
+        int yOffset = 50;
 
         // Draw the grid
         g.setColor(Color.GRAY);  // Set color for grid lines
+        g.setColor(Color.GRAY);  // Set color for grid lines
         for (int x = 0; x <= boardWidth; x++) {
-            g.drawLine(x * cellSize, 0, x * cellSize, boardHeight * cellSize); // Vertical lines
+            g.drawLine(xOffset + x * gridCellSize, yOffset, xOffset + x * gridCellSize, yOffset + boardHeight * gridCellSize);
         }
         for (int y = 0; y <= boardHeight; y++) {
-            g.drawLine(0, y * cellSize, boardWidth * cellSize, y * cellSize); // Horizontal lines
+            g.drawLine(xOffset, yOffset + y * gridCellSize, xOffset + boardWidth * gridCellSize, yOffset + y * gridCellSize);
         }
     }
 
@@ -56,13 +60,21 @@ public class gamePanel extends JPanel{
     }
 
     private void drawPiece(Graphics g, int[][] piece, int x, int y) {
+        int xOffset = (getWidth() - boardWidth * gridCellSize) / 2;
+        int yOffset = 50;
+
         g.setColor(Color.RED);  // Set the color for the piece
-        int cellSize = 30;  // Same size as defined earlier
+        int margin = 1;  // Margin inside each cell to avoid overlap
 
         for (int i = 0; i < piece.length; i++) {
             for (int j = 0; j < piece[i].length; j++) {
                 if (piece[i][j] != 0) {
-                    g.fillRect((x + j) * cellSize, (y + i) * cellSize, cellSize, cellSize);
+                    g.fillRect(
+                            xOffset + (x + j) * gridCellSize + margin,
+                            yOffset + (y + i) * gridCellSize + margin,
+                            gridCellSize - 2 * margin,
+                            gridCellSize - 2 * margin
+                    );
                 }
             }
         }
