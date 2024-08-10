@@ -17,7 +17,7 @@ public class Main_menu {
         CardPanel = new JPanel(cardLayout);
 
         // Create the game panel
-        gamePanel game = new gamePanel();
+        gamePanel game = new gamePanel(25, 25);
 
         // Set the default properties for all buttons
         UIManager.put("Button.font", new Font("Arial", Font.BOLD, 14));
