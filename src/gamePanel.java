@@ -7,6 +7,7 @@ public class gamePanel extends JPanel{
     private int boardWidth;
     private int boardHeight;
 
+
     // Constructor
     public gamePanel(int width, int height) {
         // Set up the panel's properties, such as size, background color, etc.
