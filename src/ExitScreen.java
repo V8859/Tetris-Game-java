@@ -1,3 +1,5 @@
+import TetrisConfiguration.UtilityA;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -17,8 +19,8 @@ public class ExitScreen extends JFrame{
 
         // Buttons
         JPanel buttonPanel = new JPanel();
-        JButton yesButton = new JButton("Yes");
-        JButton noButton = new JButton("No");
+        JButton yesButton = UtilityA.createButton("Yes");
+        JButton noButton = UtilityA.createButton("No");
 
         buttonPanel.add(yesButton);
         buttonPanel.add(noButton);

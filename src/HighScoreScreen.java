@@ -1,3 +1,5 @@
+import TetrisConfiguration.UtilityA;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -7,14 +9,14 @@ import java.io.FileReader;
 import java.io.IOException;
 
 
-public class HighScoreScreen extends JFrame {
+public class HighScoreScreen extends JPanel {
     private JTextArea scoreArea;
 
     public HighScoreScreen() {
-        setTitle("High Scores");
+//        setTitle("High Scores");
         setSize(400, 300);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
+//        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
         // High Scores Area
@@ -24,7 +26,7 @@ public class HighScoreScreen extends JFrame {
 
         // Buttons
         JPanel buttonPanel = new JPanel();
-        JButton mainMenuButton = new JButton("Main Menu");
+        JButton mainMenuButton = UtilityA.createButton("Main Menu");
 
         buttonPanel.add(mainMenuButton);
         add(buttonPanel, BorderLayout.SOUTH);
@@ -36,8 +38,8 @@ public class HighScoreScreen extends JFrame {
         mainMenuButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new Main_menu();
-                dispose();
+                CardLayout cardLayout = (CardLayout) getParent().getLayout();
+                cardLayout.show(getParent(), "Main Menu");
             }
         });
 

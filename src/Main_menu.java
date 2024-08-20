@@ -49,10 +49,13 @@ public class Main_menu {
 
         SplashScreen splash = new SplashScreen();
         Configuration gameConfig = new Configuration();
+        HighScoreScreen highscores = new HighScoreScreen();
+
         // Add panels to the card panel
         CardPanel.add(main_menu, "Main Menu");
         CardPanel.add(splash, "Splash" );
         CardPanel.add(gameConfig,"Config");
+        CardPanel.add(highscores, "highscore");
         // Add action listener to the play button
         playButton.addActionListener(new ActionListener() {
             @Override
@@ -81,8 +84,14 @@ public class Main_menu {
         exitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(exitButton);
-                parentFrame.dispose();
+                ExitScreen exit = new ExitScreen();
+
+            }
+        });
+        highscoresButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cardLayout.show(CardPanel, "highscore");
             }
         });
         cardLayout.show(CardPanel, "Splash");
