@@ -1,0 +1,3 @@
+Alice: 15000
+Bob: 12000
+Charlie: 10000
