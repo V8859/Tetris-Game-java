@@ -7,6 +7,7 @@ public class GameBoard {
         this.width = width;
         this.height = height;
         this.board = new int[height][width];
+        spawnNewPiece();  // Spawn the first piece when the game board is created
     }
 
     public boolean canPlacePiece(TetrisPiece piece) {
@@ -43,15 +44,6 @@ public class GameBoard {
         }
     }
 
-    public boolean checkLineFull(int row) {
-        for (int col = 0; col < width; col++) {
-            if (board[row][col] == 0) {
-                return false;
-            }
-        }
-        return true;
-    }
-
     public void clearLine(int row) {
         for (int col = 0; col < width; col++) {
             board[row][col] = 0; // Clear the row
@@ -72,6 +64,15 @@ public class GameBoard {
         }
     }
 
+    public boolean checkLineFull(int row) {
+        for (int col = 0; col < width; col++) {
+            if (board[row][col] == 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public boolean isGameOver() {
         // Check if any blocks are in the top row
         for (int col = 0; col < width; col++) {
@@ -80,6 +81,19 @@ public class GameBoard {
             }
         }
         return false;
+    }
+
+    public void spawnNewPiece() {
+        String[] pieceTypes = {"I", "O", "T", "L", "J", "S", "Z"};
+        String randomType = pieceTypes[(int) (Math.random() * pieceTypes.length)];
+        TetrisPiece newPiece = TetrisPiece.createPiece(randomType);
+        newPiece.resetPosition(width / 2 - 1, 0); // Start in the middle top of the board
+        this.currentPiece = newPiece;
+
+        if (!canPlacePiece(currentPiece)) {
+            // Game over logic if the new piece cannot be placed
+            System.out.println("Game Over");
+        }
     }
 
     public boolean movePieceLeft() {
@@ -103,7 +117,7 @@ public class GameBoard {
     public boolean movePieceDown() {
         currentPiece.moveDown();
         if (!canPlacePiece(currentPiece)) {
-            currentPiece.moveDown(); // Place the piece
+            currentPiece.moveUp(); // Undo move
             placePiece(currentPiece);
             clearFullLines();
             return false;
@@ -121,12 +135,11 @@ public class GameBoard {
         }
     }
 
-    public void spawnNewPiece() {
-        String[] pieceTypes = {"I", "O", "T", "L", "J", "S", "Z"};
-        String randomType = pieceTypes[(int) (Math.random() * pieceTypes.length)];
-        TetrisPiece newPiece = TetrisPiece.createPiece(randomType);
-        newPiece.resetPosition(width / 2 - 1, 0);
-        this.currentPiece = newPiece;
+    public TetrisPiece getCurrentPiece() {
+        return currentPiece;
     }
 
+    public int[][] getBoard() {
+        return board;
+    }
 }

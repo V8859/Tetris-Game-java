@@ -4,30 +4,33 @@ import java.awt.event.ActionListener;
 
 public class GameLoop {
     private GameBoard gameBoard;
+    private GamePanel gamePanel;
     private Timer timer;
 
-    public GameLoop(GameBoard gameBoard) {
+    public GameLoop(GameBoard gameBoard, GamePanel gamePanel) {
         this.gameBoard = gameBoard;
+        this.gamePanel = gamePanel;
 
-        // Set up the game loop timer
+        // Set up the game loop timer to move the piece down every 500ms
         timer = new Timer(500, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 updateGame();
             }
         });
-        timer.start();
+        timer.start();  // Start the game loop timer
     }
 
-    private void updateGame() {
+    public void updateGame() {
         if (!gameBoard.movePieceDown()) {
             if (gameBoard.isGameOver()) {
-                timer.stop();
+                timer.stop();  // Stop the game loop if the game is over
                 System.out.println("Game Over");
             } else {
-                gameBoard.spawnNewPiece(); // Spawn a new piece when the current one can no longer move down
+                gameBoard.spawnNewPiece();  // Spawn a new piece when the current one can no longer move down
             }
         }
+        gamePanel.repaint();  // Repaint the game panel after updating the game state
     }
 
     public void handleInput(String input) {
@@ -39,11 +42,12 @@ public class GameLoop {
                 gameBoard.movePieceRight();
                 break;
             case "down":
-                gameBoard.movePieceDown();
+                gameBoard.movePieceDown();  // Move piece down faster when the down key is pressed
                 break;
             case "rotate":
                 gameBoard.rotatePiece();
                 break;
         }
+        gamePanel.repaint();  // Repaint the game panel after handling input
     }
 }
