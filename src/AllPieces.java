@@ -17,11 +17,11 @@ public class AllPieces {
             // Can only be rotated two different ways, the other shape is the S_SHAPE
 
             {{1,1,0},{0,1,1}}  // 0 degrees
-            ,{{1,0},{1,1}, {0,1}} // 90 degrees Alternate;
+            ,{{0,1},{1,1}, {1,0}} // 90 degrees Alternate;
     };
     public static final int[][][] S_SHAPE = {
             {{0,1,1},{1,1,0}} // 0 degrees
-            ,{{0,1},{1,1},{1,0}}
+            ,{{1,0},{1,1},{0,1}}
     };
 
     public static final int[][][] I_SHAPE = {
@@ -54,9 +54,10 @@ public class AllPieces {
              {1,0},
              {1,1}},
             //
+            {{1,1,1},
+             {1,0,0}},
             // 90 degrees
-            {{0,0,1},
-             {1,1,1}},
+
             //
             //180 degrees
             {{1,1},
@@ -64,8 +65,8 @@ public class AllPieces {
              {0,1}},
             //
             // 360 degrees
-            {{1,1,1},
-             {1,0,0}}
+            {{0,0,1},
+            {1,1,1}},
             //
     };
     public static final int[][][] J_SHAPE = {

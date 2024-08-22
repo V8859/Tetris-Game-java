@@ -11,7 +11,8 @@ public class GamePanel extends JPanel {
     public GamePanel(GameBoard gameBoard) {
         this.gameBoard = gameBoard;
         setBackground(Color.BLACK);
-        setFocusable(true);
+        this.setFocusable(true);
+        this.requestFocusInWindow();
     }
 
     private int getXOffset() {
