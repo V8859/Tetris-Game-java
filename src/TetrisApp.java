@@ -12,10 +12,10 @@ public class TetrisApp extends JPanel {
     private boolean pause;
     private JLabel pauseLabel;
     private JLayeredPane layeredPane;
-    public TetrisApp(int boardWidth, int boardHeight){
+    public TetrisApp(int boardWidth, int boardHeight, int gameLevel){
         GameBoard gameBoard = new GameBoard(boardWidth, boardHeight);
         GamePanel gamePanel = new GamePanel(gameBoard);
-        GameLoop gameLoop = new GameLoop(gameBoard, gamePanel);  // Pass both gameBoard and gamePanel
+        GameLoop gameLoop = new GameLoop(gameBoard, gamePanel, gameLevel);  // Pass both gameBoard and gamePanel
 
         this.setLayout(new BorderLayout());
         this.setPreferredSize(new Dimension(800, 800));
@@ -42,7 +42,7 @@ public class TetrisApp extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
             JPanel parent = (JPanel) getParent();
-            CardLayout cardLayout = (CardLayout) getParent().getLayout();
+            CardLayout cardLayout = (CardLayout) parent.getLayout();
             MainMenuConfirmationScreen back_toMenu = new MainMenuConfirmationScreen(cardLayout, parent );
             }
         });

@@ -60,7 +60,7 @@ public class Main_menu {
         playButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                TetrisApp game = new TetrisApp(gameConfig.getW(), gameConfig.getH());
+                TetrisApp game = new TetrisApp(gameConfig.getW(), gameConfig.getH(), gameConfig.getLvl());
 
                 // Add the game panel to the CardPanel
                 CardPanel.add(game, "Tetris Game");

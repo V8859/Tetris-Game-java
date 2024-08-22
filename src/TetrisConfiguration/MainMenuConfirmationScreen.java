@@ -10,12 +10,12 @@ public class MainMenuConfirmationScreen extends JFrame {
     public  MainMenuConfirmationScreen(CardLayout cardLayout, JPanel parent) {
         setTitle("Exit Confirmation");
         setSize(600, 150);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
         // Label
-        JLabel exitLabel = new JLabel("Are you sure you want to exit?", SwingConstants.CENTER);
+        JLabel exitLabel = new JLabel("Are you sure you want to go back to Main Menu?", SwingConstants.CENTER);
         add(exitLabel, BorderLayout.CENTER);
 
         // Buttons
