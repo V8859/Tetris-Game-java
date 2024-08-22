@@ -1,10 +1,8 @@
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 public class SplashScreen extends JPanel {
     public CustomProgressBar pbar;
-
     public SplashScreen() {
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();

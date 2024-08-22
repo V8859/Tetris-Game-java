@@ -9,7 +9,7 @@ public class ExitScreen extends JFrame{
     public ExitScreen() {
         setTitle("Exit Confirmation");
         setSize(600, 150);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 

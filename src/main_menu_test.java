@@ -10,10 +10,6 @@ public class main_menu_test {
 
                 frame.add(r.CardPanel);
 
-                JPanel panel = new JPanel(new GridBagLayout()); // Use GridBagLayout
-
-                LineDrawing lineDrawing = new LineDrawing();
-
                 GridBagConstraints gbc = new GridBagConstraints();
                 gbc.anchor = GridBagConstraints.CENTER; // Center component
 
