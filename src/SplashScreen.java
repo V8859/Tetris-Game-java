@@ -29,7 +29,7 @@ public class SplashScreen extends JPanel {
     // Custom Progress Bar Class
     class CustomProgressBar extends JProgressBar {
         private final Color[] colors = {
-                Color.CYAN, Color.GREEN, Color.BLUE, Color.ORANGE, Color.YELLOW, Color.RED, Color.PINK
+                Color.CYAN, Color.GREEN, Color.BLUE, Color.ORANGE, Color.YELLOW, Color.RED, Color.MAGENTA
         };
 
         @Override

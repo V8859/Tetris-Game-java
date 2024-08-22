@@ -1,3 +1,4 @@
+import TetrisConfiguration.MainMenuConfirmationScreen;
 import TetrisConfiguration.UtilityA;
 
 import javax.swing.*;
@@ -40,7 +41,9 @@ public class TetrisApp extends JPanel {
         MainMenu.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Working");
+            JPanel parent = (JPanel) getParent();
+            CardLayout cardLayout = (CardLayout) getParent().getLayout();
+            MainMenuConfirmationScreen back_toMenu = new MainMenuConfirmationScreen(cardLayout, parent );
             }
         });
 
