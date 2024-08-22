@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
@@ -47,12 +48,14 @@ public class HighScoreScreen extends JPanel {
     }
 
     private void loadScores() {
-        try (BufferedReader reader = new BufferedReader(new FileReader("highscores.txt"))) {
+
+        try (BufferedReader reader = new BufferedReader(new FileReader("src/highscores.txt"))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 scoreArea.append(line + "\n");
             }
         } catch (IOException e) {
+//            e.printStackTrace();
             scoreArea.setText("No high scores available.");
         }
     }

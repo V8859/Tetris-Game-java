@@ -1,4 +1,6 @@
-import javax.swing.Timer;
+import javax.swing.*;
+import javax.swing.text.StyledEditorKit;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -19,6 +21,9 @@ public class GameLoop {
             }
         });
         timer.start();  // Start the game loop timer
+
+
+
     }
 
     public void updateGame() {
@@ -27,27 +32,53 @@ public class GameLoop {
                 timer.stop();  // Stop the game loop if the game is over
                 System.out.println("Game Over");
             } else {
-                gameBoard.spawnNewPiece();  // Spawn a new piece when the current one can no longer move down
+                gameBoard.spawnNewPiece();// Spawn a new piece when the current one can no longer move down
+                int score = gameBoard.getScore();
+                gamePanel.setScore(score);
             }
         }
         gamePanel.repaint();  // Repaint the game panel after updating the game state
     }
 
+    boolean paused;
     public void handleInput(String input) {
         switch (input) {
             case "left":
-                gameBoard.movePieceLeft();
+                if(!paused){
+                    gameBoard.movePieceLeft();
+                }
                 break;
+
             case "right":
-                gameBoard.movePieceRight();
+                if(!paused){
+                    gameBoard.movePieceRight();
+                }
                 break;
+
             case "down":
-                gameBoard.movePieceDown();  // Move piece down faster when the down key is pressed
+//                gameBoard.movePieceDown();  // Move piece down faster when the down key is pressed // problematic dont do this here. updateGame instead
+                if(!paused){
+                    updateGame();
+                }
                 break;
+
             case "rotate":
-                gameBoard.rotatePiece();
+                if(!paused){
+                    gameBoard.rotatePiece();
+                }
                 break;
+
+            case "pause":
+
+                if(paused){
+                    timer.start();
+                    paused = false;
+                }else {
+                    timer.stop();
+                    paused = true;
+                }
         }
         gamePanel.repaint();  // Repaint the game panel after handling input
     }
+
 }

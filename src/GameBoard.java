@@ -1,12 +1,17 @@
+import java.awt.*;
+
 public class GameBoard {
     private int width, height;
     private int[][] board; // 2D array representing the board
     private TetrisPiece currentPiece;
+    private int TotalScore;
+    private Color[][] colors;
 
     public GameBoard(int width, int height) {
         this.width = width;
         this.height = height;
         this.board = new int[height][width];
+        this.colors = new Color[height][width];
         spawnNewPiece();  // Spawn the first piece when the game board is created
     }
 
@@ -30,15 +35,18 @@ public class GameBoard {
         return true;
     }
 
+
+
     public void placePiece(TetrisPiece piece) {
         int[][] shape = piece.getCurrentShape();
+        Color color  = piece.getColor();
         int pieceX = piece.getX();
         int pieceY = piece.getY();
-
         for (int i = 0; i < shape.length; i++) {
             for (int j = 0; j < shape[i].length; j++) {
                 if (shape[i][j] != 0) {
                     board[pieceY + i][pieceX + j] = 1; // Mark the board with the piece
+                    colors[pieceY+i][pieceX+j]= color;
                 }
             }
         }
@@ -57,11 +65,20 @@ public class GameBoard {
     }
 
     public void clearFullLines() {
+        int multiplier = 0;
+        int BaseScore = 100;
         for (int row = 0; row < height; row++) {
+            int CurrentScore = 0;
             if (checkLineFull(row)) {
+                multiplier++;
                 clearLine(row);
             }
         }
+        this.TotalScore += BaseScore * multiplier;
+    }
+
+    public int getScore(){
+        return TotalScore;
     }
 
     public boolean checkLineFull(int row) {
@@ -141,5 +158,9 @@ public class GameBoard {
 
     public int[][] getBoard() {
         return board;
+    }
+
+    public Color[][] getColors(){
+        return colors;
     }
 }

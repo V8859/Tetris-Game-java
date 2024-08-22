@@ -1,16 +1,21 @@
-import javax.swing.JPanel;
+import TetrisConfiguration.UtilityA;
+
+import javax.swing.*;
 import java.awt.Graphics;
 import java.awt.Color;
 import java.awt.Font;
 
 public class GamePanel extends JPanel {
     private GameBoard gameBoard;
-    private final int cellSize = 30;  // Each cell is 30x30 pixels
+    private final int cellSize = 25;  // Each cell is 30x30 pixels
     private final int scoreHeight = 50;  // Space reserved for the score display
+    private int score;
+    private Color currentColor;
 
     public GamePanel(GameBoard gameBoard) {
         this.gameBoard = gameBoard;
         setBackground(Color.BLACK);
+
         this.setFocusable(true);
         this.requestFocusInWindow();
     }
@@ -33,7 +38,7 @@ public class GamePanel extends JPanel {
 
         TetrisPiece currentPiece = gameBoard.getCurrentPiece();
         if (currentPiece != null) {
-            drawPiece(g, currentPiece.getCurrentShape(), currentPiece.getX(), currentPiece.getY());
+            drawPiece(g, currentPiece.getCurrentShape(), currentPiece.getX(), currentPiece.getY(), currentPiece.getColor());
         }
     }
 
@@ -41,6 +46,7 @@ public class GamePanel extends JPanel {
         int xOffset = getXOffset();
         int yOffset = getYOffset();
         int[][] board = gameBoard.getBoard();
+        Color [][] colors = gameBoard.getColors();
 
         g.setColor(Color.GRAY);  // Set color for grid lines
         for (int x = 0; x <= board[0].length; x++) {
@@ -54,15 +60,16 @@ public class GamePanel extends JPanel {
         for (int y = 0; y < board.length; y++) {
             for (int x = 0; x < board[0].length; x++) {
                 if (board[y][x] != 0) {
-                    g.setColor(Color.RED);
+                    g.setColor(colors[y][x]);
                     g.fillRect(xOffset + x * cellSize, yOffset + y * cellSize, cellSize, cellSize);
                 }
             }
         }
     }
 
-    private void drawPiece(Graphics g, int[][] piece, int x, int y) {
-        g.setColor(Color.YELLOW);
+    private void drawPiece(Graphics g, int[][] piece, int x, int y, Color color) {
+        g.setColor(color);
+        currentColor = color;
         int xOffset = getXOffset();
         int yOffset = getYOffset();
         int margin = 1;
@@ -82,10 +89,15 @@ public class GamePanel extends JPanel {
     }
 
     private void drawScore(Graphics g) {
-        int score = 12345;  // Example score
-
+        // Example score
         g.setColor(Color.WHITE);  // Set color for the text
         g.setFont(new Font("Arial", Font.BOLD, 20));  // Set font for the score
         g.drawString("Score: " + score, 10, 30);  // Draw score at a fixed position (left-aligned)
     }
+    public void setScore(int score){
+        this.score = score;
+    }
+
+
+
 }

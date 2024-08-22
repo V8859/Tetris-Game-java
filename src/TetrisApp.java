@@ -1,18 +1,48 @@
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import TetrisConfiguration.UtilityA;
+
+import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 public class TetrisApp extends JPanel {
-
+    private boolean pause;
+    private JLabel pauseLabel;
+    private JLayeredPane layeredPane;
     public TetrisApp(int boardWidth, int boardHeight){
         GameBoard gameBoard = new GameBoard(boardWidth, boardHeight);
         GamePanel gamePanel = new GamePanel(gameBoard);
         GameLoop gameLoop = new GameLoop(gameBoard, gamePanel);  // Pass both gameBoard and gamePanel
 
         this.setLayout(new BorderLayout());
-        this.add(gamePanel);
+        this.setPreferredSize(new Dimension(800, 800));
 
 
+        layeredPane = new JLayeredPane();
+        layeredPane.setPreferredSize(new Dimension(800,800));
+        this.add(layeredPane, BorderLayout.CENTER);
+        gamePanel.setBounds(0,0, 800,800);
+        layeredPane.add(gamePanel, JLayeredPane.DEFAULT_LAYER);
+
+        pauseLabel= new JLabel("Paused");
+        pauseLabel.setFont(new Font("Verdana", Font.BOLD, 35));
+        pauseLabel.setForeground(Color.WHITE);
+        pauseLabel.setBackground(Color.white);
+        pauseLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        pauseLabel.setBounds(0,0,800,800);
+        pauseLabel.setVisible(false);
+        layeredPane.add(pauseLabel, JLayeredPane.PALETTE_LAYER);
+
+        JButton MainMenu = UtilityA.createButton("Main Menu");
+        this.add(MainMenu, BorderLayout.SOUTH);
+        MainMenu.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Working");
+            }
+        });
 
         // Add key bindings for player input
         this.getInputMap().put(javax.swing.KeyStroke.getKeyStroke("LEFT"), "moveLeft");
@@ -43,6 +73,29 @@ public class TetrisApp extends JPanel {
             }
         });
 
+        this.getInputMap().put(javax.swing.KeyStroke.getKeyStroke("P"), "pause");
+        this.getActionMap().put("pause", new javax.swing.AbstractAction() {
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+                gameLoop.handleInput("pause");
+                pause = !pause;
+                pauseLabel.setVisible(pause);
+                layeredPane.revalidate();
+                layeredPane.repaint();
+
+            }
+        });
+        this.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                Dimension size = getSize();
+                layeredPane.setPreferredSize(size);
+                gamePanel.setBounds(0,0, size.width, size.height);
+                pauseLabel.setBounds(0,0, size.width, size.height);
+                layeredPane.revalidate();
+                layeredPane.repaint();
+                super.componentResized(e);
+            }
+        });
     this.setFocusable(true);
     this.requestFocusInWindow();
     this.setVisible(true);
