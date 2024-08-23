@@ -22,10 +22,10 @@ public class TetrisApp extends JPanel {
 //        soundPlayer = new SoundPlayer();
 //        soundPlayer.loadSound("src/music.wav");
         effectPlayer = new SoundPlayer();
-        effectPlayer.loadSound("src/TetrisConfiguration/MovePiece.wav");
+        effectPlayer.loadSound("src/TetrisConfiguration/MovePieceAlternate.wav");
         if(Music){
-            soundPlayer.playSound();
-            soundPlayer.loopSound();
+//            soundPlayer.playSound(1);
+//            soundPlayer.loopSound(1);
         }
 
 
@@ -65,7 +65,7 @@ public class TetrisApp extends JPanel {
             public void actionPerformed(java.awt.event.ActionEvent e) {
                 gameLoop.handleInput("left");
                 if (Sound){
-                    effectPlayer.playSound();
+                    effectPlayer.playSound(-30.0f);
                 }
             }
         });
@@ -75,7 +75,7 @@ public class TetrisApp extends JPanel {
             public void actionPerformed(java.awt.event.ActionEvent e) {
                 gameLoop.handleInput("right");
                 if (Sound){
-                    effectPlayer.playSound();
+                    effectPlayer.playSound(-30.0f);
                 }
             }
         });
@@ -85,7 +85,7 @@ public class TetrisApp extends JPanel {
             public void actionPerformed(java.awt.event.ActionEvent e) {
                 gameLoop.handleInput("down");
                 if (Sound){
-                    effectPlayer.playSound();
+                    effectPlayer.playSound(-30.0f);
                 }
             }
         });
@@ -95,7 +95,7 @@ public class TetrisApp extends JPanel {
             public void actionPerformed(java.awt.event.ActionEvent e) {
                 gameLoop.handleInput("rotate");
                 if (Sound){
-                    effectPlayer.playSound();
+                    effectPlayer.playSound(-30.0f);
                 }
             }
         });
