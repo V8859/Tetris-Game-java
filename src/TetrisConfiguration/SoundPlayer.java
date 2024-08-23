@@ -6,6 +6,7 @@ import java.io.IOException;
 
 public class SoundPlayer {
     private String filePath;
+    private Clip clip;
 
     public void loadSound(String filePath) {
         this.filePath = filePath;
@@ -14,7 +15,7 @@ public class SoundPlayer {
     public void playSound(float volume) {
         try {
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(filePath));
-            Clip clip = AudioSystem.getClip();
+            clip = AudioSystem.getClip();
             clip.open(audioInputStream);
             FloatControl volumeControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
             volumeControl.setValue(volume);
@@ -27,13 +28,19 @@ public class SoundPlayer {
     public void loopSound(float volume) {
         try {
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(filePath));
-            Clip clip = AudioSystem.getClip();
+            clip = AudioSystem.getClip();
             clip.open(audioInputStream);
             FloatControl volumeControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
             volumeControl.setValue(volume);
             clip.loop(Clip.LOOP_CONTINUOUSLY);
         } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void stopSound() {
+        if (clip != null && clip.isRunning()) {
+            clip.stop();
         }
     }
 }

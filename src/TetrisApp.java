@@ -13,21 +13,23 @@ public class TetrisApp extends JPanel {
     private boolean pause;
     private JLabel pauseLabel;
     private JLayeredPane layeredPane;
-    private SoundPlayer soundPlayer;
+    private SoundPlayer musicPlayer;
     private SoundPlayer effectPlayer;
+    private boolean sound;
+    private boolean music;
     public TetrisApp(int boardWidth, int boardHeight, int gameLevel, boolean Music, boolean Sound){
         GameBoard gameBoard = new GameBoard(boardWidth, boardHeight);
         GamePanel gamePanel = new GamePanel(gameBoard);
         GameLoop gameLoop = new GameLoop(gameBoard, gamePanel, gameLevel);  // Pass both gameBoard and gamePanel
-//        soundPlayer = new SoundPlayer();
-//        soundPlayer.loadSound("src/music.wav");
+        this.sound = Sound;
+        this.music = Music;
+        musicPlayer = new SoundPlayer();
+        musicPlayer.loadSound("src/TetrisConfiguration/Aerial City, Chika - Menu Music.wav");
         effectPlayer = new SoundPlayer();
         effectPlayer.loadSound("src/TetrisConfiguration/MovePieceAlternate.wav");
-        if(Music){
-//            soundPlayer.playSound(1);
-//            soundPlayer.loopSound(1);
+        if(music){
+            musicPlayer.loopSound(1);
         }
-
 
         this.setLayout(new BorderLayout());
         this.setPreferredSize(new Dimension(800, 800));
@@ -64,7 +66,7 @@ public class TetrisApp extends JPanel {
         this.getActionMap().put("moveLeft", new javax.swing.AbstractAction() {
             public void actionPerformed(java.awt.event.ActionEvent e) {
                 gameLoop.handleInput("left");
-                if (Sound){
+                if (sound){
                     effectPlayer.playSound(-30.0f);
                 }
             }
@@ -74,7 +76,7 @@ public class TetrisApp extends JPanel {
         this.getActionMap().put("moveRight", new javax.swing.AbstractAction() {
             public void actionPerformed(java.awt.event.ActionEvent e) {
                 gameLoop.handleInput("right");
-                if (Sound){
+                if (sound){
                     effectPlayer.playSound(-30.0f);
                 }
             }
@@ -84,7 +86,7 @@ public class TetrisApp extends JPanel {
         this.getActionMap().put("moveDown", new javax.swing.AbstractAction() {
             public void actionPerformed(java.awt.event.ActionEvent e) {
                 gameLoop.handleInput("down");
-                if (Sound){
+                if (sound){
                     effectPlayer.playSound(-30.0f);
                 }
             }
@@ -94,7 +96,7 @@ public class TetrisApp extends JPanel {
         this.getActionMap().put("rotate", new javax.swing.AbstractAction() {
             public void actionPerformed(java.awt.event.ActionEvent e) {
                 gameLoop.handleInput("rotate");
-                if (Sound){
+                if (sound){
                     effectPlayer.playSound(-30.0f);
                 }
             }
@@ -109,6 +111,26 @@ public class TetrisApp extends JPanel {
                 layeredPane.revalidate();
                 layeredPane.repaint();
 
+            }
+        });
+        this.getInputMap().put(javax.swing.KeyStroke.getKeyStroke("S"),"sound-off");
+        this.getActionMap().put("sound-off", new javax.swing.AbstractAction(){
+            public void actionPerformed(java.awt.event.ActionEvent e){
+                sound = !sound;
+            }
+        });
+
+
+        this.getInputMap().put(javax.swing.KeyStroke.getKeyStroke("M"),"music-off");
+        this.getActionMap().put("music-off", new javax.swing.AbstractAction(){
+            public void actionPerformed(java.awt.event.ActionEvent e){
+                music = !music;
+                if (music){
+                    musicPlayer.loopSound(-15.0f);
+                }else{
+                    musicPlayer.stopSound();
+
+                }
             }
         });
         this.addComponentListener(new ComponentAdapter() {
