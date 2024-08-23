@@ -1,4 +1,5 @@
 import TetrisConfiguration.MainMenuConfirmationScreen;
+import TetrisConfiguration.SoundPlayer;
 import TetrisConfiguration.UtilityA;
 
 import javax.swing.*;
@@ -12,10 +13,21 @@ public class TetrisApp extends JPanel {
     private boolean pause;
     private JLabel pauseLabel;
     private JLayeredPane layeredPane;
-    public TetrisApp(int boardWidth, int boardHeight, int gameLevel){
+    private SoundPlayer soundPlayer;
+    private SoundPlayer effectPlayer;
+    public TetrisApp(int boardWidth, int boardHeight, int gameLevel, boolean Music, boolean Sound){
         GameBoard gameBoard = new GameBoard(boardWidth, boardHeight);
         GamePanel gamePanel = new GamePanel(gameBoard);
         GameLoop gameLoop = new GameLoop(gameBoard, gamePanel, gameLevel);  // Pass both gameBoard and gamePanel
+//        soundPlayer = new SoundPlayer();
+//        soundPlayer.loadSound("src/music.wav");
+        effectPlayer = new SoundPlayer();
+        effectPlayer.loadSound("src/TetrisConfiguration/MovePiece.wav");
+        if(Music){
+            soundPlayer.playSound();
+            soundPlayer.loopSound();
+        }
+
 
         this.setLayout(new BorderLayout());
         this.setPreferredSize(new Dimension(800, 800));
@@ -52,6 +64,9 @@ public class TetrisApp extends JPanel {
         this.getActionMap().put("moveLeft", new javax.swing.AbstractAction() {
             public void actionPerformed(java.awt.event.ActionEvent e) {
                 gameLoop.handleInput("left");
+                if (Sound){
+                    effectPlayer.playSound();
+                }
             }
         });
 
@@ -59,6 +74,9 @@ public class TetrisApp extends JPanel {
         this.getActionMap().put("moveRight", new javax.swing.AbstractAction() {
             public void actionPerformed(java.awt.event.ActionEvent e) {
                 gameLoop.handleInput("right");
+                if (Sound){
+                    effectPlayer.playSound();
+                }
             }
         });
 
@@ -66,6 +84,9 @@ public class TetrisApp extends JPanel {
         this.getActionMap().put("moveDown", new javax.swing.AbstractAction() {
             public void actionPerformed(java.awt.event.ActionEvent e) {
                 gameLoop.handleInput("down");
+                if (Sound){
+                    effectPlayer.playSound();
+                }
             }
         });
 
@@ -73,6 +94,9 @@ public class TetrisApp extends JPanel {
         this.getActionMap().put("rotate", new javax.swing.AbstractAction() {
             public void actionPerformed(java.awt.event.ActionEvent e) {
                 gameLoop.handleInput("rotate");
+                if (Sound){
+                    effectPlayer.playSound();
+                }
             }
         });
 
