@@ -10,14 +10,16 @@ public class GameLoop {
     private Timer timer;
     private int totalScore;
     private int GameLevel;
+    private int MaxGamLevel;
 
     public GameLoop(GameBoard gameBoard, GamePanel gamePanel, int gameLevel) {
         this.GameLevel = gameLevel;
         this.gameBoard = gameBoard;
         this.gamePanel = gamePanel;
-
+        this.MaxGamLevel= 11;
         // Set up the game loop timer to move the piece down every 500ms
-        timer = new Timer(Math.floorDiv(3000,gameLevel), new ActionListener() {
+        int time = (int) (500/(GameLevel*0.4));
+        timer = new Timer(time, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 updateGame();
@@ -38,9 +40,11 @@ public class GameLoop {
                 gameBoard.spawnNewPiece();// Spawn a new piece when the current one can no longer move down
                 // Increment gameLevel every 500 score added.
                 int score = gameBoard.getScore();
-                if (score%BaseScore == 0){
+                if (score%BaseScore == 0 && score>totalScore && GameLevel<MaxGamLevel){
                     GameLevel++;
-                    timer.setDelay(Math.floorDiv(3000,GameLevel/2));
+                    totalScore = score;
+                    int time = (int) (500/(GameLevel*0.4));
+                    timer.setDelay(time);
                 }
                 gamePanel.setScore(score);
             }
