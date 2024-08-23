@@ -7,7 +7,7 @@ import java.awt.event.ActionListener;
 
 public class MainMenuConfirmationScreen extends JFrame {
 //    private JFrame mainframe;
-    public  MainMenuConfirmationScreen(CardLayout cardLayout, JPanel parent) {
+    public  MainMenuConfirmationScreen(CardLayout cardLayout, JPanel parent, SoundPlayer musicPlayer, SoundPlayer effectPlayer) {
         setTitle("Exit Confirmation");
         setSize(600, 150);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -32,6 +32,8 @@ public class MainMenuConfirmationScreen extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 cardLayout.show(parent, "Main Menu");
+                effectPlayer.stopSound();
+                musicPlayer.stopSound();
                 dispose();
             }
         });

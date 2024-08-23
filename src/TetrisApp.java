@@ -57,7 +57,7 @@ public class TetrisApp extends JPanel {
             public void actionPerformed(ActionEvent e) {
             JPanel parent = (JPanel) getParent();
             CardLayout cardLayout = (CardLayout) parent.getLayout();
-            MainMenuConfirmationScreen back_toMenu = new MainMenuConfirmationScreen(cardLayout, parent );
+            MainMenuConfirmationScreen back_toMenu = new MainMenuConfirmationScreen(cardLayout, parent, musicPlayer, effectPlayer);
             }
         });
 
@@ -129,7 +129,6 @@ public class TetrisApp extends JPanel {
                     musicPlayer.loopSound(-15.0f);
                 }else{
                     musicPlayer.stopSound();
-
                 }
             }
         });
