@@ -3,21 +3,20 @@ import java.awt.*;
 
 public class Main {
     public static void main(String[] args) {
-        JFrame frame = new JFrame("My first JFrame");
+        JFrame frame = new JFrame("Tetris");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        GameForm rr = new GameForm();
 
-        JPanel panel = new JPanel(new GridBagLayout()); // Use GridBagLayout
+        Main_menu r = new Main_menu();
 
-//        LineDrawing lineDrawing = new LineDrawing();
+        frame.add(r.CardPanel);
+
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.anchor = GridBagConstraints.CENTER; // Center component
 
-//        panel.add(lineDrawing, gbc); // Add LineDrawing to panel with constraints
+//                panel.add(lineDrawing, gbc); // Add LineDrawing to panel with constraints
 
-//        panel.add(rr);
-        frame.getContentPane().add(panel);
-        frame.setSize(1920, 4040);
+//                frame.getContentPane().add(panel);
+        frame.setSize(800, 1000);
         frame.setVisible(true);
     }
 }
