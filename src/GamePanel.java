@@ -4,12 +4,14 @@ import javax.swing.*;
 import java.awt.Graphics;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.*;
 
 public class GamePanel extends JPanel {
     private GameBoard gameBoard;
     private final int cellSize = 25;  // Each cell is 30x30 pixels
     private final int scoreHeight = 50;  // Space reserved for the score display
     private int score;
+    private boolean gameOver;
     private Color currentColor;
 
     public GamePanel(GameBoard gameBoard) {
@@ -18,6 +20,11 @@ public class GamePanel extends JPanel {
 
         this.setFocusable(true);
         this.requestFocusInWindow();
+        this.gameOver = false;
+    }
+
+    public void setGameOver(boolean gameOver){
+        this.gameOver = gameOver;
     }
 
     private int getXOffset() {
@@ -39,6 +46,17 @@ public class GamePanel extends JPanel {
         TetrisPiece currentPiece = gameBoard.getCurrentPiece();
         if (currentPiece != null) {
             drawPiece(g, currentPiece.getCurrentShape(), currentPiece.getX(), currentPiece.getY(), currentPiece.getColor());
+        }
+
+        // If the game is over, display "Game Over" text
+        if (gameOver) {
+            g.setColor(Color.RED);
+            g.setFont(new Font("Monospaced", Font.BOLD, 48));
+            FontMetrics fm = g.getFontMetrics();
+            String gameOverText = "GAME OVER";
+            int x = (getWidth() - fm.stringWidth(gameOverText)) / 2;
+            int y = getHeight() / 2;
+            g.drawString(gameOverText, x, y);
         }
     }
 

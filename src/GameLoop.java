@@ -36,6 +36,9 @@ public class GameLoop {
             if (gameBoard.isGameOver()) {
                 timer.stop();  // Stop the game loop if the game is over
                 System.out.println("Game Over");
+                gamePanel.setGameOver(true);
+                gamePanel.repaint();
+
             } else {
                 gameBoard.spawnNewPiece();// Spawn a new piece when the current one can no longer move down
                 // Increment gameLevel every 500 score added.
