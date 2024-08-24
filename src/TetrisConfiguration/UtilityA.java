@@ -104,6 +104,7 @@ public class UtilityA {
         tickbox.setBackground(Color.black);
         tickbox.setForeground(Color.CYAN);
         tickbox.setPreferredSize(new Dimension(300,50));
+        tickbox.setSelected(true);
         panel.add(tickbox, c);
 
 
@@ -111,7 +112,7 @@ public class UtilityA {
         c.gridy =0;
         JLabel currentStatus = new JLabel();
         currentStatus.setForeground(Color.white);
-        currentStatus.setText("Off");
+        currentStatus.setText("On");
         panel.add(currentStatus);
 
         tickbox.addChangeListener(new ChangeListener() {

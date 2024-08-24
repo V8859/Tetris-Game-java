@@ -26,6 +26,7 @@ public class GameBoard {
                     int boardX = pieceX + j;
                     int boardY = pieceY + i;
 
+                    // Check if the piece is out of bounds or collides with existing blocks
                     if (boardX < 0 || boardX >= width || boardY >= height || board[boardY][boardX] != 0) {
                         return false;
                     }
@@ -143,11 +144,42 @@ public class GameBoard {
     }
 
     public void rotatePiece() {
+        TetrisPiece currentPiece = this.currentPiece;
+
+        // Save the current state
+        int originalRotation = currentPiece.getCurrentRotation();
+        int originalX = currentPiece.getX();
+        int originalY = currentPiece.getY();
+
         currentPiece.rotate();
+
+        // Check if the rotation is valid
         if (!canPlacePiece(currentPiece)) {
-            // Undo rotation if it collides
-            for (int i = 0; i < 3; i++) {
-                currentPiece.rotate();
+            // Wall kick attempts: try moving the piece left, right, and up
+            boolean successfulKick = false;
+            int[][] wallKickOffsets = {
+                    {1, 0},  // Kick right
+                    {-1, 0}, // Kick left
+                    {0, 1},  // Kick down (moving up in the grid)
+                    {0, -1},  // Kick up
+                    {2, 0}  //special case I push right twice
+            };
+
+            for (int[] offset : wallKickOffsets) {
+                currentPiece.setX(originalX + offset[0]);
+                currentPiece.setY(originalY + offset[1]);
+
+                if (canPlacePiece(currentPiece)) {
+                    successfulKick = true;
+                    break;
+                }
+            }
+
+            // If all wall kicks failed, undo the rotation
+            if (!successfulKick) {
+                currentPiece.setRotation(originalRotation);
+                currentPiece.setX(originalX);
+                currentPiece.setY(originalY);
             }
         }
     }

@@ -25,20 +25,34 @@ public class AllPieces {
     };
 
     public static final int[][][] I_SHAPE = {
-            // Can only be rotated two different ways
-            {{1,1,1,1}}, // 0 degrees
-
-            {{1},
-             {1},
-             {1},
-             {1}} // 90 degrees
-
-            ,{{1,1,1,1}} // 180 degrees
-
-            ,{{1},
-              {1},
-              {1},
-              {1}}, //360 degrees
+            // 0 degrees
+            {
+                    {0, 0, 0, 0},
+                    {1, 1, 1, 1},
+                    {0, 0, 0, 0},
+                    {0, 0, 0, 0}
+            },
+            // 90 degrees
+            {
+                    {0, 0, 1, 0},
+                    {0, 0, 1, 0},
+                    {0, 0, 1, 0},
+                    {0, 0, 1, 0}
+            },
+            // 180 degrees
+            {
+                    {0, 0, 0, 0},
+                    {1, 1, 1, 1},
+                    {0, 0, 0, 0},
+                    {0, 0, 0, 0}
+            },
+            // 270 degrees
+            {
+                    {0, 0, 1, 0},
+                    {0, 0, 1, 0},
+                    {0, 0, 1, 0},
+                    {0, 0, 1, 0}
+            }
     };
     public static final int[][][] O_SHAPE = {
             // No rotate possible for this shape
