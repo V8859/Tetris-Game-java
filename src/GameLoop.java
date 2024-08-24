@@ -40,7 +40,12 @@ public class GameLoop {
                 gamePanel.repaint();
 
             } else {
-                gameBoard.spawnNewPiece();// Spawn a new piece when the current one can no longer move down
+                if (!gameBoard.spawnNewPiece()){
+                    timer.stop();
+                    gamePanel.setGameOver(true);
+                    gamePanel.repaint();
+                }
+                // Spawn a new piece when the current one can no longer move down
                 // Increment gameLevel every 500 score added.
                 int score = gameBoard.getScore();
                 if (score%BaseScore == 0 && score>totalScore && GameLevel<MaxGamLevel){

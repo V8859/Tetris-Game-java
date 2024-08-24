@@ -43,6 +43,14 @@ public class TetrisPiece {
         currentRotation = (currentRotation + 1) % shapes.length;
     }
 
+    public int getCurrentRotation() {
+        return currentRotation;
+    }
+
+    public void setRotation(int rotation) {
+        currentRotation = rotation;
+    }
+
     public void moveLeft() {
         x--;
     }
@@ -65,6 +73,14 @@ public class TetrisPiece {
 
     public int getY() {
         return y;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public void setY(int y) {
+        this.y = y;
     }
 
     public void resetPosition(int startX, int startY) {
