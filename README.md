@@ -11,8 +11,8 @@ A different take on classic tetris.
 
 
 ### Authors/Collaborators
-Jesse Barnett
-Basil Aziz
+Jesse Barnett | 
+Basil Aziz |
 Kartik Krishna Naidu
 
 ### Credits
