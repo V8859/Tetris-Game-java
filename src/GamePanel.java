@@ -13,9 +13,11 @@ public class GamePanel extends JPanel {
     private int score;
     private boolean gameOver;
     private Color currentColor;
+    private Image splashImage;
 
     public GamePanel(GameBoard gameBoard) {
         this.gameBoard = gameBoard;
+        splashImage = new ImageIcon("src/TetrisConfiguration/RainWallpaper.png").getImage();
         setBackground(Color.BLACK);
 
         this.setFocusable(true);
@@ -39,6 +41,8 @@ public class GamePanel extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+        // Draw the splash image as the background
+        g.drawImage(splashImage, 0, 0, getWidth(), getHeight(), this);
 
         drawBoard(g);  // Draw the grid first
         drawScore(g);
