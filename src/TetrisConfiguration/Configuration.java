@@ -41,11 +41,15 @@ public class Configuration extends JPanel {
         c.gridx = 0;
         c.gridy = 4;
         JPanel music = UtilityA.createOptions("Music(On/Off): ");
+        JCheckBox MusicState = (JCheckBox) music.getComponent(1);
+        MusicState.setSelected(true);
         this.add(music, c);
 
         c.gridx = 0;
         c.gridy = 5;
         JPanel soundEffect = UtilityA.createOptions("Sound(On/Off):");
+        JCheckBox soundState =(JCheckBox) soundEffect.getComponent(1);
+        soundState.setSelected(true);
         this.add(soundEffect, c);
 
 
