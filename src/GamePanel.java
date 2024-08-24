@@ -50,7 +50,7 @@ public class GamePanel extends JPanel {
 
         // If the game is over, display "Game Over" text
         if (gameOver) {
-            g.setColor(new Color(255, 0, 0, 128));
+            g.setColor(new Color(255, 0, 0, 122));
             g.setFont(new Font("Monospaced", Font.BOLD, 48));
             FontMetrics fm = g.getFontMetrics();
             String gameOverText = "GAME OVER";
