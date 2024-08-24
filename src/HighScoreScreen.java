@@ -1,33 +1,41 @@
-import TetrisConfiguration.UtilityA;
-
 import javax.swing.*;
+import javax.swing.text.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
-
 public class HighScoreScreen extends JPanel {
-    private JTextArea scoreArea;
+    private JTextPane scorePane;
 
     public HighScoreScreen() {
-//        setTitle("High Scores");
-        setSize(400, 300);
-//        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
         // High Scores Area
-        scoreArea = new JTextArea();
-        scoreArea.setEditable(false);
-        add(new JScrollPane(scoreArea), BorderLayout.CENTER);
+        scorePane = new JTextPane();
+        scorePane.setEditable(false);
+
+        // Set a retro-style font (Monospaced), bold, and bigger size
+        Font retroFont = new Font("Monospaced", Font.BOLD, 24); // Adjust the font size as needed
+        scorePane.setFont(retroFont);
+
+        //background color
+        scorePane.setBackground(Color.BLACK);
+        scorePane.setForeground(Color.GREEN);
+
+        // Center text alignment
+        StyledDocument doc = scorePane.getStyledDocument();
+        SimpleAttributeSet center = new SimpleAttributeSet();
+        StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
+        doc.setParagraphAttributes(0, doc.getLength(), center, false);
+
+        add(new JScrollPane(scorePane), BorderLayout.CENTER);
 
         // Buttons
         JPanel buttonPanel = new JPanel();
-        JButton mainMenuButton = UtilityA.createButton("Main Menu");
+        JButton mainMenuButton = createButton("Main Menu");
 
         buttonPanel.add(mainMenuButton);
         add(buttonPanel, BorderLayout.SOUTH);
@@ -43,20 +51,22 @@ public class HighScoreScreen extends JPanel {
                 cardLayout.show(getParent(), "Main Menu");
             }
         });
-
-        setVisible(true);
     }
 
     private void loadScores() {
-
         try (BufferedReader reader = new BufferedReader(new FileReader("src/highscores.txt"))) {
+            StringBuilder scores = new StringBuilder();
             String line;
             while ((line = reader.readLine()) != null) {
-                scoreArea.append(line + "\n");
+                scores.append(line).append("\n");
             }
+            scorePane.setText(scores.toString());
         } catch (IOException e) {
-//            e.printStackTrace();
-            scoreArea.setText("No high scores available.");
+            scorePane.setText("No high scores available.");
         }
+    }
+
+    private JButton createButton(String text) {
+        return new JButton(text);
     }
 }
