@@ -16,7 +16,7 @@ public class main_menu_test {
 //                panel.add(lineDrawing, gbc); // Add LineDrawing to panel with constraints
 
 //                frame.getContentPane().add(panel);
-                frame.setSize(1000, 1000);
+                frame.setSize(800, 1000);
                 frame.setVisible(true);
     }
 }

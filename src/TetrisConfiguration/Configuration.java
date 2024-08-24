@@ -10,12 +10,14 @@ import java.util.jar.JarEntry;
 public class Configuration extends JPanel {
     public Configuration() {
         this.setLayout(new GridBagLayout());
+        this.setBackground(Color.BLACK);
         GridBagConstraints c = new GridBagConstraints();
         c.insets = new Insets(10, 10, 10, 10); // Add some padding around components
         c.gridx = 0;
         c.gridy = 0;
         c.anchor = GridBagConstraints.CENTER;
         JLabel ConfigTitle = new JLabel("Configuration");
+        ConfigTitle.setForeground(Color.WHITE);
         ConfigTitle.setFont(new Font("Verdana", Font.BOLD, 24));
         ConfigTitle.setHorizontalAlignment(SwingConstants.CENTER);
         this.add(ConfigTitle, c);

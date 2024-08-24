@@ -92,15 +92,14 @@ public class Main_menu {
                     game.setFocusable(true);
                     game.requestFocusInWindow();
                 });
-
-
-                System.out.println(gameConfig.getW());
-                System.out.println(gameConfig.getH());
-                System.out.println(gameConfig.getLvl());
-                System.out.println(gameConfig.getMusicState());
-                System.out.println(gameConfig.getSoundState());
-                System.out.println(gameConfig.getAIState());
-                System.out.println(gameConfig.getExtendModeState());
+//                For testing purposes
+//                System.out.println(gameConfig.getW());
+//                System.out.println(gameConfig.getH());
+//                System.out.println(gameConfig.getLvl());
+//                System.out.println(gameConfig.getMusicState());
+//                System.out.println(gameConfig.getSoundState());
+//                System.out.println(gameConfig.getAIState());
+//                System.out.println(gameConfig.getExtendModeState());
             }
         });
 
@@ -126,7 +125,7 @@ public class Main_menu {
             }
         });
         cardLayout.show(CardPanel, "Splash");
-        Timer timer = new Timer(5, new ActionListener() {
+        Timer timer = new Timer(100, new ActionListener() {
             int progress = 0;
 
             @Override
