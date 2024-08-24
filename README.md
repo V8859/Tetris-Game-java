@@ -16,5 +16,5 @@ Basil Aziz |
 Kartik Krishna Naidu
 
 ### Credits
-Music by Tetr.io Chika - Aerial City
-Sound effects - Block Arm With Hand - Pixabay https://pixabay.com/sound-effects/blocking-arm-with-hand-6941/
+- Music by Tetr.io Chika - Aerial City
+- Sound effects - Block Arm With Hand - Pixabay https://pixabay.com/sound-effects/blocking-arm-with-hand-6941/
