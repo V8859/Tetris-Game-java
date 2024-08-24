@@ -24,18 +24,22 @@ public class Configuration extends JPanel {
         c.gridy = 1;
         c.anchor = GridBagConstraints.WEST;
         JPanel widthSliderPanel = UtilityA.createCustomSlider("Field Width(No. of Cells):    ", 5, 15, 5);
+        JSlider widthSlider = (JSlider) widthSliderPanel.getComponent(2);
+        widthSlider.setValue(10);
         this.add(widthSliderPanel, c);
 
         c.gridx=0;
         c.gridy=2;
         c.anchor = GridBagConstraints.WEST;
         JPanel heightSliderPanel = UtilityA.createCustomSlider("Field Height (No. of cells):  ", 15,30,15);
+        JSlider heightSlider = (JSlider) heightSliderPanel.getComponent(2);
+        heightSlider.setValue(20);
         this.add(heightSliderPanel,c);
 
         c.gridx=0;
         c.gridy=3;
 //        c.anchor=GridBagConstraints.WEST;
-        JPanel GameLevel = UtilityA.createCustomSlider("Game  Level:                         ", 1,10,1);
+        JPanel GameLevel = UtilityA.createCustomSlider("Game  Level:", 1,10,1);
         this.add(GameLevel,c);
 
         c.gridx = 0;

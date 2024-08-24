@@ -28,7 +28,7 @@ public class TetrisApp extends JPanel {
         effectPlayer = new SoundPlayer();
         effectPlayer.loadSound("src/TetrisConfiguration/MovePieceAlternate.wav");
         if(music){
-            musicPlayer.loopSound(1);
+            musicPlayer.loopSound(-30.0f);
         }
 
         this.setLayout(new BorderLayout());
@@ -67,7 +67,7 @@ public class TetrisApp extends JPanel {
             public void actionPerformed(java.awt.event.ActionEvent e) {
                 gameLoop.handleInput("left");
                 if (sound){
-                    effectPlayer.playSound(-30.0f);
+                    effectPlayer.playSound(-20.0f);
                 }
             }
         });
@@ -77,7 +77,7 @@ public class TetrisApp extends JPanel {
             public void actionPerformed(java.awt.event.ActionEvent e) {
                 gameLoop.handleInput("right");
                 if (sound){
-                    effectPlayer.playSound(-30.0f);
+                    effectPlayer.playSound(-20.0f);
                 }
             }
         });
@@ -87,7 +87,7 @@ public class TetrisApp extends JPanel {
             public void actionPerformed(java.awt.event.ActionEvent e) {
                 gameLoop.handleInput("down");
                 if (sound){
-                    effectPlayer.playSound(-30.0f);
+                    effectPlayer.playSound(-20.0f);
                 }
             }
         });
@@ -97,7 +97,7 @@ public class TetrisApp extends JPanel {
             public void actionPerformed(java.awt.event.ActionEvent e) {
                 gameLoop.handleInput("rotate");
                 if (sound){
-                    effectPlayer.playSound(-30.0f);
+                    effectPlayer.playSound(-20.0f);
                 }
             }
         });
@@ -126,7 +126,7 @@ public class TetrisApp extends JPanel {
             public void actionPerformed(java.awt.event.ActionEvent e){
                 music = !music;
                 if (music){
-                    musicPlayer.loopSound(-15.0f);
+                    musicPlayer.loopSound(-30.0f);
                 }else{
                     musicPlayer.stopSound();
                 }

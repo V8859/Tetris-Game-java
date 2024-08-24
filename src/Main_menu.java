@@ -85,13 +85,14 @@ public class Main_menu {
         playButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                TetrisApp game = new TetrisApp(gameConfig.getW(), gameConfig.getH(), gameConfig.getLvl(), gameConfig.getMusicState(), gameConfig.getSoundState());
+                SwingUtilities.invokeLater(()->{
+                    TetrisApp game = new TetrisApp(gameConfig.getW(), gameConfig.getH(), gameConfig.getLvl(), gameConfig.getMusicState(), gameConfig.getSoundState());
+                    CardPanel.add(game, "Tetris Game");
+                    cardLayout.show(CardPanel, "Tetris Game");
+                    game.setFocusable(true);
+                    game.requestFocusInWindow();
+                });
 
-                // Add the game panel to the CardPanel
-                CardPanel.add(game, "Tetris Game");
-                cardLayout.show(CardPanel, "Tetris Game");
-                game.setFocusable(true);
-                game.requestFocusInWindow();
 
                 System.out.println(gameConfig.getW());
                 System.out.println(gameConfig.getH());
