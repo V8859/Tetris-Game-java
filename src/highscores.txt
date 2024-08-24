@@ -1,3 +1,10 @@
 Alice: 15000
 Bob: 12000
 Charlie: 10000
+Kartik: 10000
+Basil: 9550
+Jesse: 9500
+Arthur: 9450S
+Morgan: 8950
+Xi: 6000
+Jin: 500
