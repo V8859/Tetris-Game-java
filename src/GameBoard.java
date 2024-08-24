@@ -101,17 +101,14 @@ public class GameBoard {
         return false;
     }
 
-    public void spawnNewPiece() {
+    public boolean spawnNewPiece() {
         String[] pieceTypes = {"I", "O", "T", "L", "J", "S", "Z"};
         String randomType = pieceTypes[(int) (Math.random() * pieceTypes.length)];
         TetrisPiece newPiece = TetrisPiece.createPiece(randomType);
         newPiece.resetPosition(width / 2 - 1, 0); // Start in the middle top of the board
         this.currentPiece = newPiece;
-
-        if (!canPlacePiece(currentPiece)) {
-            // Game over logic if the new piece cannot be placed
-            System.out.println("Game Over");
-        }
+        if (!canPlacePiece(currentPiece)) {return false;}
+        return true;
     }
 
     public boolean movePieceLeft() {
