@@ -17,6 +17,7 @@ public class TetrisApp extends JPanel {
     private SoundPlayer effectPlayer;
     private boolean sound;
     private boolean music;
+    private JPanel PanelReference;
     public TetrisApp(int boardWidth, int boardHeight, int gameLevel, boolean Music, boolean Sound){
         GameBoard gameBoard = new GameBoard(boardWidth, boardHeight);
         GamePanel gamePanel = new GamePanel(gameBoard);
@@ -27,6 +28,7 @@ public class TetrisApp extends JPanel {
         musicPlayer.loadSound("src/TetrisConfiguration/Aerial City, Chika - Menu Music.wav");
         effectPlayer = new SoundPlayer();
         effectPlayer.loadSound("src/TetrisConfiguration/MovePieceAlternate.wav");
+        PanelReference = this;
         if(music){
             musicPlayer.loopSound(-30.0f);
         }
@@ -57,7 +59,7 @@ public class TetrisApp extends JPanel {
             public void actionPerformed(ActionEvent e) {
             JPanel parent = (JPanel) getParent();
             CardLayout cardLayout = (CardLayout) parent.getLayout();
-            MainMenuConfirmationScreen back_toMenu = new MainMenuConfirmationScreen(cardLayout, parent, musicPlayer, effectPlayer);
+            MainMenuConfirmationScreen back_toMenu = new MainMenuConfirmationScreen(cardLayout, parent, musicPlayer, effectPlayer, PanelReference);
             }
         });
 

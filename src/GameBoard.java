@@ -69,7 +69,6 @@ public class GameBoard {
         int multiplier = 0;
         int BaseScore = 100;
         for (int row = 0; row < height; row++) {
-            int CurrentScore = 0;
             if (checkLineFull(row)) {
                 multiplier++;
                 clearLine(row);
