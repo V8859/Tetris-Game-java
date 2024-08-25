@@ -17,7 +17,7 @@ public class GamePanel extends JPanel {
 
     public GamePanel(GameBoard gameBoard) {
         this.gameBoard = gameBoard;
-        splashImage = new ImageIcon("src/TetrisConfiguration/RainWallpaper.png").getImage();
+        //splashImage = new ImageIcon("src/TetrisConfiguration/RainWallpaper.png").getImage();
         setBackground(Color.BLACK);
 
         this.setFocusable(true);

@@ -30,14 +30,21 @@ public class Main_menu {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 0, 10, 0); // Add vertical gap between buttons
 
+        // Load the image
+        ImageIcon titleIcon = new ImageIcon("src/TetrisConfiguration/TetrisWorld.png");
+        JLabel titleLabel = new JLabel(titleIcon);
+
+        // Add the title image to the panel
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        main_menu.add(titleLabel, gbc);
+
         JButton playButton = UtilityA.createButton("Play");
         JButton configButton = UtilityA.createButton("Configuration");
         JButton highscoresButton = UtilityA.createButton("Highscores");
         JButton exitButton = UtilityA.createButton("Exit");
 
-        // Add buttons to the panel
-        gbc.gridx = 0;
-        gbc.gridy = 0;
+        gbc.gridy++;
         main_menu.add(playButton, gbc);
 
         gbc.gridy++;
