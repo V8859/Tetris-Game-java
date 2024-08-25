@@ -12,7 +12,7 @@ A Clone of classic tetris.
 
 ### Authors/Collaborators
 Jesse Barnett | 
-Basil Aziz |
+Basil Aziz (V8859) |
 Kartik Krishna Naidu
 
 ### Credits
