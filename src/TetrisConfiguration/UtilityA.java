@@ -104,7 +104,6 @@ public class UtilityA {
         tickbox.setBackground(Color.black);
         tickbox.setForeground(Color.CYAN);
         tickbox.setPreferredSize(new Dimension(300,50));
-        tickbox.setSelected(true);
         panel.add(tickbox, c);
 
 
