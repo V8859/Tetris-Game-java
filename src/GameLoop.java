@@ -1,6 +1,4 @@
 import javax.swing.*;
-import javax.swing.text.StyledEditorKit;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -99,6 +97,12 @@ public class GameLoop {
                 }
         }
         gamePanel.repaint();  // Repaint the game panel after handling input
+    }
+    public void setPause(){
+        this.timer.stop();
+    }
+    public void unPause(){
+        this.timer.start();
     }
 
 }

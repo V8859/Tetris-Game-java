@@ -1,4 +1,3 @@
-import TetrisConfiguration.MainMenuConfirmationScreen;
 import TetrisConfiguration.SoundPlayer;
 import TetrisConfiguration.UtilityA;
 
@@ -59,7 +58,8 @@ public class TetrisApp extends JPanel {
             public void actionPerformed(ActionEvent e) {
             JPanel parent = (JPanel) getParent();
             CardLayout cardLayout = (CardLayout) parent.getLayout();
-            MainMenuConfirmationScreen back_toMenu = new MainMenuConfirmationScreen(cardLayout, parent, musicPlayer, effectPlayer, PanelReference);
+            gameLoop.setPause();
+            MainMenuConfirmationScreen back_toMenu = new MainMenuConfirmationScreen(cardLayout, parent, musicPlayer, effectPlayer, PanelReference, gameLoop);
             }
         });
 
