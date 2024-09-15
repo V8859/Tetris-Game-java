@@ -14,6 +14,9 @@ public class GamePanel extends JPanel {
     private boolean gameOver;
     private Color currentColor;
     private Image splashImage;
+    private int partialMoveStep;
+    private int totalSteps;
+
 
     public GamePanel(GameBoard gameBoard) {
         this.gameBoard = gameBoard;
@@ -23,11 +26,19 @@ public class GamePanel extends JPanel {
         this.setFocusable(true);
         this.requestFocusInWindow();
         this.gameOver = false;
+        this.partialMoveStep = 0;
+        this.totalSteps = 24;
     }
 
     public void setGameOver(boolean gameOver){
         this.gameOver = gameOver;
     }
+
+    public void setPartialMove(int step, int totalSteps) {
+        this.partialMoveStep = step;
+        this.totalSteps = totalSteps;
+    }
+
 
     private int getXOffset() {
         int panelWidth = getWidth();
@@ -91,17 +102,19 @@ public class GamePanel extends JPanel {
 
     private void drawPiece(Graphics g, int[][] piece, int x, int y, Color color) {
         g.setColor(color);
-        currentColor = color;
         int xOffset = getXOffset();
         int yOffset = getYOffset();
         int margin = 1;
+
+        // Calculate the partial offset for smoother movement
+        int partialYOffset = (int) ((cellSize * partialMoveStep) / (double) totalSteps);
 
         for (int i = 0; i < piece.length; i++) {
             for (int j = 0; j < piece[i].length; j++) {
                 if (piece[i][j] != 0) {
                     g.fillRect(
                             xOffset + (x + j) * cellSize + margin,
-                            yOffset + (y + i) * cellSize + margin,
+                            yOffset + (y + i) * cellSize + margin + partialYOffset,
                             cellSize - 2 * margin,
                             cellSize - 2 * margin
                     );
@@ -119,7 +132,5 @@ public class GamePanel extends JPanel {
     public void setScore(int score){
         this.score = score;
     }
-
-
 
 }

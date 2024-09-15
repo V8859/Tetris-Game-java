@@ -182,6 +182,12 @@ public class GameBoard {
             }
         }
     }
+    public boolean canMovePieceDown() {
+        currentPiece.moveDown();
+        boolean canMove = canPlacePiece(currentPiece);
+        currentPiece.moveUp(); // Restore the original position
+        return canMove;
+    }
 
     public TetrisPiece getCurrentPiece() {
         return currentPiece;

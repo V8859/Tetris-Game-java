@@ -7,55 +7,60 @@ public class GameLoop {
     private GamePanel gamePanel;
     private Timer timer;
     private int totalScore;
-    private int GameLevel;
-    private int MaxGamLevel;
+    private int gameLevel;
+    private int maxGameLevel;
+    private int stepsPerMove;
+    private int currentStep;
 
     public GameLoop(GameBoard gameBoard, GamePanel gamePanel, int gameLevel) {
-        this.GameLevel = gameLevel;
+        this.gameLevel = gameLevel;
         this.gameBoard = gameBoard;
         this.gamePanel = gamePanel;
-        this.MaxGamLevel= 11;
-        // Set up the game loop timer to move the piece down every 500ms
-        int time = (int) (500/(GameLevel*0.4));
-        timer = new Timer(time, new ActionListener() {
+        this.maxGameLevel = 11;
+        this.stepsPerMove = 24; // Number of steps for smoother movement
+        this.currentStep = 0;
+
+        // Set up the game loop timer
+        int time = (int) (500 / (gameLevel * 0.4));
+        timer = new Timer(time / stepsPerMove, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 updateGame();
             }
         });
         timer.start();
-
-
-
     }
-    public void updateGame() {
-        int BaseScore = 500;
-        if (!gameBoard.movePieceDown()) {
-            if (gameBoard.isGameOver()) {
-                timer.stop();  // Stop the game loop if the game is over
-                System.out.println("Game Over");
-                gamePanel.setGameOver(true);
-                gamePanel.repaint();
 
-            } else {
-                if (!gameBoard.spawnNewPiece()){
+    public void updateGame() {
+        if (currentStep < stepsPerMove - 1 && gameBoard.canMovePieceDown()) {
+            currentStep++;
+        } else {
+            currentStep = 0;
+            if (!gameBoard.movePieceDown()) {
+                if (gameBoard.isGameOver()) {
                     timer.stop();
+                    System.out.println("Game Over");
                     gamePanel.setGameOver(true);
                     gamePanel.repaint();
+                } else {
+                    if (!gameBoard.spawnNewPiece()) {
+                        timer.stop();
+                        gamePanel.setGameOver(true);
+                        gamePanel.repaint();
+                    }
+                    int score = gameBoard.getScore();
+                    if (score % 500 == 0 && score > totalScore && gameLevel < maxGameLevel) {
+                        gameLevel++;
+                        totalScore = score;
+                        int time = (int) (500 / (gameLevel * 0.4));
+                        timer.setDelay(time / stepsPerMove);
+                    }
+                    gamePanel.setScore(score);
                 }
-                // Spawn a new piece when the current one can no longer move down
-                // Increment gameLevel every 500 score added.
-                int score = gameBoard.getScore();
-                if (score%BaseScore == 0 && score>totalScore && GameLevel<MaxGamLevel){
-                    GameLevel++;
-                    totalScore = score;
-                    int time = (int) (500/(GameLevel*0.4));
-                    timer.setDelay(time);
-                }
-                gamePanel.setScore(score);
             }
         }
-        gamePanel.repaint();  // Repaint the game panel after updating the game state
+        gamePanel.setPartialMove(currentStep, stepsPerMove);
+        gamePanel.repaint();
     }
 
     boolean paused;
@@ -76,7 +81,8 @@ public class GameLoop {
             case "down":
 //                gameBoard.movePieceDown();  // Move piece down faster when the down key is pressed // problematic dont do this here. updateGame instead
                 if(!paused){
-                    updateGame();
+                    for(int i = 0; i < stepsPerMove; ++i)
+                        updateGame();
                 }
                 break;
 
