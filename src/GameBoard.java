@@ -56,13 +56,16 @@ public class GameBoard {
     public void clearLine(int row) {
         for (int col = 0; col < width; col++) {
             board[row][col] = 0; // Clear the row
+            colors[row][col] = null; // Clear the colors
         }
 
         // Move all rows above down by one
         for (int r = row; r > 0; r--) {
             board[r] = board[r - 1].clone();
+            colors[r] = colors[r - 1].clone(); // Clone the colors array as well
         }
         board[0] = new int[width]; // Clear the top row
+        colors[0] = new Color[width]; // Clear the colors of the top row
     }
 
     public void clearFullLines() {
