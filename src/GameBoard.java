@@ -36,8 +36,6 @@ public class GameBoard {
         return true;
     }
 
-
-
     public void placePiece(TetrisPiece piece) {
         int[][] shape = piece.getCurrentShape();
         Color color  = piece.getColor();

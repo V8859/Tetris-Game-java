@@ -1,6 +1,6 @@
 import java.awt.*;
 
-public class TetrisPiece {
+public class TetrisPiece implements Cloneable {
     private int[][][] shapes; // 3D array for shapes (rotations)
     private int currentRotation;
     private int x, y;
@@ -14,6 +14,7 @@ public class TetrisPiece {
         this.color = color;
     }
 
+    // Static factory method to create a Tetris piece based on type
     public static TetrisPiece createPiece(String type) {
         switch (type) {
             case "I":
@@ -35,12 +36,36 @@ public class TetrisPiece {
         }
     }
 
+    // Get the current shape of the piece as a 2D array
     public int[][] getCurrentShape() {
         return shapes[currentRotation];
     }
 
+    // Convert the current shape to a Point array (used by AI)
+    public Point[] getShape() {
+        int[][] shape = getCurrentShape();
+        Point[] points = new Point[4];  // Tetrominoes always have 4 blocks
+        int index = 0;
+
+        for (int i = 0; i < shape.length; i++) {
+            for (int j = 0; j < shape[i].length; j++) {
+                if (shape[i][j] != 0) {
+                    points[index] = new Point(j, i);  // Use Point(x, y) for each block
+                    index++;
+                }
+            }
+        }
+        return points;
+    }
+
+    // Rotate the piece by incrementing the rotation index
     public void rotate() {
         currentRotation = (currentRotation + 1) % shapes.length;
+    }
+
+    // Rotate the piece to a specific rotation (used by AI)
+    public void rotate(int rotations) {
+        currentRotation = (currentRotation + rotations) % shapes.length;
     }
 
     public int getCurrentRotation() {
@@ -83,11 +108,26 @@ public class TetrisPiece {
         this.y = y;
     }
 
+    // Reset the position of the piece
     public void resetPosition(int startX, int startY) {
         this.x = startX;
         this.y = startY;
     }
-    public Color getColor(){
+
+    public Color getColor() {
         return color;
+    }
+
+    // Implementing clone to return a deep copy of the Tetris piece
+    @Override
+    public TetrisPiece clone() {
+        try {
+            TetrisPiece cloned = (TetrisPiece) super.clone();
+            cloned.shapes = shapes.clone();  // Deep clone the shapes array
+            cloned.color = color;  // Color is immutable, so no need to deep copy
+            return cloned;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();  // This should never happen
+        }
     }
 }

@@ -17,10 +17,11 @@ public class TetrisApp extends JPanel {
     private boolean sound;
     private boolean music;
     private JPanel PanelReference;
-    public TetrisApp(int boardWidth, int boardHeight, int gameLevel, boolean Music, boolean Sound){
+
+    public TetrisApp(int boardWidth, int boardHeight, int gameLevel, boolean Music, boolean Sound, boolean isAIPlayer) {
         GameBoard gameBoard = new GameBoard(boardWidth, boardHeight);
         GamePanel gamePanel = new GamePanel(gameBoard);
-        GameLoop gameLoop = new GameLoop(gameBoard, gamePanel, gameLevel);  // Pass both gameBoard and gamePanel
+        GameLoop gameLoop = new GameLoop(gameBoard, gamePanel, gameLevel, isAIPlayer);  // Pass AI flag to GameLoop
         this.sound = Sound;
         this.music = Music;
         musicPlayer = new SoundPlayer();
@@ -35,21 +36,20 @@ public class TetrisApp extends JPanel {
         this.setLayout(new BorderLayout());
         this.setPreferredSize(new Dimension(800, 800));
 
-
         layeredPane = new JLayeredPane();
-        layeredPane.setPreferredSize(new Dimension(800,800));
+        layeredPane.setPreferredSize(new Dimension(800, 800));
         this.add(layeredPane, BorderLayout.CENTER);
-        gamePanel.setBounds(0,0, 800,800);
+        gamePanel.setBounds(0, 0, 800, 800);
         layeredPane.add(gamePanel, JLayeredPane.DEFAULT_LAYER);
 
-        pauseLabel= new JLabel("Paused");
+        pauseLabel = new JLabel("Paused");
         pauseLabel.setFont(new Font("Verdana", Font.BOLD, 35));
         pauseLabel.setForeground(Color.WHITE);
-        pauseLabel.setBackground(Color.white);
         pauseLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        pauseLabel.setBounds(0,0,800,800);
+        pauseLabel.setBounds(0, 0, 800, 800);
         pauseLabel.setVisible(false);
         layeredPane.add(pauseLabel, JLayeredPane.PALETTE_LAYER);
+
 
         JButton MainMenu = UtilityA.createButton("Main Menu");
         this.add(MainMenu, BorderLayout.SOUTH);

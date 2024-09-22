@@ -93,7 +93,7 @@ public class Main_menu {
             @Override
             public void actionPerformed(ActionEvent e) {
                 SwingUtilities.invokeLater(()->{
-                    TetrisApp game = new TetrisApp(gameConfig.getW(), gameConfig.getH(), gameConfig.getLvl(), gameConfig.getMusicState(), gameConfig.getSoundState());
+                    TetrisApp game = new TetrisApp(gameConfig.getW(), gameConfig.getH(), gameConfig.getLvl(), gameConfig.getMusicState(), gameConfig.getSoundState(), gameConfig.getAIState());
                     CardPanel.add(game, "Tetris Game");
                     cardLayout.show(CardPanel, "Tetris Game");
                     game.setFocusable(true);

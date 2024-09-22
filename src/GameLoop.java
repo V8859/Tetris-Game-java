@@ -11,14 +11,25 @@ public class GameLoop {
     private int maxGameLevel;
     private int stepsPerMove;
     private int currentStep;
+    private boolean isAIPlayer;
+    private TetrisAI ai;  // Add an AI instance
 
-    public GameLoop(GameBoard gameBoard, GamePanel gamePanel, int gameLevel) {
+    // Fields to track AI's target move
+    private Move aiTargetMove;
+    private boolean aiMoveInProgress;
+
+    public GameLoop(GameBoard gameBoard, GamePanel gamePanel, int gameLevel, boolean isAIPlayer) {
         this.gameLevel = gameLevel;
         this.gameBoard = gameBoard;
         this.gamePanel = gamePanel;
         this.maxGameLevel = 11;
-        this.stepsPerMove = 24; // Number of steps for smoother movement
+        this.stepsPerMove = 24;  // Number of steps for smoother movement
         this.currentStep = 0;
+        this.isAIPlayer = isAIPlayer;
+        if (isAIPlayer) {
+            ai = new TetrisAI();  // Initialize AI
+            aiMoveInProgress = false;  // Flag to track if AI is still moving the piece
+        }
 
         // Set up the game loop timer
         int time = (int) (500 / (gameLevel * 0.4));
@@ -32,6 +43,10 @@ public class GameLoop {
     }
 
     public void updateGame() {
+        if (isAIPlayer) {
+            handleAIMove();  // Handle gradual AI movement
+        }
+
         if (currentStep < stepsPerMove - 1 && gameBoard.canMovePieceDown()) {
             currentStep++;
         } else {
@@ -39,7 +54,6 @@ public class GameLoop {
             if (!gameBoard.movePieceDown()) {
                 if (gameBoard.isGameOver()) {
                     timer.stop();
-                    System.out.println("Game Over");
                     gamePanel.setGameOver(true);
                     gamePanel.repaint();
                 } else {
@@ -61,6 +75,36 @@ public class GameLoop {
         }
         gamePanel.setPartialMove(currentStep, stepsPerMove);
         gamePanel.repaint();
+    }
+
+    private void handleAIMove() {
+        if (!aiMoveInProgress) {
+            // If AI move isn't in progress, calculate the best move
+            aiTargetMove = ai.findBestMove(gameBoard, gameBoard.getCurrentPiece());
+            aiMoveInProgress = true;
+        } else {
+            TetrisPiece currentPiece = gameBoard.getCurrentPiece();
+
+            // Apply gradual rotation
+            if (currentPiece.getCurrentRotation() != aiTargetMove.getRotation()) {
+                currentPiece.rotate();  // Rotate one step at a time
+            }
+
+            // Apply gradual horizontal movement
+            if (currentPiece.getX() < aiTargetMove.getColumn() && gameBoard.movePieceRight()) {
+                // Move right only if within bounds
+                gameBoard.movePieceRight();
+            } else if (currentPiece.getX() > aiTargetMove.getColumn() && gameBoard.movePieceLeft()) {
+                // Move left only if within bounds
+                gameBoard.movePieceLeft();
+            }
+
+            // Check if the AI has reached the target position
+            if (currentPiece.getCurrentRotation() == aiTargetMove.getRotation() &&
+                    currentPiece.getX() == aiTargetMove.getColumn()) {
+                aiMoveInProgress = false;  // AI move complete
+            }
+        }
     }
 
     boolean paused;
