@@ -59,6 +59,7 @@ public class GamePanel extends JPanel {
 
         drawBoard(g);  // Draw the grid first
         drawScore(g);
+        drawNextPiece(g);  // Draw the next piece in a corner
 
         TetrisPiece currentPiece = gameBoard.getCurrentPiece();
         if (currentPiece != null) {
@@ -113,6 +114,36 @@ public class GamePanel extends JPanel {
                     g.fillRect(smallXPos, smallYPos, smallSize, smallSize);
                 }
             }
+        }
+    }
+    // Draw the next piece in a designated corner of the screen
+    private void drawNextPiece(Graphics g) {
+        TetrisPiece nextPiece = gameBoard.getNextPiece();
+        if (nextPiece != null) {
+            int[][] shape = nextPiece.getCurrentShape();
+            Color color = nextPiece.getColor();
+
+            int xOffset = getWidth() - 5 * cellSize;  // Adjust the offset for where you want to draw the next piece
+            int yOffset = cellSize;  // Adjust the offset for vertical positioning
+
+            g.setColor(color);
+            int margin = 1;  // Small margin for visual effect
+
+            for (int i = 0; i < shape.length; i++) {
+                for (int j = 0; j < shape[i].length; j++) {
+                    if (shape[i][j] != 0) {
+                        g.fillRect(
+                                xOffset + j * cellSize + margin,
+                                yOffset + i * cellSize + margin,
+                                cellSize - 2 * margin,
+                                cellSize - 2 * margin
+                        );
+                    }
+                }
+            }
+
+            g.setColor(Color.WHITE);
+            g.drawString("Next Piece:", xOffset - cellSize, yOffset - cellSize);  // Label for next piece
         }
     }
 

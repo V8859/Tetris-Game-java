@@ -5,6 +5,7 @@ public class GameBoard {
     private int width, height;
     private int[][] board; // 2D array representing the board
     private TetrisPiece currentPiece;
+    private TetrisPiece nextPiece;
     private int TotalScore;
     private Color[][] colors;
     private Random random;
@@ -15,10 +16,9 @@ public class GameBoard {
         this.board = new int[height][width];
         this.colors = new Color[height][width];
         this.random  = new Random(seed);
+        this.nextPiece = generateRandomPiece();
         spawnNewPiece();  // Spawn the first piece when the game board is created
     }
-
-
 
 
     public boolean canPlacePiece(TetrisPiece piece) {
@@ -107,14 +107,26 @@ public class GameBoard {
         return false;
     }
 
-    public boolean spawnNewPiece() {
+    // Generates a random Tetris piece
+    private TetrisPiece generateRandomPiece() {
         String[] pieceTypes = {"I", "O", "T", "L", "J", "S", "Z"};
         String randomType = pieceTypes[random.nextInt(pieceTypes.length)];
-        TetrisPiece newPiece = TetrisPiece.createPiece(randomType);
-        newPiece.resetPosition(width / 2 - 1, 0); // Start in the middle top of the board
-        this.currentPiece = newPiece;
-        if (!canPlacePiece(currentPiece)) {return false;}
+        return TetrisPiece.createPiece(randomType);
+    }
+
+    // Spawn the next piece as the current piece and generate a new next piece
+    public boolean spawnNewPiece() {
+        this.currentPiece = this.nextPiece;  // The current piece becomes the next piece
+        this.currentPiece.resetPosition(width / 2 - 1, 0);  // Start in the middle top of the board
+        this.nextPiece = generateRandomPiece();
+        if (!canPlacePiece(currentPiece)) {
+            return false;  // Game over condition
+        }
         return true;
+    }
+
+    public TetrisPiece getNextPiece() {
+        return nextPiece;
     }
 
     public boolean movePieceLeft() {
