@@ -94,8 +94,8 @@ public class Main_menu {
             public void actionPerformed(ActionEvent e) {
                 System.out.println(gameConfig.getExtendModeState());
                 SwingUtilities.invokeLater(()->{
-                    System.out.println(gameConfig.getP1Status());
-                    TetrisMultiPlayer game = new TetrisMultiPlayer(gameConfig.getW(), gameConfig.getH(), gameConfig.getLvl(), gameConfig.getMusicState(), gameConfig.getSoundState(), gameConfig.getExtendModeState(), gameConfig.getP1Status(), gameConfig.getP2Status());
+                    long seed = (long) (Math.random()*100);
+                    TetrisMultiPlayer game = new TetrisMultiPlayer(gameConfig.getW(), gameConfig.getH(), gameConfig.getLvl(), gameConfig.getMusicState(), gameConfig.getSoundState(), gameConfig.getExtendModeState(), gameConfig.getP1Status(), gameConfig.getP2Status(), seed);
                     CardPanel.add(game, "Tetris Game");
                     cardLayout.show(CardPanel, "Tetris Game");
                     game.setFocusable(true);

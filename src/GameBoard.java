@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.util.Random;
 
 public class GameBoard {
     private int width, height;
@@ -6,14 +7,19 @@ public class GameBoard {
     private TetrisPiece currentPiece;
     private int TotalScore;
     private Color[][] colors;
+    private Random random;
 
-    public GameBoard(int width, int height) {
+    public GameBoard(int width, int height, long seed) {
         this.width = width;
         this.height = height;
         this.board = new int[height][width];
         this.colors = new Color[height][width];
+        this.random  = new Random(seed);
         spawnNewPiece();  // Spawn the first piece when the game board is created
     }
+
+
+
 
     public boolean canPlacePiece(TetrisPiece piece) {
         int[][] shape = piece.getCurrentShape();
@@ -103,7 +109,7 @@ public class GameBoard {
 
     public boolean spawnNewPiece() {
         String[] pieceTypes = {"I", "O", "T", "L", "J", "S", "Z"};
-        String randomType = pieceTypes[(int) (Math.random() * pieceTypes.length)];
+        String randomType = pieceTypes[random.nextInt(pieceTypes.length)];
         TetrisPiece newPiece = TetrisPiece.createPiece(randomType);
         newPiece.resetPosition(width / 2 - 1, 0); // Start in the middle top of the board
         this.currentPiece = newPiece;
