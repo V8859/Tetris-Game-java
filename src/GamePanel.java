@@ -21,7 +21,6 @@ public class GamePanel extends JPanel {
     public GamePanel(GameBoard gameBoard) {
         this.gameBoard = gameBoard;
         //splashImage = new ImageIcon("src/TetrisConfiguration/RainWallpaper.png").getImage();
-        setBackground(Color.BLACK);
 
         this.setFocusable(true);
         this.requestFocusInWindow();
@@ -49,11 +48,14 @@ public class GamePanel extends JPanel {
         return scoreHeight;  // Position the board just below the score
     }
 
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         // Draw the splash image as the background
-        g.drawImage(splashImage, 0, 0, getWidth(), getHeight(), this);
+//        g.drawImage(splashImage, 0, 0, getWidth(), getHeight(), this);
+
+        drawComplexBackground(g);
 
         drawBoard(g);  // Draw the grid first
         drawScore(g);
@@ -93,8 +95,22 @@ public class GamePanel extends JPanel {
         for (int y = 0; y < board.length; y++) {
             for (int x = 0; x < board[0].length; x++) {
                 if (board[y][x] != 0) {
+                    int xPos = xOffset + x * cellSize;
+                    int yPos = yOffset + y * cellSize;
                     g.setColor(colors[y][x]);
-                    g.fillRect(xOffset + x * cellSize, yOffset + y * cellSize, cellSize, cellSize);
+                    g.fillRect(xPos,yPos, cellSize, cellSize);
+                    int size =cellSize;
+                    int smallsize = (size +22)/ 2 ;
+                    int smallxPos = xPos + (size - smallsize) / 2;
+                    int smallyPos = yPos + (size - smallsize) / 2;
+                    g.setColor(Color.black.brighter().darker().brighter().brighter());
+                    g.fillRect(smallxPos, smallyPos, smallsize, smallsize);
+
+                    int smallSize = (size +18)/ 2 ;
+                    int smallXPos = xPos + (size - smallSize) / 2;
+                    int smallYPos = yPos + (size - smallSize) / 2;
+                    g.setColor(colors[y][x].darker().darker());
+                    g.fillRect(smallXPos, smallYPos, smallSize, smallSize);
                 }
             }
         }
@@ -112,12 +128,28 @@ public class GamePanel extends JPanel {
         for (int i = 0; i < piece.length; i++) {
             for (int j = 0; j < piece[i].length; j++) {
                 if (piece[i][j] != 0) {
-                    g.fillRect(
-                            xOffset + (x + j) * cellSize + margin,
-                            yOffset + (y + i) * cellSize + margin + partialYOffset,
-                            cellSize - 2 * margin,
-                            cellSize - 2 * margin
-                    );
+                    int xPos = xOffset + (x + j) * cellSize + margin;
+                    int yPos = yOffset + (y + i) * cellSize + margin + partialYOffset;
+
+                    int size = cellSize -2 *margin;
+                    int centerX = xPos + size/2;
+                    int centerY = yPos + size/2;
+
+                    g.setColor(color.darker().darker());
+                    g.fillRect(xPos, yPos, size, size);
+
+
+                    int smallsize = (size +22)/ 2 ;
+                    int smallxPos = xPos + (size - smallsize) / 2;
+                    int smallyPos = yPos + (size - smallsize) / 2;
+                    g.setColor(Color.black.brighter().darker().brighter().brighter());
+                    g.fillRect(smallxPos, smallyPos, smallsize, smallsize);
+
+                    int smallSize = (size +18)/ 2 ;
+                    int smallXPos = xPos + (size - smallSize) / 2;
+                    int smallYPos = yPos + (size - smallSize) / 2;
+                    g.setColor(color.brighter().darker().brighter().darker());
+                    g.fillRect(smallXPos, smallYPos, smallSize, smallSize);
                 }
             }
         }
@@ -125,12 +157,39 @@ public class GamePanel extends JPanel {
 
     private void drawScore(Graphics g) {
         // Example score
+  // Draw score at a fixed position (left-aligned)
+    }
+    private void drawComplexBackground(Graphics g) {
+        Graphics2D g2d = (Graphics2D) g;
+        int width = getWidth();
+        int height = getHeight();
+
+        // Draw a gradient background
+        Color color1 = Color.BLUE;
+        Color color2 = Color.CYAN;
+        GradientPaint gp = new GradientPaint(0, 0, color1, 0, height, color2);
+        g2d.setPaint(gp);
+        g2d.fillRect(0, 0, width, height);
+
         g.setColor(Color.WHITE);  // Set color for the text
         g.setFont(new Font("Arial", Font.BOLD, 20));  // Set font for the score
-        g.drawString("Score: " + score, 10, 30);  // Draw score at a fixed position (left-aligned)
+        g.drawString("Score: " + score, 10, 30);
+
+
+        // Calculate the board area
+        int xOffset = getXOffset();
+        int yOffset = getYOffset();
+        int boardWidth = gameBoard.getBoard()[0].length * cellSize;
+        int boardHeight = gameBoard.getBoard().length * cellSize;
+
+        // Draw a solid color rectangle to cover the board area
+        g2d.setColor(Color.BLACK); // Set the color to match the board background
+        g2d.fillRect(xOffset, yOffset, boardWidth, boardHeight);
     }
+
+
+
     public void setScore(int score){
         this.score = score;
     }
-
 }
