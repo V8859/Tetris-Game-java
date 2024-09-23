@@ -17,11 +17,14 @@ public class TetrisApp extends JPanel {
     private boolean sound;
     private boolean music;
     private JPanel PanelReference;
-
-    public TetrisApp(int boardWidth, int boardHeight, int gameLevel, boolean Music, boolean Sound, boolean isAIPlayer) {
+    private GamePanel gamePanel;
+    private GameLoop CurrentLoop;
+    public TetrisApp(int boardWidth, int boardHeight, int gameLevel, boolean Music, boolean Sound, boolean isAIPlayer){
         GameBoard gameBoard = new GameBoard(boardWidth, boardHeight);
         GamePanel gamePanel = new GamePanel(gameBoard);
-        GameLoop gameLoop = new GameLoop(gameBoard, gamePanel, gameLevel, isAIPlayer);  // Pass AI flag to GameLoop
+        GameLoop gameLoop = new GameLoop(gameBoard, gamePanel, gameLevel, isAIPlayer);  // Pass both gameBoard and gamePanel
+        this.gamePanel = gamePanel;
+        this.CurrentLoop = gameLoop;
         this.sound = Sound;
         this.music = Music;
         musicPlayer = new SoundPlayer();
@@ -36,104 +39,105 @@ public class TetrisApp extends JPanel {
         this.setLayout(new BorderLayout());
         this.setPreferredSize(new Dimension(800, 800));
 
+
         layeredPane = new JLayeredPane();
-        layeredPane.setPreferredSize(new Dimension(800, 800));
+        layeredPane.setPreferredSize(new Dimension(800,800));
         this.add(layeredPane, BorderLayout.CENTER);
-        gamePanel.setBounds(0, 0, 800, 800);
+        gamePanel.setBounds(0,0, 800,800);
         layeredPane.add(gamePanel, JLayeredPane.DEFAULT_LAYER);
 
-        pauseLabel = new JLabel("Paused");
+        pauseLabel= new JLabel("Paused");
         pauseLabel.setFont(new Font("Verdana", Font.BOLD, 35));
         pauseLabel.setForeground(Color.WHITE);
+        pauseLabel.setBackground(Color.white);
         pauseLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        pauseLabel.setBounds(0, 0, 800, 800);
+        pauseLabel.setBounds(0,0,800,800);
         pauseLabel.setVisible(false);
         layeredPane.add(pauseLabel, JLayeredPane.PALETTE_LAYER);
 
+//        JButton MainMenu = UtilityA.createButton("Main Menu");
+//        this.add(MainMenu, BorderLayout.SOUTH);
+//        MainMenu.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//            JPanel parent = (JPanel) getParent();
+//            CardLayout cardLayout = (CardLayout) parent.getLayout();
+//            gameLoop.setPause();
+//            MainMenuConfirmationScreen back_toMenu = new MainMenuConfirmationScreen(cardLayout, parent, musicPlayer, effectPlayer, PanelReference, gameLoop);
+//            }
+//        });
 
-        JButton MainMenu = UtilityA.createButton("Main Menu");
-        this.add(MainMenu, BorderLayout.SOUTH);
-        MainMenu.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-            JPanel parent = (JPanel) getParent();
-            CardLayout cardLayout = (CardLayout) parent.getLayout();
-            gameLoop.setPause();
-            MainMenuConfirmationScreen back_toMenu = new MainMenuConfirmationScreen(cardLayout, parent, musicPlayer, effectPlayer, PanelReference, gameLoop);
-            }
-        });
-
-        // Add key bindings for player input
-        this.getInputMap().put(javax.swing.KeyStroke.getKeyStroke("LEFT"), "moveLeft");
-        this.getActionMap().put("moveLeft", new javax.swing.AbstractAction() {
-            public void actionPerformed(java.awt.event.ActionEvent e) {
-                gameLoop.handleInput("left");
-                if (sound){
-                    effectPlayer.playSound(-20.0f);
-                }
-            }
-        });
-
-        this.getInputMap().put(javax.swing.KeyStroke.getKeyStroke("RIGHT"), "moveRight");
-        this.getActionMap().put("moveRight", new javax.swing.AbstractAction() {
-            public void actionPerformed(java.awt.event.ActionEvent e) {
-                gameLoop.handleInput("right");
-                if (sound){
-                    effectPlayer.playSound(-20.0f);
-                }
-            }
-        });
-
-        this.getInputMap().put(javax.swing.KeyStroke.getKeyStroke("DOWN"), "moveDown");
-        this.getActionMap().put("moveDown", new javax.swing.AbstractAction() {
-            public void actionPerformed(java.awt.event.ActionEvent e) {
-                gameLoop.handleInput("down");
-                if (sound){
-                    effectPlayer.playSound(-20.0f);
-                }
-            }
-        });
-
-        this.getInputMap().put(javax.swing.KeyStroke.getKeyStroke("UP"), "rotate");
-        this.getActionMap().put("rotate", new javax.swing.AbstractAction() {
-            public void actionPerformed(java.awt.event.ActionEvent e) {
-                gameLoop.handleInput("rotate");
-                if (sound){
-                    effectPlayer.playSound(-20.0f);
-                }
-            }
-        });
-
-        this.getInputMap().put(javax.swing.KeyStroke.getKeyStroke("P"), "pause");
-        this.getActionMap().put("pause", new javax.swing.AbstractAction() {
-            public void actionPerformed(java.awt.event.ActionEvent e) {
-                gameLoop.handleInput("pause");
-                pause = !pause;
-                pauseLabel.setVisible(pause);
-                layeredPane.revalidate();
-                layeredPane.repaint();
-
-            }
-        });
-        this.getInputMap().put(javax.swing.KeyStroke.getKeyStroke("S"),"sound-off");
-        this.getActionMap().put("sound-off", new javax.swing.AbstractAction(){
-            public void actionPerformed(java.awt.event.ActionEvent e){
-                sound = !sound;
-            }
-        });
-
-
-        this.getInputMap().put(javax.swing.KeyStroke.getKeyStroke("M"),"music-off");
-        this.getActionMap().put("music-off", new javax.swing.AbstractAction(){
-            public void actionPerformed(java.awt.event.ActionEvent e){
-                music = !music;
-                if (music){
-                    musicPlayer.loopSound(-30.0f);
-                }else{
-                    musicPlayer.stopSound();
-                }
-            }
-        });
+//         Add key bindings for player input
+//        this.getInputMap().put(javax.swing.KeyStroke.getKeyStroke("LEFT"), "moveLeft");
+//        this.getActionMap().put("moveLeft", new javax.swing.AbstractAction() {
+//            public void actionPerformed(java.awt.event.ActionEvent e) {
+//                gameLoop.handleInput("left");
+//                if (sound){
+//                    effectPlayer.playSound(-20.0f);
+//                }
+//            }
+//        });
+//
+//        this.getInputMap().put(javax.swing.KeyStroke.getKeyStroke("RIGHT"), "moveRight");
+//        this.getActionMap().put("moveRight", new javax.swing.AbstractAction() {
+//            public void actionPerformed(java.awt.event.ActionEvent e) {
+//                gameLoop.handleInput("right");
+//                if (sound){
+//                    effectPlayer.playSound(-20.0f);
+//                }
+//            }
+//        });
+//
+//        this.getInputMap().put(javax.swing.KeyStroke.getKeyStroke("DOWN"), "moveDown");
+//        this.getActionMap().put("moveDown", new javax.swing.AbstractAction() {
+//            public void actionPerformed(java.awt.event.ActionEvent e) {
+//                gameLoop.handleInput("down");
+//                if (sound){
+//                    effectPlayer.playSound(-20.0f);
+//                }
+//            }
+//        });
+//
+//        this.getInputMap().put(javax.swing.KeyStroke.getKeyStroke("UP"), "rotate");
+//        this.getActionMap().put("rotate", new javax.swing.AbstractAction() {
+//            public void actionPerformed(java.awt.event.ActionEvent e) {
+//                gameLoop.handleInput("rotate");
+//                if (sound){
+//                    effectPlayer.playSound(-20.0f);
+//                }
+//            }
+//        });
+//
+//        this.getInputMap().put(javax.swing.KeyStroke.getKeyStroke("P"), "pause");
+//        this.getActionMap().put("pause", new javax.swing.AbstractAction() {
+//            public void actionPerformed(java.awt.event.ActionEvent e) {
+//                gameLoop.handleInput("pause");
+//                pause = !pause;
+//                pauseLabel.setVisible(pause);
+//                layeredPane.revalidate();
+//                layeredPane.repaint();
+//
+//            }
+//        });
+//        this.getInputMap().put(javax.swing.KeyStroke.getKeyStroke("S"),"sound-off");
+//        this.getActionMap().put("sound-off", new javax.swing.AbstractAction(){
+//            public void actionPerformed(java.awt.event.ActionEvent e){
+//                sound = !sound;
+//            }
+//        });
+//
+//
+//        this.getInputMap().put(javax.swing.KeyStroke.getKeyStroke("M"),"music-off");
+//        this.getActionMap().put("music-off", new javax.swing.AbstractAction(){
+//            public void actionPerformed(java.awt.event.ActionEvent e){
+//                music = !music;
+//                if (music){
+//                    musicPlayer.loopSound(-30.0f);
+//                }else{
+//                    musicPlayer.stopSound();
+//                }
+//            }
+//        });
         this.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
@@ -150,5 +154,37 @@ public class TetrisApp extends JPanel {
     this.requestFocusInWindow();
     this.setVisible(true);
     }
+    public GameLoop gameLoop(){
+        return this.CurrentLoop;
+    }
+    public boolean sound(){
+        return this.sound;
+    }
+    public boolean music(){
+        return this.music;
+    }
+    public SoundPlayer effectPlayer(){
+        return this.effectPlayer;
+    }
+    public SoundPlayer musicPlayer(){
+        return this.musicPlayer;
+    }
+    public JPanel App(){
+        return this;
+    }
+    public Boolean pause(){
+        return this.pause;
+    }
+    public JLabel pauseLabel(){
+        return this.pauseLabel;
+    }
+    public GamePanel gamePanel(){
+        return this.gamePanel;
+    }
+    public JLayeredPane layeredPane(){
+        return this.layeredPane;
+    }
 
 }
+
+

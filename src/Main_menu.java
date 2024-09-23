@@ -92,8 +92,10 @@ public class Main_menu {
         playButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                System.out.println(gameConfig.getExtendModeState());
                 SwingUtilities.invokeLater(()->{
-                    TetrisApp game = new TetrisApp(gameConfig.getW(), gameConfig.getH(), gameConfig.getLvl(), gameConfig.getMusicState(), gameConfig.getSoundState(), gameConfig.getAIState());
+                    System.out.println(gameConfig.getP1Status());
+                    TetrisMultiPlayer game = new TetrisMultiPlayer(gameConfig.getW(), gameConfig.getH(), gameConfig.getLvl(), gameConfig.getMusicState(), gameConfig.getSoundState(), gameConfig.getExtendModeState(), gameConfig.getP1Status(), gameConfig.getP2Status());
                     CardPanel.add(game, "Tetris Game");
                     cardLayout.show(CardPanel, "Tetris Game");
                     game.setFocusable(true);
@@ -106,7 +108,6 @@ public class Main_menu {
 //                System.out.println(gameConfig.getMusicState());
 //                System.out.println(gameConfig.getSoundState());
 //                System.out.println(gameConfig.getAIState());
-//                System.out.println(gameConfig.getExtendModeState());
             }
         });
 

@@ -2,9 +2,14 @@ package TetrisConfiguration;
 
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.util.ArrayList;
 import java.util.jar.JarEntry;
 
 public class Configuration extends JPanel {
@@ -64,18 +69,40 @@ public class Configuration extends JPanel {
         c.gridx = 0;
         c.gridy = 6;
         JPanel AiPlay = UtilityA.createOptions("AI Play (On/Off):");
-        this.add(AiPlay, c);
+//        this.add(AiPlay, c);
 
 
 
         c.gridx = 0;
         c.gridy = 7;
         JPanel extendMode = UtilityA.createOptions("Extend Mode(On/Off):");
+        JCheckBox ExtendModeState = (JCheckBox) extendMode.getComponent(1);
+
         this.add(extendMode, c);
-
-
         c.gridx = 0;
         c.gridy = 8;
+        JPanel playerOne = UtilityA.PlayerSetting("Player One");
+        this.add(playerOne, c);
+
+        c.gridx = 0;
+        c.gridy = 9;
+        JPanel playerTwo = UtilityA.PlayerSetting("Player Two");
+        disablePanel(playerTwo);
+        this.add(playerTwo, c);
+
+        ExtendModeState.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED){
+                    EnablePanel(playerTwo);
+                }else{
+                    disablePanel(playerTwo);
+                }
+            }
+        });
+
+        c.gridx = 0;
+        c.gridy = 20;
         c.gridwidth = 2; // Span across 2 columns
         c.fill = GridBagConstraints.HORIZONTAL;
 
@@ -118,16 +145,63 @@ public class Configuration extends JPanel {
         JCheckBox SoundState = (JCheckBox) SoundStatePanel.getComponent(1);
         return SoundState.isSelected();
     }
-    public boolean getAIState(){
-        JPanel AIStatePanel = (JPanel) this.getComponent(6);
-        JCheckBox AIState = (JCheckBox) AIStatePanel.getComponent(1);
-        return AIState.isSelected();
-    }
 
     public boolean getExtendModeState(){
-        JPanel ExtendModeStatePanel = (JPanel) this.getComponent(7);
+        JPanel ExtendModeStatePanel = (JPanel) this.getComponent(6);
         JCheckBox ExtendModeState = (JCheckBox) ExtendModeStatePanel.getComponent(1);
         return ExtendModeState.isSelected();
     }
+
+    public void disablePanel(JPanel playerPanel){
+        Component [] components = playerPanel.getComponents();
+        playerPanel.setEnabled(false);
+        for (Component component: components){
+            component.setEnabled(false);
+        }
+    }
+
+    public void EnablePanel(JPanel playerPanel){
+        Component [] components = playerPanel.getComponents();
+        playerPanel.setEnabled(true);
+        for (Component component: components){
+            component.setEnabled(true);
+        }
+    }
+
+    public String getP1Status(){
+        JPanel p1Panel = (JPanel) this.getComponent(7);
+        Component[] components = p1Panel.getComponents();
+        int i = 0;
+        for (Component component : components) {
+            if (i != 0) {
+
+            JRadioButton comp = (JRadioButton) component;
+            if (comp.isSelected()) {
+                return (String) comp.getText();
+            }
+        }i++;
+        }
+        return "s";
+    }
+
+
+    public String getP2Status(){
+        JPanel p2Panel = (JPanel) this.getComponent(8);
+        Component[] components = p2Panel.getComponents();
+        int i = 0;
+        for (Component component : components){
+            if (i!=0){
+                JRadioButton comp = (JRadioButton) component;
+                if (comp.isSelected()){
+                    return (String) comp.getText();
+                    }
+                }
+                i++;
+            }
+
+        return "s";
+    }
+
+
 }
 //complete

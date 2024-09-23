@@ -9,7 +9,7 @@ import java.awt.event.ActionListener;
 public class MainMenuConfirmationScreen extends JFrame {
 //    private JFrame mainframe;
     private boolean YesOrNo;
-    public  MainMenuConfirmationScreen(CardLayout cardLayout, JPanel parent, SoundPlayer musicPlayer, SoundPlayer effectPlayer, JPanel game, GameLoop gameLoop) {
+    public  MainMenuConfirmationScreen(CardLayout cardLayout, JPanel parent, TetrisApp p1, TetrisApp p2, boolean ExtendMode, JPanel game) {
         setTitle("Exit Confirmation");
         setSize(600, 150);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -34,8 +34,13 @@ public class MainMenuConfirmationScreen extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 cardLayout.show(parent, "Main Menu");
-                effectPlayer.stopSound();
-                musicPlayer.stopSound();
+                p1.effectPlayer().stopSound();
+                p1.musicPlayer().stopSound();
+                if (ExtendMode){
+                    p2.effectPlayer().stopSound();
+                    p2.musicPlayer().stopSound();
+                }
+
                 dispose();
             }
         });
@@ -44,7 +49,12 @@ public class MainMenuConfirmationScreen extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
 //                new Main_menu(); // Go back to the main menu
-                gameLoop.unPause();
+                p1.gameLoop().unPause();
+                p1.pauseLabel().setVisible(false);
+                if (ExtendMode){
+                    p2.gameLoop().unPause();
+                    p2.pauseLabel().setVisible(false);
+                }
                 game.setFocusable(true);
                 game.requestFocusInWindow();
                 dispose();
@@ -53,6 +63,5 @@ public class MainMenuConfirmationScreen extends JFrame {
 
         setVisible(true);
     }
-
 
 }

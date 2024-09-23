@@ -62,7 +62,8 @@ public class UtilityA {
 
         c.gridx = 1;
         c.gridy = 0;
-        c.gridwidth = 2;
+//        c.fill = GridBagConstraints.HORIZONTAL;
+//        c.gridwidth = 6;
 
         JSlider slider = new JSlider(min, max, initial);
         slider.setBackground(Color.black);
@@ -124,6 +125,51 @@ public class UtilityA {
                 }
             }
         });
+        return panel;
+    }
+
+    public static JPanel PlayerSetting(String LabelText){
+        JPanel panel = new JPanel(new GridBagLayout());
+        panel.setBackground(Color.black);
+        GridBagConstraints c = new GridBagConstraints();
+        c.insets = new Insets(10, 10, 10, 10); // Add some padding around components
+        c.gridx = 0;
+        c.gridy = 0;
+        c.anchor = GridBagConstraints.WEST;
+
+        JLabel label = new JLabel(LabelText);
+        label.setForeground(Color.white);
+        label.setPreferredSize(new Dimension(150, label.getPreferredSize().height));
+        panel.add(label,c);
+
+        c.gridx = 1;
+        c.gridy = 0;
+        JRadioButton Human = new JRadioButton("Human", true);
+        Human.setBackground(Color.black);
+        Human.setForeground(Color.CYAN);
+        panel.add(Human, c);
+
+
+        c.gridx = 2;
+        c.gridy = 0;
+        JRadioButton Ai = new JRadioButton("Ai");
+        Ai.setBackground(Color.black);
+        Ai.setForeground(Color.CYAN);
+        panel.add(Ai, c);
+
+
+        c.gridx = 3;
+        c.gridy = 0;
+        JRadioButton External = new JRadioButton("External");
+        External.setBackground(Color.black);
+        External.setForeground(Color.CYAN);
+        panel.add(External, c);
+
+        ButtonGroup bg = new ButtonGroup();
+        bg.add(Human);
+        bg.add(Ai);
+        bg.add(External);
+
         return panel;
     }
 
