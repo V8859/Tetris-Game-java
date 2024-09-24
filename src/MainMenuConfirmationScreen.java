@@ -40,8 +40,9 @@ public class MainMenuConfirmationScreen extends JFrame {
                     p2.effectPlayer().stopSound();
                     p2.musicPlayer().stopSound();
                 }
-
                 dispose();
+                UtilityA.DynamicFrameAdjustment(1000,800, false,false);
+
             }
         });
 
