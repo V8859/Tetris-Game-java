@@ -22,7 +22,7 @@ public class GameLoop {
         this.gameLevel = gameLevel;
         this.gameBoard = gameBoard;
         this.gamePanel = gamePanel;
-        this.maxGameLevel = 11;
+        this.maxGameLevel = 10;
         this.stepsPerMove = 24;  // Number of steps for smoother movement
         this.currentStep = 0;
         this.isAIPlayer = isAIPlayer;

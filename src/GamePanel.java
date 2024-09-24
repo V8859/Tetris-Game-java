@@ -212,7 +212,7 @@ public class GamePanel extends JPanel {
 
 
         g2d.setColor(Color.white.darker());
-        g2d.fillRect(6,10, 150,400);
+        g2d.fillRect(6,10, 150,500);
         g2d.setColor(Color.black.darker());
         g2d.fillRect(9,14, 148,498);
 

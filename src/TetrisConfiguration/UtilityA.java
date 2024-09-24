@@ -177,8 +177,13 @@ public class UtilityA {
         JFrame parentFrame = getFrameByTitle("Tetris");
         int wid;
         int hei;
+        double adjuster = 1;
         if (gamePurpose){
-            wid = width *60;
+            if (width<10){
+                adjuster = (40 * ((double) 4 /width));
+                System.out.println(adjuster);
+            }
+            wid = width *(60 + (int) adjuster);
             hei = height *35;
             if (ExtendMode){
                 wid = wid*2;

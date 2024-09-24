@@ -5,7 +5,7 @@ public class Main {
     public static void main(String[] args) {
         JFrame frame = new JFrame("Tetris");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+        frame.setResizable(false);
         Main_menu r = new Main_menu();
 
         frame.add(r.CardPanel);
