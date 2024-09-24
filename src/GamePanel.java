@@ -11,6 +11,11 @@ public class GamePanel extends JPanel {
     private final int cellSize = 25;  // Each cell is 30x30 pixels
     private final int scoreHeight = 50;  // Space reserved for the score display
     private int score;
+    private int level;
+    private int initialLevel;
+    private int lines;
+    private String playerTag;
+    private String playerType;
     private boolean gameOver;
     private Color currentColor;
     private Image splashImage;
@@ -21,7 +26,7 @@ public class GamePanel extends JPanel {
     public GamePanel(GameBoard gameBoard) {
         this.gameBoard = gameBoard;
         //splashImage = new ImageIcon("src/TetrisConfiguration/RainWallpaper.png").getImage();
-
+        initialLevel = level;
         this.setFocusable(true);
         this.requestFocusInWindow();
         this.gameOver = false;
@@ -123,8 +128,8 @@ public class GamePanel extends JPanel {
             int[][] shape = nextPiece.getCurrentShape();
             Color color = nextPiece.getColor();
 
-            int xOffset = getWidth() - 5 * cellSize;  // Adjust the offset for where you want to draw the next piece
-            int yOffset = cellSize;  // Adjust the offset for vertical positioning
+            int xOffset = 40;  // Adjust the offset for where you want to draw the next piece
+            int yOffset = 220;  // Adjust the offset for vertical positioning
 
             g.setColor(color);
             int margin = 1;  // Small margin for visual effect
@@ -143,7 +148,8 @@ public class GamePanel extends JPanel {
             }
 
             g.setColor(Color.WHITE);
-            g.drawString("Next Piece:", xOffset - cellSize, yOffset - cellSize);  // Label for next piece
+            g.setFont(new Font("Arial", Font.BOLD, 15));
+            g.drawString("Next Piece:", 14, 210);  // Label for next piece
         }
     }
 
@@ -196,15 +202,33 @@ public class GamePanel extends JPanel {
         int height = getHeight();
 
         // Draw a gradient background
-        Color color1 = Color.BLUE;
-        Color color2 = Color.CYAN;
+        Color [] curr  = getColorScheme(level);
+        Color color1 = curr[0];
+        Color color2 = curr[1];
         GradientPaint gp = new GradientPaint(0, 0, color1, 0, height, color2);
         g2d.setPaint(gp);
         g2d.fillRect(0, 0, width, height);
 
+
+
+        g2d.setColor(Color.white.darker());
+        g2d.fillRect(6,10, 150,400);
+        g2d.setColor(Color.black.darker());
+        g2d.fillRect(9,14, 148,498);
+
+        g2d.setColor(Color.gray.brighter().darker().brighter().darker());
+        g2d.fillRect(9,14, 145,495);
+
         g.setColor(Color.WHITE);  // Set color for the text
-        g.setFont(new Font("Arial", Font.BOLD, 20));  // Set font for the score
-        g.drawString("Score: " + score, 10, 30);
+        g.setFont(new Font("Arial", Font.BOLD, 15));  // Set font for the score
+
+        g.drawString(playerTag,50 , 30);
+        g.drawString("Player type: " + playerType, 14,60);
+        g.drawString("Initial level: " + initialLevel, 14, 90);
+        g.drawString("Current level: " + level, 14, 120);
+        g.drawString("Lines Erased: " + lines, 14, 150);
+        g.drawString("Score: " + score, 14, 180);
+
 
 
         // Calculate the board area
@@ -214,13 +238,41 @@ public class GamePanel extends JPanel {
         int boardHeight = gameBoard.getBoard().length * cellSize;
 
         // Draw a solid color rectangle to cover the board area
-        g2d.setColor(Color.BLACK); // Set the color to match the board background
+        g2d.setColor(Color.gray.darker()); // Set the color to match the board background
         g2d.fillRect(xOffset, yOffset, boardWidth, boardHeight);
     }
-
+    private static Color[] getColorScheme(int level){
+        return switch (level) {
+            case 1 -> new Color[]{new Color(3, 2, 252), new Color(140, 255, 244)};
+            case 2 -> new Color[]{new Color(42, 0, 213), new Color(140, 237, 255)};
+            case 3 -> new Color[]{new Color(99, 0, 158), new Color(140, 196, 255)};
+            case 4 -> new Color[]{new Color(161, 1, 93), new Color(140, 156, 255)};
+            case 5 -> new Color[]{new Color(216, 0, 39), new Color(165, 140, 255)};
+            case 6 -> new Color[]{new Color(254, 0, 2), new Color(180, 130, 255)};
+            case 7 -> new Color[]{new Color(254, 0, 2).darker(), new Color(180, 130, 255).darker()};
+            case 8 -> new Color[]{new Color(254, 0, 2).darker().darker(), new Color(180, 130, 255).darker().darker()};
+            case 9 -> new Color[]{new Color(254, 0, 2).darker().darker().darker(), new Color(180, 130, 255).darker().darker().darker()};
+            default -> new Color[]{new Color(254, 0, 2).darker().darker().darker().darker(), new Color(180, 130, 255).darker().darker().darker().darker()};
+        };
+    }
 
 
     public void setScore(int score){
         this.score = score;
+    }
+    public void setLevel(int level){
+        this.level = level;
+    }
+    public void setInitialLevel(int level){
+        this.initialLevel = level;
+    }
+    public void setPlayerTag(String playerTag){
+        this.playerTag =  playerTag;
+    }
+    public void setPlayerType(String playerType){
+        this.playerType = playerType;
+    }
+    public void setLines(int lines){
+        this.lines = lines;
     }
 }

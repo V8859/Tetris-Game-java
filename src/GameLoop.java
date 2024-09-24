@@ -26,6 +26,9 @@ public class GameLoop {
         this.stepsPerMove = 24;  // Number of steps for smoother movement
         this.currentStep = 0;
         this.isAIPlayer = isAIPlayer;
+        gamePanel.setLevel(gameLevel);
+        gamePanel.setInitialLevel(gameLevel);
+
         if (isAIPlayer) {
             ai = new TetrisAI();  // Initialize AI
             aiMoveInProgress = false;  // Flag to track if AI is still moving the piece
@@ -66,10 +69,13 @@ public class GameLoop {
                     if (score % 500 == 0 && score > totalScore && gameLevel < maxGameLevel) {
                         gameLevel++;
                         totalScore = score;
-                        int time = (int) (500 / (gameLevel * 0.4));
-                        timer.setDelay(time / stepsPerMove);
+                        int time = (int) (500 / (gameLevel * 10));
+                        int t2 = (int) (stepsPerMove);
+                        timer.setDelay(time / t2);
                     }
+                    gamePanel.setLines(gameBoard.getLines());
                     gamePanel.setScore(score);
+                    gamePanel.setLevel(gameLevel);
                 }
             }
         }
@@ -124,9 +130,10 @@ public class GameLoop {
 
             case "down":
 //                gameBoard.movePieceDown();  // Move piece down faster when the down key is pressed // problematic dont do this here. updateGame instead
-                if(!paused){
-                    for(int i = 0; i < stepsPerMove; ++i)
+                if(!paused) {
+                    for (int i = 0; i < stepsPerMove; ++i){
                         updateGame();
+                    }
                 }
                 break;
 

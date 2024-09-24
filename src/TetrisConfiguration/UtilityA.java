@@ -173,5 +173,41 @@ public class UtilityA {
         return panel;
     }
 
+    public static void DynamicFrameAdjustment(int height, int width, boolean ExtendMode, boolean gamePurpose){
+        JFrame parentFrame = getFrameByTitle("Tetris");
+        int wid;
+        int hei;
+        if (gamePurpose){
+            wid = width *60;
+            hei = height *35;
+            if (ExtendMode){
+                wid = wid*2;
+            }
+        }else{
+            wid = width;
+            hei = height;
+        }
+
+        try {
+            if (parentFrame != null){
+                parentFrame.setSize(new Dimension(wid, hei ));
+            }else{
+                throw new Exception("No such frame exists");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public static JFrame getFrameByTitle(String title) {
+        Frame[] frames = Frame.getFrames();
+        for (Frame frame : frames) {
+            if (frame instanceof JFrame && title.equals(frame.getTitle())) {
+                return (JFrame) frame;
+            }
+        }
+        return null;
+    }
+
 
 }

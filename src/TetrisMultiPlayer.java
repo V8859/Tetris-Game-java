@@ -1,7 +1,7 @@
 import TetrisConfiguration.UtilityA;
+import jdk.nio.mapmode.ExtendedMapMode;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,15 +14,17 @@ public class TetrisMultiPlayer extends JPanel {
     private boolean gpause1;
     private JPanel panel;
     public TetrisMultiPlayer(int boardWidth, int boardHeight, int gameLevel, boolean Music, boolean Sound, boolean ExtendMode, String p1AI, String p2AI, long seed) {
+        UtilityA.DynamicFrameAdjustment(boardHeight, boardWidth, ExtendMode, true);
         setLayout(new BorderLayout());
         this.panel = this;
+
         JPanel gameArea = new JPanel(new GridLayout(1,2));
-        p1 = new TetrisApp(boardWidth, boardHeight, gameLevel, Music, Sound, checkAi(p1AI), seed);
+        p1 = new TetrisApp(boardWidth, boardHeight, gameLevel, Music, Sound, checkAi(p1AI), seed, "Player 1", p1AI);
+        gameArea.add(p1);
         if (ExtendMode){
-            p2 = new TetrisApp(boardWidth, boardHeight, gameLevel, Music, Sound, checkAi(p1AI), seed);
+            p2 = new TetrisApp(boardWidth, boardHeight, gameLevel, Music, Sound, checkAi(p1AI), seed, "Player 2", p2AI);
             gameArea.add(p2);
         }
-        gameArea.add(p1);
         this.add(gameArea, BorderLayout.CENTER);
         JButton MainMenu = UtilityA.createButton("Main Menu");
         this.add(MainMenu, BorderLayout.SOUTH);

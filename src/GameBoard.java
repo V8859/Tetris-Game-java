@@ -9,6 +9,7 @@ public class GameBoard {
     private int TotalScore;
     private Color[][] colors;
     private Random random;
+    private int lines;
 
     public GameBoard(int width, int height, long seed) {
         this.width = width;
@@ -78,6 +79,7 @@ public class GameBoard {
         for (int row = 0; row < height; row++) {
             if (checkLineFull(row)) {
                 multiplier++;
+                lines++;
                 clearLine(row);
             }
         }
@@ -86,6 +88,9 @@ public class GameBoard {
 
     public int getScore(){
         return TotalScore;
+    }
+    public int getLines(){
+        return lines;
     }
 
     public boolean checkLineFull(int row) {
