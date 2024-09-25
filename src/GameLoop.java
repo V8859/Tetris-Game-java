@@ -24,7 +24,7 @@ public class GameLoop {
     private boolean aiDroppingPiece;  // Flag to handle piece drop
 
     private long lastMoveTime;  // Tracks the last time AI made a move
-    private static final long AI_MOVE_DELAY = 500;  // 0.5 seconds delay for AI commands
+    private static final long AI_MOVE_DELAY = 100;  // 0.1 seconds delay for AI commands
 
     public GameLoop(GameBoard gameBoard, GamePanel gamePanel, int gameLevel, boolean isAIPlayer) {
         this.gameLevel = gameLevel;
@@ -90,7 +90,6 @@ public class GameLoop {
         gamePanel.repaint();
     }
 
-    // AI gradual movement logic with 0.5 seconds delay between moves
     private void handleAIMove() {
         long currentTime = System.currentTimeMillis();
 
@@ -108,21 +107,21 @@ public class GameLoop {
 
         TetrisPiece currentPiece = gameBoard.getCurrentPiece();
 
-        // Apply gradual rotation
+        // Apply gradual rotation (only once per cycle)
         if (currentPiece.getCurrentRotation() != aiTargetMove.getRotation()) {
             currentPiece.rotate();  // Rotate one step at a time
             lastMoveTime = currentTime;  // Update last move time after rotation
             return;  // Exit after a single move (rotation)
         }
 
-        // Apply gradual horizontal movement
-        if (currentPiece.getX() < aiTargetMove.getColumn() && gameBoard.movePieceRight()) {
-            // Move right only if within bounds
+        // Apply gradual horizontal movement (only move left or right once per cycle)
+        if (currentPiece.getX() < aiTargetMove.getColumn()) {
+            // Move right only if within bounds and once per cycle
             gameBoard.movePieceRight();
             lastMoveTime = currentTime;  // Update last move time after moving right
             return;  // Exit after a single move (right)
-        } else if (currentPiece.getX() > aiTargetMove.getColumn() && gameBoard.movePieceLeft()) {
-            // Move left only if within bounds
+        } else if (currentPiece.getX() > aiTargetMove.getColumn()) {
+            // Move left only if within bounds and once per cycle
             gameBoard.movePieceLeft();
             lastMoveTime = currentTime;  // Update last move time after moving left
             return;  // Exit after a single move (left)
