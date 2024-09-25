@@ -21,6 +21,7 @@ public class GamePanel extends JPanel {
     private Image splashImage;
     private int partialMoveStep;
     private int totalSteps;
+    private String FontType = "HelveticaNeue";
 
 
     public GamePanel(GameBoard gameBoard) {
@@ -130,7 +131,8 @@ public class GamePanel extends JPanel {
 
             int xOffset = 40;  // Adjust the offset for where you want to draw the next piece
             int yOffset = 220;  // Adjust the offset for vertical positioning
-
+            int AdjustY = getYOffset();
+            yOffset = yOffset +AdjustY;
             g.setColor(color);
             int margin = 1;  // Small margin for visual effect
 
@@ -148,8 +150,8 @@ public class GamePanel extends JPanel {
             }
 
             g.setColor(Color.WHITE);
-            g.setFont(new Font("Arial", Font.BOLD, 15));
-            g.drawString("Next Piece:", 14, 210);  // Label for next piece
+            g.setFont(new Font(FontType, Font.BOLD, 15));
+            g.drawString("Next Piece:", 14, 210+AdjustY);  // Label for next piece
         }
     }
 
@@ -200,6 +202,8 @@ public class GamePanel extends JPanel {
         Graphics2D g2d = (Graphics2D) g;
         int width = getWidth();
         int height = getHeight();
+        int y1Offset = getYOffset();
+
 
         // Draw a gradient background
         Color [] curr  = getColorScheme(level);
@@ -209,25 +213,23 @@ public class GamePanel extends JPanel {
         g2d.setPaint(gp);
         g2d.fillRect(0, 0, width, height);
 
-
-
         g2d.setColor(Color.white.darker());
-        g2d.fillRect(6,10, 150,500);
+        g2d.fillRect(6,y1Offset, 150,500);
         g2d.setColor(Color.black.darker());
-        g2d.fillRect(9,14, 148,498);
+        g2d.fillRect(9,y1Offset+4, 148,498);
 
         g2d.setColor(Color.gray.brighter().darker().brighter().darker());
-        g2d.fillRect(9,14, 145,495);
+        g2d.fillRect(9,y1Offset+4, 145,495);
 
         g.setColor(Color.WHITE);  // Set color for the text
-        g.setFont(new Font("Arial", Font.BOLD, 15));  // Set font for the score
+        g.setFont(new Font(FontType, Font.BOLD, 15));  // Set font for the score
 
-        g.drawString(playerTag,50 , 30);
-        g.drawString("Player type: " + playerType, 14,60);
-        g.drawString("Initial level: " + initialLevel, 14, 90);
-        g.drawString("Current level: " + level, 14, 120);
-        g.drawString("Lines Erased: " + lines, 14, 150);
-        g.drawString("Score: " + score, 14, 180);
+        g.drawString(playerTag,50 , 30+y1Offset);
+        g.drawString("Player type: " + playerType, 14,60+y1Offset);
+        g.drawString("Initial level: " + initialLevel, 14, 90+y1Offset);
+        g.drawString("Current level: " + level, 14, 120+y1Offset);
+        g.drawString("Lines Erased: " + lines, 14, 150+y1Offset);
+        g.drawString("Score: " + score, 14, 180+y1Offset);
 
 
 
