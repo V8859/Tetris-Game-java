@@ -2,36 +2,43 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.Timer;
+
 public class GameLoop {
     private GameBoard gameBoard;
     private GamePanel gamePanel;
     private Timer timer;
-    private int totalLines;
+    private int totalScore;
     private int gameLevel;
     private int maxGameLevel;
     private int stepsPerMove;
     private int currentStep;
     private boolean isAIPlayer;
-    private TetrisAI ai;  // Add an AI instance
+    private TetrisAI ai;
 
     // Fields to track AI's target move
     private Move aiTargetMove;
     private boolean aiMoveInProgress;
+    private boolean aiDroppingPiece;  // Flag to handle piece drop
+
+    private long lastMoveTime;  // Tracks the last time AI made a move
+    private static final long AI_MOVE_DELAY = 500;  // 0.5 seconds delay for AI commands
 
     public GameLoop(GameBoard gameBoard, GamePanel gamePanel, int gameLevel, boolean isAIPlayer) {
         this.gameLevel = gameLevel;
         this.gameBoard = gameBoard;
         this.gamePanel = gamePanel;
-        this.maxGameLevel = 10;
+        this.maxGameLevel = 11;
         this.stepsPerMove = 24;  // Number of steps for smoother movement
         this.currentStep = 0;
         this.isAIPlayer = isAIPlayer;
-        gamePanel.setLevel(gameLevel);
-        gamePanel.setInitialLevel(gameLevel);
-
         if (isAIPlayer) {
             ai = new TetrisAI();  // Initialize AI
             aiMoveInProgress = false;  // Flag to track if AI is still moving the piece
+            aiDroppingPiece = false;  // Flag to track if AI is dropping the piece
+            lastMoveTime = System.currentTimeMillis();  // Initialize the last move time
         }
 
         // Set up the game loop timer
@@ -50,7 +57,7 @@ public class GameLoop {
             handleAIMove();  // Handle gradual AI movement
         }
 
-        if (currentStep < stepsPerMove - 1 && gameBoard.canMovePieceDown()) {
+        if (currentStep < stepsPerMove - 1 && gameBoard.canMovePieceDown() && !aiDroppingPiece) {
             currentStep++;
         } else {
             currentStep = 0;
@@ -65,18 +72,17 @@ public class GameLoop {
                         gamePanel.setGameOver(true);
                         gamePanel.repaint();
                     }
+                    // Reset AI state after spawning a new piece
+                    aiMoveInProgress = false;
+                    aiDroppingPiece = false;  // Reset dropping flag for the new piece
                     int score = gameBoard.getScore();
-                    int lines  = gameBoard.getLines();
-                    if ((lines - totalLines) >=10 && gameLevel < maxGameLevel) {
+                    if (score % 500 == 0 && score > totalScore && gameLevel < maxGameLevel) {
                         gameLevel++;
-                        totalLines = lines;
+                        totalScore = score;
                         int time = (int) (500 / (gameLevel * 0.4));
-                        int t2 = (int) (stepsPerMove);
-                        timer.setDelay(time / t2);
+                        timer.setDelay(time / stepsPerMove);
                     }
-                    gamePanel.setLines(gameBoard.getLines());
                     gamePanel.setScore(score);
-                    gamePanel.setLevel(gameLevel);
                 }
             }
         }
@@ -84,32 +90,58 @@ public class GameLoop {
         gamePanel.repaint();
     }
 
+    // AI gradual movement logic with 0.5 seconds delay between moves
     private void handleAIMove() {
+        long currentTime = System.currentTimeMillis();
+
+        // Only calculate the best move once per piece, when the piece is spawned
         if (!aiMoveInProgress) {
-            // If AI move isn't in progress, calculate the best move
             aiTargetMove = ai.findBestMove(gameBoard, gameBoard.getCurrentPiece());
             aiMoveInProgress = true;
-        } else {
-            TetrisPiece currentPiece = gameBoard.getCurrentPiece();
+            aiDroppingPiece = false;  // Reset the dropping state when moving
+        }
 
-            // Apply gradual rotation
-            if (currentPiece.getCurrentRotation() != aiTargetMove.getRotation()) {
-                currentPiece.rotate();  // Rotate one step at a time
-            }
+        // Ensure at least 0.5 seconds has passed since the last move
+        if (currentTime - lastMoveTime < AI_MOVE_DELAY) {
+            return;  // Skip this iteration if 0.5 seconds haven't passed yet
+        }
 
-            // Apply gradual horizontal movement
-            if (currentPiece.getX() < aiTargetMove.getColumn() && gameBoard.movePieceRight()) {
-                // Move right only if within bounds
-                gameBoard.movePieceRight();
-            } else if (currentPiece.getX() > aiTargetMove.getColumn() && gameBoard.movePieceLeft()) {
-                // Move left only if within bounds
-                gameBoard.movePieceLeft();
-            }
+        TetrisPiece currentPiece = gameBoard.getCurrentPiece();
 
-            // Check if the AI has reached the target position
-            if (currentPiece.getCurrentRotation() == aiTargetMove.getRotation() &&
-                    currentPiece.getX() == aiTargetMove.getColumn()) {
+        // Apply gradual rotation
+        if (currentPiece.getCurrentRotation() != aiTargetMove.getRotation()) {
+            currentPiece.rotate();  // Rotate one step at a time
+            lastMoveTime = currentTime;  // Update last move time after rotation
+            return;  // Exit after a single move (rotation)
+        }
+
+        // Apply gradual horizontal movement
+        if (currentPiece.getX() < aiTargetMove.getColumn() && gameBoard.movePieceRight()) {
+            // Move right only if within bounds
+            gameBoard.movePieceRight();
+            lastMoveTime = currentTime;  // Update last move time after moving right
+            return;  // Exit after a single move (right)
+        } else if (currentPiece.getX() > aiTargetMove.getColumn() && gameBoard.movePieceLeft()) {
+            // Move left only if within bounds
+            gameBoard.movePieceLeft();
+            lastMoveTime = currentTime;  // Update last move time after moving left
+            return;  // Exit after a single move (left)
+        }
+
+        // Check if the AI has reached the target position
+        if (currentPiece.getCurrentRotation() == aiTargetMove.getRotation() &&
+                currentPiece.getX() == aiTargetMove.getColumn()) {
+
+            // Now start dropping the piece one step at a time
+            aiDroppingPiece = true;  // Start the drop process
+
+            // Drop the piece one row every 0.5 seconds
+            if (!gameBoard.canMovePieceDown()) {
                 aiMoveInProgress = false;  // AI move complete
+                aiDroppingPiece = false;  // Drop is complete
+            } else {
+                gameBoard.movePieceDown();  // Drop the piece one row at a time
+                lastMoveTime = currentTime;  // Update last move time after dropping the piece
             }
         }
     }

@@ -21,6 +21,7 @@ public class TetrisAI {
                 }
             }
         }
+        System. out. println(bestMove);
         return bestMove;
     }
 
