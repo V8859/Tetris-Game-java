@@ -12,6 +12,7 @@ public class GameLoop {
     private Timer timer;
     private int totalScore;
     private int gameLevel;
+    private int TotalLines;
     private int maxGameLevel;
     private int stepsPerMove;
     private int currentStep;
@@ -30,6 +31,8 @@ public class GameLoop {
         this.gameLevel = gameLevel;
         this.gameBoard = gameBoard;
         this.gamePanel = gamePanel;
+        gamePanel.setLevel(gameLevel);
+        gamePanel.setInitialLevel(gameLevel);
         this.maxGameLevel = 11;
         this.stepsPerMove = 24;  // Number of steps for smoother movement
         this.currentStep = 0;
@@ -76,13 +79,17 @@ public class GameLoop {
                     aiMoveInProgress = false;
                     aiDroppingPiece = false;  // Reset dropping flag for the new piece
                     int score = gameBoard.getScore();
-                    if (score % 500 == 0 && score > totalScore && gameLevel < maxGameLevel) {
+                    int lines = gameBoard.getLines();
+                    if ((lines-TotalLines) >=10 && gameLevel < maxGameLevel) {
                         gameLevel++;
-                        totalScore = score;
+                        TotalLines = lines;
                         int time = (int) (500 / (gameLevel * 0.4));
                         timer.setDelay(time / stepsPerMove);
                     }
+                    gamePanel.setPartialMove(currentStep,stepsPerMove);
                     gamePanel.setScore(score);
+                    gamePanel.setLines(lines);
+                    gamePanel.setLevel(gameLevel);
                 }
             }
         }
