@@ -6,7 +6,7 @@ public class GameLoop {
     private GameBoard gameBoard;
     private GamePanel gamePanel;
     private Timer timer;
-    private int totalScore;
+    private int totalLines;
     private int gameLevel;
     private int maxGameLevel;
     private int stepsPerMove;
@@ -66,10 +66,11 @@ public class GameLoop {
                         gamePanel.repaint();
                     }
                     int score = gameBoard.getScore();
-                    if (score % 500 == 0 && score > totalScore && gameLevel < maxGameLevel) {
+                    int lines  = gameBoard.getLines();
+                    if ((lines - totalLines) >=10 && gameLevel < maxGameLevel) {
                         gameLevel++;
-                        totalScore = score;
-                        int time = (int) (500 / (gameLevel * 10));
+                        totalLines = lines;
+                        int time = (int) (500 / (gameLevel * 0.4));
                         int t2 = (int) (stepsPerMove);
                         timer.setDelay(time / t2);
                     }
