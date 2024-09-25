@@ -119,6 +119,7 @@ public class GameLoop {
             case "left":
                 if(!paused){
                     gameBoard.movePieceLeft();
+
                 }
                 break;
 
@@ -129,7 +130,7 @@ public class GameLoop {
                 break;
 
             case "down":
-//                gameBoard.movePieceDown();  // Move piece down faster when the down key is pressed // problematic dont do this here. updateGame instead
+                  // Move piece down faster when the down key is pressed // problematic dont do this here. updateGame instead
                 if(!paused) {
                     for (int i = 0; i < stepsPerMove; ++i){
                         updateGame();

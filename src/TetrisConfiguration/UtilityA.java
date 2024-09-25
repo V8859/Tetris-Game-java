@@ -178,13 +178,19 @@ public class UtilityA {
         int wid;
         int hei;
         double adjuster = 1;
+        double hdjuster = 1;
         if (gamePurpose){
             if (width<10){
                 adjuster = (40 * ((double) 4 /width));
                 System.out.println(adjuster);
             }
+            if (height <24){
+                hdjuster = (40* ((double) 4/height));
+
+            }
+
             wid = width *(60 + (int) adjuster);
-            hei = height *35;
+            hei = height *(30 + (int)hdjuster);
             if (ExtendMode){
                 wid = wid*2;
             }
@@ -212,6 +218,12 @@ public class UtilityA {
             }
         }
         return null;
+    }
+    public static void centerFrame(JFrame frame) {
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int x = (screenSize.width - frame.getWidth()) / 2;
+        int y = (screenSize.height - frame.getHeight()) / 2;
+        frame.setLocation(x, y-10);
     }
 
 
