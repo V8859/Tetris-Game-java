@@ -6,7 +6,7 @@ public class GameLoop {
     private GameBoard gameBoard;
     private GamePanel gamePanel;
     private Timer timer;
-    private int totalScore;
+    private int totalLines;
     private int gameLevel;
     private int maxGameLevel;
     private int stepsPerMove;
@@ -22,10 +22,13 @@ public class GameLoop {
         this.gameLevel = gameLevel;
         this.gameBoard = gameBoard;
         this.gamePanel = gamePanel;
-        this.maxGameLevel = 11;
+        this.maxGameLevel = 10;
         this.stepsPerMove = 24;  // Number of steps for smoother movement
         this.currentStep = 0;
         this.isAIPlayer = isAIPlayer;
+        gamePanel.setLevel(gameLevel);
+        gamePanel.setInitialLevel(gameLevel);
+
         if (isAIPlayer) {
             ai = new TetrisAI();  // Initialize AI
             aiMoveInProgress = false;  // Flag to track if AI is still moving the piece
@@ -63,13 +66,17 @@ public class GameLoop {
                         gamePanel.repaint();
                     }
                     int score = gameBoard.getScore();
-                    if (score % 500 == 0 && score > totalScore && gameLevel < maxGameLevel) {
+                    int lines  = gameBoard.getLines();
+                    if ((lines - totalLines) >=10 && gameLevel < maxGameLevel) {
                         gameLevel++;
-                        totalScore = score;
+                        totalLines = lines;
                         int time = (int) (500 / (gameLevel * 0.4));
-                        timer.setDelay(time / stepsPerMove);
+                        int t2 = (int) (stepsPerMove);
+                        timer.setDelay(time / t2);
                     }
+                    gamePanel.setLines(gameBoard.getLines());
                     gamePanel.setScore(score);
+                    gamePanel.setLevel(gameLevel);
                 }
             }
         }
@@ -123,10 +130,11 @@ public class GameLoop {
                 break;
 
             case "down":
-//                gameBoard.movePieceDown();  // Move piece down faster when the down key is pressed // problematic dont do this here. updateGame instead
-                if(!paused){
-                    for(int i = 0; i < stepsPerMove; ++i)
+                  // Move piece down faster when the down key is pressed // problematic dont do this here. updateGame instead
+                if(!paused) {
+                    for (int i = 0; i < stepsPerMove; ++i){
                         updateGame();
+                    }
                 }
                 break;
 

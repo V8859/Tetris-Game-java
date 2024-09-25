@@ -10,10 +10,16 @@ public class ControlScheme {
     private boolean music;
     private boolean sound;
     private boolean pause;
-    public ControlScheme(TetrisApp p1, TetrisApp p2, JPanel App, Boolean ExtendMode){
+    public ControlScheme(TetrisApp p1, TetrisApp p2, TetrisMultiPlayer App, Boolean ExtendMode){
         this.sound = p1.sound();
         this.music = p1.music();
         this.pause = p1.pause();
+
+
+        String SoundSetting  = checkMorS(p1.sound());
+        String MusicSetting  = checkMorS(p1.music());
+        App.getOverlayPane().setSound_status(SoundSetting);
+        App.getOverlayPane().setMusic_status(MusicSetting);
 
         App.getInputMap().put(javax.swing.KeyStroke.getKeyStroke("LEFT"), "moveLeft");
         App.getActionMap().put("moveLeft", new javax.swing.AbstractAction() {
@@ -79,6 +85,13 @@ public class ControlScheme {
         App.getActionMap().put("sound-off", new javax.swing.AbstractAction(){
             public void actionPerformed(java.awt.event.ActionEvent e){
                 sound = !sound;
+                String soond;
+                if (sound){
+                    soond = "On";
+                }else{
+                    soond = "Off";
+                }
+                App.getOverlayPane().setSound_status(soond);
             }
         });
 
@@ -87,17 +100,22 @@ public class ControlScheme {
         App.getActionMap().put("music-off", new javax.swing.AbstractAction(){
             public void actionPerformed(java.awt.event.ActionEvent e){
                 music = !music;
+                String muzic;
                 if (music){
                     p1.musicPlayer().loopSound(-30.0f);
                     if (ExtendMode){
                         p2.musicPlayer().loopSound(-30.0f);
                     }
+                    muzic = "On";
+
                 }else{
                     p1.musicPlayer().stopSound();
                     if (ExtendMode){
                         p2.musicPlayer().stopSound();
                     }
+                    muzic = "Off";
                 }
+                App.getOverlayPane().setMusic_status(muzic);
             }
         });
 //        App.addComponentListener(new ComponentAdapter() {
@@ -155,6 +173,15 @@ public class ControlScheme {
                 }
             });
         }
+    }
+
+    private String checkMorS(boolean s){
+        if (s){
+            return "On";
+        }else{
+            return "Off";
+        }
+
     }
 }
 

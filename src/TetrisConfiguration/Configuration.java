@@ -72,7 +72,6 @@ public class Configuration extends JPanel {
 //        this.add(AiPlay, c);
 
 
-
         c.gridx = 0;
         c.gridy = 7;
         JPanel extendMode = UtilityA.createOptions("Extend Mode(On/Off):");

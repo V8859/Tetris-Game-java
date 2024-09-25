@@ -9,6 +9,7 @@ public class GameBoard {
     private int TotalScore;
     private Color[][] colors;
     private Random random;
+    private int lines;
 
     public GameBoard(int width, int height, long seed) {
         this.width = width;
@@ -74,18 +75,31 @@ public class GameBoard {
 
     public void clearFullLines() {
         int multiplier = 0;
-        int BaseScore = 100;
+        int baseScore = 100;
         for (int row = 0; row < height; row++) {
             if (checkLineFull(row)) {
                 multiplier++;
+                lines++;
                 clearLine(row);
             }
         }
-        this.TotalScore += BaseScore * multiplier;
+        System.out.println(multiplier);
+        if (multiplier == 1){
+            this.TotalScore += baseScore;
+        }else if(multiplier == 2){
+            this.TotalScore += 300;
+        } else if (multiplier == 3) {
+            this.TotalScore += 600;
+        } else if (multiplier == 4) {
+            this.TotalScore += 1000;
+        }
     }
 
     public int getScore(){
         return TotalScore;
+    }
+    public int getLines(){
+        return lines;
     }
 
     public boolean checkLineFull(int row) {
