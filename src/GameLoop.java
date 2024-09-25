@@ -120,7 +120,6 @@ public class GameLoop {
             case "left":
                 if(!paused){
                     gameBoard.movePieceLeft();
-
                 }
                 break;
 
