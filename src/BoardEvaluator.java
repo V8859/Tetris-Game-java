@@ -4,7 +4,20 @@ public class BoardEvaluator {
         int holesScore = getHoles(board);
         int linesCleared = getClearedLines(board);
         int bumpinessScore = getBumpiness(board);
-        return (-4 * heightScore) + (10 * linesCleared) - (15 * holesScore) - (2 * bumpinessScore);
+        int adjuster = 1;
+        if (linesCleared == 1){
+            adjuster = 100;
+        } else if (linesCleared == 2) {
+            adjuster = 300;
+
+        } else if (linesCleared ==3) {
+            adjuster = 600;
+
+        } else if (linesCleared >= 4) {
+            adjuster = 1000;
+        }
+
+        return (-4 * heightScore) + ((10 * linesCleared)+adjuster) - (15 * holesScore) - (2 * bumpinessScore);
     }
 
     private int getHeight(int[][] board) {
