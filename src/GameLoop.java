@@ -1,9 +1,19 @@
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.security.cert.Extension;
 import javax.swing.Timer;
 
 public class GameLoop {
@@ -37,6 +47,16 @@ public class GameLoop {
         this.stepsPerMove = 24;  // Number of steps for smoother movement
         this.currentStep = 0;
         this.isAIPlayer = isAIPlayer;
+        this.isExternalPlayer = isExternalPlayer;
+        if (isExternalPlayer) {
+            externalMoveHandler = null;  // This will be set once we receive a move
+            //TODO set External player in progres status's
+            ConnectToServer();
+            Operation response = getResponse(gameBoard.getWidth(), gameBoard.getHeight(), gameBoard.getBoard(), gameBoard.getCurrentPiece().getCurrentShape(), gameBoard.getNextPiece().getCurrentShape());
+            System.out.println(response.getOpX());
+            System.out.println(response.getOpRotate());
+        }
+
         if (isAIPlayer) {
             ai = new TetrisAI();  // Initialize AI
             aiMoveInProgress = false;  // Flag to track if AI is still moving the piece
@@ -58,6 +78,13 @@ public class GameLoop {
     public void updateGame() {
         if (isAIPlayer) {
             handleAIMove();  // Handle gradual AI movement
+        }
+        if (isExternalPlayer && externalMoveHandler != null) {
+
+
+            if (!externalMoveHandler.isMoveInProgress()) {
+                externalMoveHandler = null;  // Move is complete, reset handler
+            }
         }
 
         if (currentStep < stepsPerMove - 1 && gameBoard.canMovePieceDown() && !aiDroppingPiece) {
@@ -200,5 +227,79 @@ public class GameLoop {
     public void unPause(){
         this.timer.start();
     }
+
+
+    public void ConnectToServer(){
+        try{
+            Socket socket = new Socket(SERVER_HOST,SERVER_PORT);
+            if (socket != null){
+                this.socket = socket;
+            }
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+
+    }
+
+
+    public Operation getResponse(int width, int height, int [][] cells, int [][] currentShape, int [][]nextShape) {
+        PureGame game = PureGame.getINSTANCE();
+        updatePureGame(game, width, height, cells, currentShape, nextShape);
+        String response = "";
+        Gson gson = new Gson();
+        var operation = new Operation();
+        try{
+            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            sendMessage(game, out);
+            response =  in.readLine();
+            operation = gson.fromJson(response, Operation.class);
+
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        return operation;
+    }
+
+    //TODO make method that returns
+    //response -> String response =  in.readLine();
+
+    public void sendMessage(PureGame game, PrintWriter out) throws IOException {
+        Gson gson = new Gson();
+        String jsonGameState = gson.toJson(game);
+//        System.out.println(jsonGameState);
+        out.println(jsonGameState);
+    }
+
+    public void updatePureGame(PureGame game, int width, int height,int [][] cells ,int[][] currentShape, int [][] nextShape){
+        game.setWidth(width);
+        game.setHeight(height);
+        game.setCurrentShape(currentShape);
+        game.setNextShape(nextShape);
+        game.setCells(cells);
+    }
+
+    class Operation {
+        private int opX;
+        private int opRotate;
+
+        // Getters and setters
+        public int getOpX() {
+            return opX;
+        }
+
+        public void setOpX(int opX) {
+            this.opX = opX;
+        }
+
+        public int getOpRotate() {
+            return opRotate;
+        }
+
+        public void setOpRotate(int opRotate) {
+            this.opRotate = opRotate;
+        }
+    }
+
 
 }

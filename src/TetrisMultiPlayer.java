@@ -19,7 +19,7 @@ public class TetrisMultiPlayer extends JPanel {
     private int TWidth;
     private int THeight;
 
-    public TetrisMultiPlayer(int boardWidth, int boardHeight, int gameLevel, boolean Music, boolean Sound, boolean ExtendMode, String p1AI, String p2AI, long seed) {
+    public TetrisMultiPlayer(int boardWidth, int boardHeight, int gameLevel, boolean Music, boolean Sound, boolean ExtendMode, String p1status, String p2Status, long seed) {
         UtilityA.DynamicFrameAdjustment(boardHeight, boardWidth, ExtendMode, true);
         overlayPanel = new OverlayPanel();
         setLayout(new BorderLayout());
@@ -120,7 +120,6 @@ public class TetrisMultiPlayer extends JPanel {
             this.sound_status = status;
             this.repaint();
         }
-
     }
 
 }
