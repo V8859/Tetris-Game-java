@@ -16,12 +16,14 @@ public class BoardEvaluator {
         } else if (linesCleared >= 4) {
             adjuster = 1000;
         }
-
-        return (-4 * heightScore) + ((10 * linesCleared)+adjuster) - (15 * holesScore) - (2 * bumpinessScore);
+//        System.out.println(heightScore);
+        return (-4 * heightScore) + ((5 * linesCleared)+(adjuster)) - (15 * holesScore) - (2 * bumpinessScore);
     }
 
     private int getHeight(int[][] board) {
         int height = 0;
+//        System.out.println(board[0].length + " Width");
+//        System.out.println(board.length + " Height");
         for (int x = 0; x < board[0].length; x++) {
             for (int y = 0; y < board.length; y++) {
                 if (board[y][x] != 0) {

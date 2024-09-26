@@ -22,16 +22,16 @@ public class TetrisAI {
                 int[][] simulatedBoard = simulateDrop(gameBoard.getBoard(), simulatedPiece, col);
                 int score = evaluator.evaluateBoard(simulatedBoard);  // Evaluate the board state
 
-                System.out.println("Rotation: " + rotation + ", Column: " + col + ", Score: " + score);
-
+//                System.out.println("Rotation: " + rotation + ", Column: " + col + ", Score: " + score);
                 if (score > bestScore) {
+//                    System.out.println("Best Score: " +bestScore);
                     bestScore = score;
                     bestMove = new Move(col, rotation);
                 }
             }
         }
 
-        System.out.println("Best Move: Column " + bestMove.getColumn() + ", Rotation " + bestMove.getRotation());
+//        System.out.println("Best Move: Column " + bestMove.getColumn() + ", Rotation " + bestMove.getRotation());
         return bestMove;
     }
 
