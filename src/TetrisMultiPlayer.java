@@ -28,10 +28,10 @@ public class TetrisMultiPlayer extends JPanel {
         this.panel = this;
 
         JPanel gameArea = new JPanel(new GridLayout(1,2));
-        p1 = new TetrisApp(boardWidth, boardHeight, gameLevel, Music, Sound, checkAi(p1AI), seed, "Player 1", p1AI);
+        p1 = new TetrisApp(boardWidth, boardHeight, gameLevel, Music, Sound, checkAi(p1status), checkExternal(p2Status) ,seed, "Player 1", p1status);
         gameArea.add(p1);
         if (ExtendMode){
-            p2 = new TetrisApp(boardWidth, boardHeight, gameLevel, Music, Sound, checkAi(p1AI), seed, "Player 2", p2AI);
+            p2 = new TetrisApp(boardWidth, boardHeight, gameLevel, Music, Sound, checkAi(p2Status), checkExternal(p2Status) , seed, "Player 2", p2Status);
             gameArea.add(p2);
         }
         THeight = 1;

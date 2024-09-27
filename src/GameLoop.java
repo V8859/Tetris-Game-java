@@ -27,6 +27,12 @@ public class GameLoop {
     private int stepsPerMove;
     private int currentStep;
     private boolean isAIPlayer;
+    private Socket socket;
+    private boolean isExternalPlayer;
+    private static final String SERVER_HOST = "localhost";
+    private static final int SERVER_PORT = 3000;
+
+    private HandleExternalMove externalMoveHandler;
     private TetrisAI ai;
 
     // Fields to track AI's target move
@@ -37,7 +43,7 @@ public class GameLoop {
     private long lastMoveTime;  // Tracks the last time AI made a move
     private static final long AI_MOVE_DELAY = 100;  // 0.1 seconds delay for AI commands
 
-    public GameLoop(GameBoard gameBoard, GamePanel gamePanel, int gameLevel, boolean isAIPlayer) {
+    public GameLoop(GameBoard gameBoard, GamePanel gamePanel, int gameLevel, boolean isAIPlayer, boolean isExternalPlayer) {
         this.gameLevel = gameLevel;
         this.gameBoard = gameBoard;
         this.gamePanel = gamePanel;
@@ -49,7 +55,7 @@ public class GameLoop {
         this.isAIPlayer = isAIPlayer;
         this.isExternalPlayer = isExternalPlayer;
         if (isExternalPlayer) {
-            externalMoveHandler = null;  // This will be set once we receive a move
+//            externalMoveHandler = null;  // This will be set once we receive a move
             //TODO set External player in progres status's
             ConnectToServer();
             Operation response = getResponse(gameBoard.getWidth(), gameBoard.getHeight(), gameBoard.getBoard(), gameBoard.getCurrentPiece().getCurrentShape(), gameBoard.getNextPiece().getCurrentShape());

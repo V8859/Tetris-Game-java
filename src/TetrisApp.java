@@ -19,10 +19,10 @@ public class TetrisApp extends JPanel {
     private JPanel PanelReference;
     private GamePanel gamePanel;
     private GameLoop CurrentLoop;
-    public TetrisApp(int boardWidth, int boardHeight, int gameLevel, boolean Music, boolean Sound, boolean isAIPlayer, long seed,String playerTag, String playerType){
+    public TetrisApp(int boardWidth, int boardHeight, int gameLevel, boolean Music, boolean Sound, boolean isAIPlayer,boolean isExternal ,long seed,String playerTag, String playerType){
         GameBoard gameBoard = new GameBoard(boardWidth, boardHeight, seed);
         GamePanel gamePanel = new GamePanel(gameBoard);
-        GameLoop gameLoop = new GameLoop(gameBoard, gamePanel, gameLevel, isAIPlayer);  // Pass both gameBoard and gamePanel
+        GameLoop gameLoop = new GameLoop(gameBoard, gamePanel, gameLevel, isAIPlayer, isExternal);  // Pass both gameBoard and gamePanel
         this.gamePanel = gamePanel;
         this.CurrentLoop = gameLoop;
         this.sound = Sound;
