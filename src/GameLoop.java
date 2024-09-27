@@ -56,11 +56,13 @@ public class GameLoop {
         this.isExternalPlayer = isExternalPlayer;
         if (isExternalPlayer) {
 //            externalMoveHandler = null;  // This will be set once we receive a move
+            System.out.println("Testing");
             //TODO set External player in progres status's
-            ConnectToServer();
-            Operation response = getResponse(gameBoard.getWidth(), gameBoard.getHeight(), gameBoard.getBoard(), gameBoard.getCurrentPiece().getCurrentShape(), gameBoard.getNextPiece().getCurrentShape());
-            System.out.println(response.getOpX());
-            System.out.println(response.getOpRotate());
+            for (int i = 0; i<10; i++){
+                Operation response = getResponse(gameBoard.getWidth(), gameBoard.getHeight(), gameBoard.getBoard(), gameBoard.getCurrentPiece().getCurrentShape(), gameBoard.getNextPiece().getCurrentShape());
+                System.out.println("Opx: "+response.getOpX());
+                System.out.println("Rotate "+response.getOpRotate());
+            }
         }
 
         if (isAIPlayer) {
@@ -249,6 +251,7 @@ public class GameLoop {
 
 
     public Operation getResponse(int width, int height, int [][] cells, int [][] currentShape, int [][]nextShape) {
+        ConnectToServer();
         PureGame game = PureGame.getINSTANCE();
         updatePureGame(game, width, height, cells, currentShape, nextShape);
         String response = "";
