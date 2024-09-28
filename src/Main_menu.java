@@ -12,11 +12,13 @@ public class Main_menu {
     public JPanel main_menu;
     public JPanel CardPanel;
     public CardLayout cardLayout;
+    private HighScoreManager highScoreManager;
 
     // Constructor for the main menu class
     public Main_menu() {
         cardLayout = new CardLayout();
         CardPanel = new JPanel(cardLayout);
+        JPanel parentPanel = new JPanel(cardLayout);
 
         // Create the game panel
 
@@ -81,13 +83,16 @@ public class Main_menu {
 
         SplashScreen splash = new SplashScreen();
         Configuration gameConfig = new Configuration();
-        HighScoreScreen highscores = new HighScoreScreen();
+        highScoreManager = new HighScoreManager();
+        HighScoreScreen highscores = new HighScoreScreen(parentPanel, cardLayout, highScoreManager);
+
 
         // Add panels to the card panel
         CardPanel.add(main_menu, "Main Menu");
         CardPanel.add(splash, "Splash" );
         CardPanel.add(gameConfig,"Config");
         CardPanel.add(highscores, "highscore");
+
         // Add action listener to the play button
         playButton.addActionListener(new ActionListener() {
             @Override

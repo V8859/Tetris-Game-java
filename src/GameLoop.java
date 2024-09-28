@@ -1,19 +1,16 @@
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.security.cert.Extension;
+import java.util.List;
 import javax.swing.Timer;
 
 public class GameLoop {
@@ -33,6 +30,9 @@ public class GameLoop {
     private static final String SERVER_HOST = "localhost";
     private static final int SERVER_PORT = 3000;
     private TetrisAI ai;
+    private HighScoreManager highScoreManager;
+    private int currentScore;
+
 
     // Fields to track AI's target move
     private Move aiTargetMove;
@@ -55,6 +55,8 @@ public class GameLoop {
         this.currentStep = 0;
         this.isAIPlayer = isAIPlayer;
         this.isExternalPlayer = isExternalPlayer;
+        highScoreManager = new HighScoreManager();
+        gameBoard = new GameBoard(10, 20, System.currentTimeMillis()); // Initialize game board
         if (isExternalPlayer) {
 //            externalMoveHandler = null;  // This will be set once we receive a move
             eMoveInProgress = false;
@@ -82,6 +84,7 @@ public class GameLoop {
         });
         timer.start();
     }
+
     public void updateGame() {
         if (isAIPlayer) {
             handleAIMove();  // Handle gradual AI movement
@@ -116,13 +119,13 @@ public class GameLoop {
                     eDroppingPiece = false;
                     int score = gameBoard.getScore();
                     int lines = gameBoard.getLines();
-                    if ((lines-TotalLines) >=10) {
+                    if ((lines - TotalLines) >= 10) {
                         gameLevel++;
                         TotalLines = lines;
                         int time = (int) (500 / (gameLevel * 0.4));
                         timer.setDelay(time / stepsPerMove);
                     }
-                    gamePanel.setPartialMove(currentStep,stepsPerMove);
+                    gamePanel.setPartialMove(currentStep, stepsPerMove);
                     gamePanel.setScore(score);
                     gamePanel.setLines(lines);
                     gamePanel.setLevel(gameLevel);
@@ -189,81 +192,84 @@ public class GameLoop {
     }
 
     boolean paused;
+
     public void handleInput(String input) {
         switch (input) {
             case "left":
-                if(!paused){
+                if (!paused) {
                     gameBoard.movePieceLeft();
                 }
                 break;
 
             case "right":
-                if(!paused){
+                if (!paused) {
                     gameBoard.movePieceRight();
                 }
                 break;
 
             case "down":
-                  // Move piece down faster when the down key is pressed // problematic dont do this here. updateGame instead
-                if(!paused) {
-                    for (int i = 0; i < stepsPerMove; ++i){
+                // Move piece down faster when the down key is pressed // problematic dont do this here. updateGame instead
+                if (!paused) {
+                    for (int i = 0; i < stepsPerMove; ++i) {
                         updateGame();
                     }
                 }
                 break;
 
             case "rotate":
-                if(!paused){
+                if (!paused) {
                     gameBoard.rotatePiece();
                 }
                 break;
 
             case "pause":
 
-                if(paused){
+                if (paused) {
                     timer.start();
                     paused = false;
-                }else {
+                } else {
                     timer.stop();
                     paused = true;
                 }
         }
         gamePanel.repaint();  // Repaint the game panel after handling input
     }
-    public void setPause(){
+
+    public void setPause() {
         this.timer.stop();
     }
-    public void unPause(){
+
+    public void unPause() {
         this.timer.start();
     }
 
 
-    public void ConnectToServer(){
-        try{
-            Socket socket = new Socket(SERVER_HOST,SERVER_PORT);
-            if (socket != null){
+    public void ConnectToServer() {
+        try {
+            Socket socket = new Socket(SERVER_HOST, SERVER_PORT);
+            if (socket != null) {
                 this.socket = socket;
             }
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
 
-    public Operation getResponse(int width, int height, int [][] cells, int [][] currentShape, int [][]nextShape) {
+    public Operation getResponse(int width, int height, int[][] cells, int[][] currentShape, int[][] nextShape) {
         ConnectToServer();
         PureGame game = PureGame.getINSTANCE();
         updatePureGame(game, width, height, cells, currentShape, nextShape);
         String response = "";
         Gson gson = new Gson();
         var operation = new Operation();
-        try{
+        try {
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             sendMessage(game, out);
-            response =  in.readLine();
+            response = in.readLine();
             operation = gson.fromJson(response, Operation.class);
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return operation;
@@ -279,13 +285,14 @@ public class GameLoop {
         out.println(jsonGameState);
     }
 
-    public void updatePureGame(PureGame game, int width, int height,int [][] cells ,int[][] currentShape, int [][] nextShape){
+    public void updatePureGame(PureGame game, int width, int height, int[][] cells, int[][] currentShape, int[][] nextShape) {
         game.setWidth(width);
         game.setHeight(height);
         game.setCurrentShape(currentShape);
         game.setNextShape(nextShape);
         game.setCells(cells);
     }
+
 
     class Operation {
         private int opX;
@@ -308,12 +315,13 @@ public class GameLoop {
             this.opRotate = opRotate;
         }
     }
+
     private void handleEMove() {
         long currentTime = System.currentTimeMillis();
 
         // Only calculate the best move once per piece, when the piece is spawned
         if (!eMoveInProgress) {
-            response = getResponse(gameBoard.getWidth(),gameBoard.getHeight(), gameBoard.getBoard(), gameBoard.getCurrentPiece().getCurrentShape(), gameBoard.getNextPiece().getCurrentShape());
+            response = getResponse(gameBoard.getWidth(), gameBoard.getHeight(), gameBoard.getBoard(), gameBoard.getCurrentPiece().getCurrentShape(), gameBoard.getNextPiece().getCurrentShape());
             System.out.println(response.getOpX());
             System.out.println(response.getOpRotate());
             eMoveInProgress = true;
