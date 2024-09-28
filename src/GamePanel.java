@@ -149,7 +149,7 @@ public class GamePanel extends JPanel {
 
 
     private void showHighScores() {
-        HighScoreScreen highScoreScreen = new HighScoreScreen(cardPanel, cardLayout);
+        HighScoreScreen highScoreScreen = new HighScoreScreen(cardPanel, cardLayout, highScoreManager);
         cardPanel.add(highScoreScreen, "High Scores");
         cardLayout.show(cardPanel, "High Scores");
     }
