@@ -14,6 +14,10 @@ public class ControlScheme {
         this.sound = p1.sound();
         this.music = p1.music();
         this.pause = p1.pause();
+        p1.gameLoop().setSound(p1.sound());
+        if (ExtendMode){
+            p2.gameLoop().setSound(p1.sound());
+        }
 
 
         String SoundSetting  = checkMorS(p1.sound());
@@ -73,11 +77,21 @@ public class ControlScheme {
                 p1.pauseLabel().setVisible(pause);
                 p1.layeredPane().revalidate();
                 p1.layeredPane().repaint();
+                if (pause){
+                    p1.gameLoop().setPause();
+                }else {
+                    p1.gameLoop().unPause();
+                }
 
                 if(ExtendMode){
                     p2.pauseLabel().setVisible(pause);
                     p2.layeredPane().revalidate();
                     p2.layeredPane().repaint();
+                    if (pause){
+                        p2.gameLoop().setPause();
+                    }else {
+                        p2.gameLoop().unPause();
+                    }
                 }
             }
         });
@@ -86,6 +100,10 @@ public class ControlScheme {
             public void actionPerformed(java.awt.event.ActionEvent e){
                 sound = !sound;
                 String soond;
+                p1.gameLoop().setSound(sound);
+                if (ExtendMode){
+                    p2.gameLoop().setSound(sound);
+                }
                 if (sound){
                     soond = "On";
                 }else{
@@ -131,8 +149,6 @@ public class ControlScheme {
 //            }
 //        });
         if (ExtendMode) {
-
-
             App.getInputMap().put(javax.swing.KeyStroke.getKeyStroke(KeyEvent.VK_COMMA, 0), "mLeft");
             App.getActionMap().put("mLeft", new javax.swing.AbstractAction() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {

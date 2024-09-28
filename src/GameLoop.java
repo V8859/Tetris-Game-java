@@ -1,3 +1,4 @@
+import TetrisConfiguration.SoundPlayer;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -40,11 +41,16 @@ public class GameLoop {
     private boolean aiDroppingPiece;  // Flag to handle piece drop
     private boolean eMoveInProgress;
     private boolean eDroppingPiece;
+    private boolean frameCheck;
+    private PureGame game;
+    private SoundPlayer effectPlayer;
+    private boolean sound;
 
     private long lastMoveTime;  // Tracks the last time AI made a move
     private static final long AI_MOVE_DELAY = 100;  // 0.1 seconds delay for AI commands
 
-    public GameLoop(GameBoard gameBoard, GamePanel gamePanel, int gameLevel, boolean isAIPlayer, boolean isExternalPlayer) {
+    public GameLoop(GameBoard gameBoard, GamePanel gamePanel, int gameLevel, boolean isAIPlayer, boolean isExternalPlayer, SoundPlayer effectPlayer ,TetrisApp app) {
+        this.effectPlayer = effectPlayer;
         this.gameLevel = gameLevel;
         this.gameBoard = gameBoard;
         this.gamePanel = gamePanel;
@@ -160,12 +166,19 @@ public class GameLoop {
         // Apply gradual horizontal movement (only move left or right once per cycle)
         if (currentPiece.getX() < aiTargetMove.getColumn()) {
             // Move right only if within bounds and once per cycle
-            gameBoard.movePieceRight();
+                gameBoard.movePieceRight();
+                if (sound){
+                    effectPlayer.playSound(-20.0f);
+            }
             lastMoveTime = currentTime;  // Update last move time after moving right
             return;  // Exit after a single move (right)
         } else if (currentPiece.getX() > aiTargetMove.getColumn()) {
             // Move left only if within bounds and once per cycle
-            gameBoard.movePieceLeft();
+                gameBoard.movePieceLeft();
+                if (sound){
+                    effectPlayer.playSound(-20.0f);
+            }
+
             lastMoveTime = currentTime;  // Update last move time after moving left
             return;  // Exit after a single move (left)
         }
@@ -182,51 +195,57 @@ public class GameLoop {
                 aiMoveInProgress = false;  // AI move complete
                 aiDroppingPiece = false;  // Drop is complete
             } else {
-                gameBoard.movePieceDown();  // Drop the piece one row at a time
+                    gameBoard.movePieceDown();  // Drop the piece one row at a time
+                    if (sound){
+                        effectPlayer.playSound(-20.0f);
+                    }
                 lastMoveTime = currentTime;  // Update last move time after dropping the piece
+
             }
         }
     }
 
     boolean paused;
     public void handleInput(String input) {
+        if (!(isAIPlayer || isExternalPlayer)){
         switch (input) {
             case "left":
-                if(!paused){
+                if (!paused) {
                     gameBoard.movePieceLeft();
                 }
                 break;
 
             case "right":
-                if(!paused){
+                if (!paused) {
                     gameBoard.movePieceRight();
                 }
                 break;
 
             case "down":
-                  // Move piece down faster when the down key is pressed // problematic dont do this here. updateGame instead
-                if(!paused) {
-                    for (int i = 0; i < stepsPerMove; ++i){
+                // Move piece down faster when the down key is pressed // problematic dont do this here. updateGame instead
+                if (!paused) {
+                    for (int i = 0; i < stepsPerMove; ++i) {
                         updateGame();
                     }
                 }
                 break;
 
             case "rotate":
-                if(!paused){
+                if (!paused) {
                     gameBoard.rotatePiece();
                 }
                 break;
 
             case "pause":
 
-                if(paused){
+                if (paused) {
                     timer.start();
                     paused = false;
-                }else {
+                } else {
                     timer.stop();
                     paused = true;
                 }
+            }
         }
         gamePanel.repaint();  // Repaint the game panel after handling input
     }
@@ -237,32 +256,63 @@ public class GameLoop {
         this.timer.start();
     }
 
-
-    public void ConnectToServer(){
-        try{
-            Socket socket = new Socket(SERVER_HOST,SERVER_PORT);
-            if (socket != null){
-                this.socket = socket;
-            }
-        }catch (IOException e){
-            e.printStackTrace();
+    private boolean isDialogOpen = false;
+    private void showErrorDialog(String message) {
+        if (isDialogOpen){
+            return;
         }
+        isDialogOpen = true;
+        JFrame frame = new JFrame("Error");
+        JButton okButton = new JButton("Ok");
+        okButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.dispose();
+                isDialogOpen = false;
+                ConnectToServer();
+            }
+        });
+
+        JPanel panel = new JPanel();
+        panel.add(new JLabel(message));
+        panel.add(okButton);
+        frame.add(panel);
+        frame.setSize(300, 150);
+        frame.setLocationRelativeTo(null); // Center the frame
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setVisible(true);
+    }
+
+
+
+    public void ConnectToServer() {
+            try {
+                Socket socket = new Socket(SERVER_HOST, SERVER_PORT);
+                if (socket != null) {
+                    this.socket = socket;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                showErrorDialog("You need to start the Tetris server to play this mode.");
+            }
     }
 
 
     public Operation getResponse(int width, int height, int [][] cells, int [][] currentShape, int [][]nextShape) {
         ConnectToServer();
-        PureGame game = PureGame.getINSTANCE();
+        this.game = PureGame.getINSTANCE();
         updatePureGame(game, width, height, cells, currentShape, nextShape);
         String response = "";
         Gson gson = new Gson();
         var operation = new Operation();
         try{
-            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            sendMessage(game, out);
-            response =  in.readLine();
-            operation = gson.fromJson(response, Operation.class);
+            if (this.socket != null){
+                PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                sendMessage(game, out);
+                response =  in.readLine();
+                operation = gson.fromJson(response, Operation.class);
+            }
         }catch (IOException e){
             e.printStackTrace();
         }
@@ -288,8 +338,8 @@ public class GameLoop {
     }
 
     class Operation {
-        private int opX;
-        private int opRotate;
+        private int opX = gameBoard.getWidth()/2-1;
+        private int opRotate = 0;
 
         // Getters and setters
         public int getOpX() {
@@ -339,11 +389,17 @@ public class GameLoop {
             // Move right only if within bounds and once per cycle
             gameBoard.movePieceRight();
             lastMoveTime = currentTime;  // Update last move time after moving right
+            if (sound){
+                effectPlayer.playSound(-20.0f);
+            }
             return;  // Exit after a single move (right)
         } else if (currentPiece.getX() > response.getOpX()) {
             // Move left only if within bounds and once per cycle
             gameBoard.movePieceLeft();
             lastMoveTime = currentTime;  // Update last move time after moving left
+            if (sound){
+                effectPlayer.playSound(-20.0f);
+            }
             return;  // Exit after a single move (left)
         }
         if (currentPiece.getCurrentRotation() == response.getOpRotate() &&
@@ -359,8 +415,15 @@ public class GameLoop {
             } else {
                 gameBoard.movePieceDown();  // Drop the piece one row at a time
                 lastMoveTime = currentTime;  // Update last move time after dropping the piece
+                if (sound){
+                    effectPlayer.playSound(-20.0f);
+                }
+
             }
         }
-
     }
+    public void setSound(boolean sound){
+        this.sound = sound;
+    }
+
 }
