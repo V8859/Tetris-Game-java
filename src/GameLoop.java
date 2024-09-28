@@ -82,7 +82,6 @@ public class GameLoop {
         });
         timer.start();
     }
-
     public void updateGame() {
         if (isAIPlayer) {
             handleAIMove();  // Handle gradual AI movement
@@ -117,7 +116,7 @@ public class GameLoop {
                     eDroppingPiece = false;
                     int score = gameBoard.getScore();
                     int lines = gameBoard.getLines();
-                    if ((lines-TotalLines) >=10 && gameLevel < maxGameLevel) {
+                    if ((lines-TotalLines) >=10) {
                         gameLevel++;
                         TotalLines = lines;
                         int time = (int) (500 / (gameLevel * 0.4));
@@ -248,7 +247,6 @@ public class GameLoop {
         }catch (IOException e){
             e.printStackTrace();
         }
-
     }
 
 
@@ -265,7 +263,6 @@ public class GameLoop {
             sendMessage(game, out);
             response =  in.readLine();
             operation = gson.fromJson(response, Operation.class);
-
         }catch (IOException e){
             e.printStackTrace();
         }
