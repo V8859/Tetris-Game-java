@@ -222,7 +222,7 @@ public class GamePanel extends JPanel {
         g2d.fillRect(9,y1Offset+4, 145,495);
 
         g.setColor(Color.WHITE);  // Set color for the text
-        g.setFont(new Font(FontType, Font.BOLD, 15));  // Set font for the score
+        g.setFont(new Font(FontType, Font.BOLD, 13));  // Set font for the score
 
         g.drawString(playerTag,50 , 30+y1Offset);
         g.drawString("Player type: " + playerType, 14,60+y1Offset);
@@ -230,7 +230,6 @@ public class GamePanel extends JPanel {
         g.drawString("Current level: " + level, 14, 120+y1Offset);
         g.drawString("Lines Erased: " + lines, 14, 150+y1Offset);
         g.drawString("Score: " + score, 14, 180+y1Offset);
-
 
 
         // Calculate the board area
