@@ -7,14 +7,11 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.security.cert.Extension;
 import javax.swing.Timer;
 
 public class GameLoop {
@@ -257,6 +254,7 @@ public class GameLoop {
     }
 
     private boolean isDialogOpen = false;
+    private boolean connected = false;
     private void showErrorDialog(String message) {
         if (isDialogOpen){
             return;
@@ -269,7 +267,9 @@ public class GameLoop {
             public void actionPerformed(ActionEvent e) {
                 frame.dispose();
                 isDialogOpen = false;
-                ConnectToServer();
+                if(!connected){
+                    ConnectToServer();
+                }
             }
         });
 
@@ -279,7 +279,7 @@ public class GameLoop {
         frame.add(panel);
         frame.setSize(300, 150);
         frame.setLocationRelativeTo(null); // Center the frame
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         frame.setVisible(true);
     }
 
@@ -290,15 +290,19 @@ public class GameLoop {
                 Socket socket = new Socket(SERVER_HOST, SERVER_PORT);
                 if (socket != null) {
                     this.socket = socket;
+                    connected = true;
                 }
             } catch (IOException e) {
                 e.printStackTrace();
-                showErrorDialog("You need to start the Tetris server to play this mode.");
+                if(!isDialogOpen){
+                    showErrorDialog("You need to start the Tetris server to play this mode.");
+                }
             }
     }
 
 
     public Operation getResponse(int width, int height, int [][] cells, int [][] currentShape, int [][]nextShape) {
+
         ConnectToServer();
         this.game = PureGame.getINSTANCE();
         updatePureGame(game, width, height, cells, currentShape, nextShape);
