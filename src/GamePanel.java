@@ -22,9 +22,16 @@ public class GamePanel extends JPanel {
     private CardLayout cardLayout;
     private HighScoreManager highScoreManager;
 
-    public GamePanel(GameLoop gameLoop, JPanel cardPanel, CardLayout cardLayout, HighScoreManager highScoreManager) {
-        this.gameLoop = gameLoop;
-        this.gameLoop = gameLoop;
+    public GamePanel(GameBoard gameBoard, JPanel cardPanel, CardLayout cardLayout, HighScoreManager highScoreManager) {
+        this.gameBoard = gameBoard;
+        //splashImage = new ImageIcon("src/TetrisConfiguration/RainWallpaper.png").getImage();
+        initialLevel = level;
+        this.setFocusable(true);
+        this.requestFocusInWindow();
+        this.gameOver = false;
+        this.partialMoveStep = 0;
+        this.totalSteps = 24;
+
         this.cardPanel = cardPanel;
         this.cardLayout = cardLayout;
         this.highScoreManager = highScoreManager;
@@ -34,12 +41,6 @@ public class GamePanel extends JPanel {
         this.lines = 0;
         this.initialLevel = 1;
         this.playerTag = "Player1";
-        this.gameOver = false;
-        this.partialMoveStep = 0;
-        this.totalSteps = 24;
-        setFocusable(true);
-        requestFocusInWindow();
-
     }
 
     public void setGameOver(boolean gameOver) {
