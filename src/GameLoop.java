@@ -25,28 +25,19 @@ public class GameLoop {
     private int stepsPerMove;
     private int currentStep;
     private boolean isAIPlayer;
-    private Socket socket;
-    private Operation response;
     private boolean isExternalPlayer;
+    private Socket socket;
+    private HandleMoveFacade handleMoveFacade;
     private static final String SERVER_HOST = "localhost";
     private static final int SERVER_PORT = 3000;
     private TetrisAI ai;
-
-    // Fields to track AI's target move
-    private Move aiTargetMove;
-    private boolean aiMoveInProgress;
-    private boolean aiDroppingPiece;  // Flag to handle piece drop
-    private boolean eMoveInProgress;
-    private boolean eDroppingPiece;
-    private boolean frameCheck;
-    private PureGame game;
     private SoundPlayer effectPlayer;
     private boolean sound;
+    private long lastMoveTime;
+    private TetrisApp app;
+    private PureGame game;
 
-    private long lastMoveTime;  // Tracks the last time AI made a move
-    private static final long AI_MOVE_DELAY = 100;  // 0.1 seconds delay for AI commands
-
-    public GameLoop(GameBoard gameBoard, GamePanel gamePanel, int gameLevel, boolean isAIPlayer, boolean isExternalPlayer, SoundPlayer effectPlayer ,TetrisApp app) {
+    public GameLoop(GameBoard gameBoard, GamePanel gamePanel, int gameLevel, boolean isAIPlayer, boolean isExternalPlayer, SoundPlayer effectPlayer, TetrisApp app) {
         this.effectPlayer = effectPlayer;
         this.gameLevel = gameLevel;
         this.gameBoard = gameBoard;
@@ -54,24 +45,15 @@ public class GameLoop {
         gamePanel.setLevel(gameLevel);
         gamePanel.setInitialLevel(gameLevel);
         this.maxGameLevel = 11;
-        this.stepsPerMove = 24;  // Number of steps for smoother movement
+        this.stepsPerMove = 24;
         this.currentStep = 0;
         this.isAIPlayer = isAIPlayer;
         this.isExternalPlayer = isExternalPlayer;
-        if (isExternalPlayer) {
-//            externalMoveHandler = null;  // This will be set once we receive a move
-            eMoveInProgress = false;
-            eDroppingPiece = false;
-            lastMoveTime = System.currentTimeMillis();
-
-//            System.out.println("Testing");
-            //TODO set External player in progres status's
-        }
+        this.handleMoveFacade = new HandleMoveFacade(gameBoard, effectPlayer, sound);
+        this.app = app;  // Assign the app reference
 
         if (isAIPlayer) {
             ai = new TetrisAI();  // Initialize AI
-            aiMoveInProgress = false;  // Flag to track if AI is still moving the piece
-            aiDroppingPiece = false;  // Flag to track if AI is dropping the piece
             lastMoveTime = System.currentTimeMillis();  // Initialize the last move time
         }
 
@@ -85,19 +67,35 @@ public class GameLoop {
         });
         timer.start();
     }
+
     public void updateGame() {
+        long currentTime = System.currentTimeMillis();
+
+        // Handle AI Player moves using the facade
         if (isAIPlayer) {
-            handleAIMove();  // Handle gradual AI movement
+            handleMoveFacade.handleAIMove(ai, currentTime);  // Use facade for AI moves
         }
+
+        // Handle External Player moves using the facade
         if (isExternalPlayer) {
-            handleEMove();
-
-//            if (!externalMoveHandler.isMoveInProgress()) {
-//                externalMoveHandler = null;  // Move is complete, reset handler
-//            }
+            if (!handleMoveFacade.isExternalMoveInProgress()) {
+                // Only call getResponse when no move is in progress for the external player
+                GameLoop.Operation externalMoveResponse = getResponse(
+                        gameBoard.getWidth(),
+                        gameBoard.getHeight(),
+                        gameBoard.getBoard(),
+                        gameBoard.getCurrentPiece().getCurrentShape(),
+                        gameBoard.getNextPiece().getCurrentShape()
+                );
+                handleMoveFacade.handleEMove(externalMoveResponse, currentTime);  // Use facade for external player moves
+            } else {
+                // Continue handling the current move if it's still in progress
+                handleMoveFacade.handleEMove(null, currentTime);
+            }
         }
 
-        if (currentStep < stepsPerMove - 1 && gameBoard.canMovePieceDown() && !aiDroppingPiece) {
+        // Handle piece dropping logic as usual
+        if (currentStep < stepsPerMove - 1 && gameBoard.canMovePieceDown()) {
             currentStep++;
         } else {
             currentStep = 0;
@@ -112,94 +110,26 @@ public class GameLoop {
                         gamePanel.setGameOver(true);
                         gamePanel.repaint();
                     }
-                    // Reset AI state after spawning a new piece
-                    aiMoveInProgress = false;
-                    aiDroppingPiece = false;  // Reset dropping flag for the new piece
-                    eMoveInProgress = false;
-                    eDroppingPiece = false;
+                    handleMoveFacade.resetMoveState();  // Reset state after spawning a new piece
+
                     int score = gameBoard.getScore();
                     int lines = gameBoard.getLines();
-                    if ((lines-TotalLines) >=10) {
+                    if ((lines - TotalLines) >= 10) {
                         gameLevel++;
                         TotalLines = lines;
                         int time = (int) (500 / (gameLevel * 0.4));
                         timer.setDelay(time / stepsPerMove);
                     }
-                    gamePanel.setPartialMove(currentStep,stepsPerMove);
+                    gamePanel.setPartialMove(currentStep, stepsPerMove);
                     gamePanel.setScore(score);
                     gamePanel.setLines(lines);
                     gamePanel.setLevel(gameLevel);
                 }
             }
         }
+
         gamePanel.setPartialMove(currentStep, stepsPerMove);
         gamePanel.repaint();
-    }
-
-    private void handleAIMove() {
-        long currentTime = System.currentTimeMillis();
-
-        // Only calculate the best move once per piece, when the piece is spawned
-        if (!aiMoveInProgress) {
-            aiTargetMove = ai.findBestMove(gameBoard, gameBoard.getCurrentPiece());
-            aiMoveInProgress = true;
-            aiDroppingPiece = false;  // Reset the dropping state when moving
-        }
-
-        // Ensure at least 0.5 seconds has passed since the last move
-        if (currentTime - lastMoveTime < AI_MOVE_DELAY) {
-            return;  // Skip this iteration if 0.5 seconds haven't passed yet
-        }
-
-        TetrisPiece currentPiece = gameBoard.getCurrentPiece();
-
-        // Apply gradual rotation (only once per cycle)
-        if (currentPiece.getCurrentRotation() != aiTargetMove.getRotation()) {
-            currentPiece.rotate();  // Rotate one step at a time
-            lastMoveTime = currentTime;  // Update last move time after rotation
-            return;  // Exit after a single move (rotation)
-        }
-
-        // Apply gradual horizontal movement (only move left or right once per cycle)
-        if (currentPiece.getX() < aiTargetMove.getColumn()) {
-            // Move right only if within bounds and once per cycle
-                gameBoard.movePieceRight();
-                if (sound){
-                    effectPlayer.playSound(-20.0f);
-            }
-            lastMoveTime = currentTime;  // Update last move time after moving right
-            return;  // Exit after a single move (right)
-        } else if (currentPiece.getX() > aiTargetMove.getColumn()) {
-            // Move left only if within bounds and once per cycle
-                gameBoard.movePieceLeft();
-                if (sound){
-                    effectPlayer.playSound(-20.0f);
-            }
-
-            lastMoveTime = currentTime;  // Update last move time after moving left
-            return;  // Exit after a single move (left)
-        }
-
-        // Check if the AI has reached the target position
-        if (currentPiece.getCurrentRotation() == aiTargetMove.getRotation() &&
-                currentPiece.getX() == aiTargetMove.getColumn()) {
-
-            // Now start dropping the piece one step at a time
-            aiDroppingPiece = true;  // Start the drop process
-
-            // Drop the piece one row every 0.5 seconds
-            if (!gameBoard.canMovePieceDown()) {
-                aiMoveInProgress = false;  // AI move complete
-                aiDroppingPiece = false;  // Drop is complete
-            } else {
-                    gameBoard.movePieceDown();  // Drop the piece one row at a time
-                    if (sound){
-                        effectPlayer.playSound(-20.0f);
-                    }
-                lastMoveTime = currentTime;  // Update last move time after dropping the piece
-
-            }
-        }
     }
 
     boolean paused;
@@ -323,9 +253,6 @@ public class GameLoop {
         return operation;
     }
 
-    //TODO make method that returns
-    //response -> String response =  in.readLine();
-
     public void sendMessage(PureGame game, PrintWriter out) throws IOException {
         Gson gson = new Gson();
         String jsonGameState = gson.toJson(game);
@@ -362,72 +289,7 @@ public class GameLoop {
             this.opRotate = opRotate;
         }
     }
-    private void handleEMove() {
-        long currentTime = System.currentTimeMillis();
-
-        // Only calculate the best move once per piece, when the piece is spawned
-        if (!eMoveInProgress) {
-            response = getResponse(gameBoard.getWidth(),gameBoard.getHeight(), gameBoard.getBoard(), gameBoard.getCurrentPiece().getCurrentShape(), gameBoard.getNextPiece().getCurrentShape());
-            System.out.println(response.getOpX());
-            System.out.println(response.getOpRotate());
-            eMoveInProgress = true;
-            eDroppingPiece = false;  // Reset the dropping state when moving
-        }
-
-        // Ensure at least 0.5 seconds has passed since the last move
-        if (currentTime - lastMoveTime < AI_MOVE_DELAY) {
-            return;  // Skip this iteration if 0.5 seconds haven't passed yet
-        }
-
-        TetrisPiece currentPiece = gameBoard.getCurrentPiece();
-
-        // Apply gradual rotation (only once per cycle)
-        if (currentPiece.getCurrentRotation() != response.getOpRotate()) {
-            currentPiece.rotate();  // Rotate one step at a time
-            lastMoveTime = currentTime;  // Update last move time after rotation
-            return;  // Exit after a single move (rotation)
-        }
-
-        // Apply gradual horizontal movement (only move left or right once per cycle)
-        if (currentPiece.getX() < response.getOpX()) {
-            // Move right only if within bounds and once per cycle
-            gameBoard.movePieceRight();
-            lastMoveTime = currentTime;  // Update last move time after moving right
-            if (sound){
-                effectPlayer.playSound(-20.0f);
-            }
-            return;  // Exit after a single move (right)
-        } else if (currentPiece.getX() > response.getOpX()) {
-            // Move left only if within bounds and once per cycle
-            gameBoard.movePieceLeft();
-            lastMoveTime = currentTime;  // Update last move time after moving left
-            if (sound){
-                effectPlayer.playSound(-20.0f);
-            }
-            return;  // Exit after a single move (left)
-        }
-        if (currentPiece.getCurrentRotation() == response.getOpRotate() &&
-                currentPiece.getX() == response.getOpX()) {
-
-            // Now start dropping the piece one step at a time
-            eDroppingPiece = true;  // Start the drop process
-
-            // Drop the piece one row every 0.5 seconds
-            if (!gameBoard.canMovePieceDown()) {
-                eMoveInProgress = false;  // AI move complete
-                eDroppingPiece = false;  // Drop is complete
-            } else {
-                gameBoard.movePieceDown();  // Drop the piece one row at a time
-                lastMoveTime = currentTime;  // Update last move time after dropping the piece
-                if (sound){
-                    effectPlayer.playSound(-20.0f);
-                }
-
-            }
-        }
-    }
     public void setSound(boolean sound){
         this.sound = sound;
     }
-
 }
