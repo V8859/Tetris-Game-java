@@ -13,6 +13,7 @@ public class Main_menu {
     public JPanel CardPanel;
     public CardLayout cardLayout;
     private HighScoreManager highScoreManager;
+    public ExitScreen exitScreen;
 
     // Constructor for the main menu class
     public Main_menu() {
@@ -127,7 +128,7 @@ public class Main_menu {
         exitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ExitScreen exit = new ExitScreen();
+                ExitScreen exit = new exitScreen();
 
             }
         });
