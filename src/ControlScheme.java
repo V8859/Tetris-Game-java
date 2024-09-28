@@ -102,9 +102,9 @@ public class ControlScheme {
                 music = !music;
                 String muzic;
                 if (music){
-                    p1.musicPlayer().loopSound(-30.0f);
+                    p1.musicPlayer().loopSoundInThread(-30.0f);
                     if (ExtendMode){
-                        p2.musicPlayer().loopSound(-30.0f);
+                        p2.musicPlayer().loopSoundInThread(-30.0f);
                     }
                     muzic = "On";
 

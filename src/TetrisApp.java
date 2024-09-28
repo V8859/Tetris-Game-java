@@ -35,7 +35,7 @@ public class TetrisApp extends JPanel {
         effectPlayer.loadSound("src/TetrisConfiguration/MovePieceAlternate.wav");
         PanelReference = this;
         if(music){
-            musicPlayer.loopSound(-30.0f);
+            musicPlayer.loopSoundInThread(-30.0f);
         }
 
         this.setLayout(new BorderLayout());
