@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -12,6 +13,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Arrays;
 import javax.swing.Timer;
 
 public class GameLoop {
@@ -36,6 +39,7 @@ public class GameLoop {
     private long lastMoveTime;
     private TetrisApp app;
     private PureGame game;
+    private HighScoreManager ScoreManager;
 
     public GameLoop(GameBoard gameBoard, GamePanel gamePanel, int gameLevel, boolean isAIPlayer, boolean isExternalPlayer, SoundPlayer effectPlayer, TetrisApp app) {
         this.effectPlayer = effectPlayer;
@@ -104,6 +108,7 @@ public class GameLoop {
                     timer.stop();
                     gamePanel.setGameOver(true);
                     gamePanel.repaint();
+                    updateScore();
                 } else {
                     if (!gameBoard.spawnNewPiece()) {
                         timer.stop();
@@ -291,5 +296,14 @@ public class GameLoop {
     }
     public void setSound(boolean sound){
         this.sound = sound;
+    }
+    private void updateScore(){
+        ScoreManager = new HighScoreManager();
+        HighScore[] ScoreArray = ScoreManager.getHighScores().toArray(new HighScore[0]);
+        for (HighScore score : ScoreArray){
+            System.out.println("Score :"+ score.getScore());
+
+        }
+
     }
 }
