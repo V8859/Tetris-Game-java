@@ -74,12 +74,7 @@ public class UtilityA {
         slider.setMajorTickSpacing(1);
         slider.setPreferredSize(new Dimension(300, 50));
 
-        slider.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                valueLabel.setText("" + slider.getValue());
-            }
-        });
+        slider.addChangeListener(e -> valueLabel.setText("" + slider.getValue())); //lambda
 
         panel.add(slider, c);
 
@@ -115,16 +110,14 @@ public class UtilityA {
         currentStatus.setText("On");
         panel.add(currentStatus);
 
-        tickbox.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                if(tickbox.isSelected()){
-                    currentStatus.setText("On");
-                }else {
-                    currentStatus.setText("Off");
-                }
+        tickbox.addChangeListener(e -> { //lambda
+            if (tickbox.isSelected()) {
+                currentStatus.setText("On");
+            } else {
+                currentStatus.setText("Off");
             }
         });
+
         return panel;
     }
 

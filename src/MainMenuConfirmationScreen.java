@@ -30,39 +30,33 @@ public class MainMenuConfirmationScreen extends JFrame {
         add(buttonPanel, BorderLayout.SOUTH);
 
         // Button Actions
-        yesButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                cardLayout.show(parent, "Main Menu");
-                p1.effectPlayer().stopSound();
-                p1.musicPlayer().stopSound();
-                if (ExtendMode){
-                    p2.effectPlayer().stopSound();
-                    p2.musicPlayer().stopSound();
-                }
-                dispose();
-                UtilityA.DynamicFrameAdjustment(1000,800, false,false);
-
+        yesButton.addActionListener(e -> { //Lambda
+            cardLayout.show(parent, "Main Menu");
+            p1.effectPlayer().stopSound();
+            p1.musicPlayer().stopSound();
+            if (ExtendMode) {
+                p2.effectPlayer().stopSound();
+                p2.musicPlayer().stopSound();
             }
+            dispose();
+            UtilityA.DynamicFrameAdjustment(1000, 800, false, false);
         });
 
-        noButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-//                new Main_menu(); // Go back to the main menu
-                p1.gameLoop().unPause();
-                p1.pauseLabel().setVisible(false);
-                if (ExtendMode){
-                    p2.gameLoop().unPause();
-                    p2.pauseLabel().setVisible(false);
-                }
-                game.setFocusable(true);
-                game.requestFocusInWindow();
-                dispose();
+        noButton.addActionListener(e -> { //Lambda
+            // Go back to the game and unpause
+            p1.gameLoop().unPause();
+            p1.pauseLabel().setVisible(false);
+            if (ExtendMode) {
+                p2.gameLoop().unPause();
+                p2.pauseLabel().setVisible(false);
             }
+            game.setFocusable(true);
+            game.requestFocusInWindow();
+            dispose();
         });
 
         setVisible(true);
+
     }
 
 }

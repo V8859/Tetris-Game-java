@@ -19,7 +19,7 @@ public class TetrisApp extends JPanel {
     private JPanel PanelReference;
     private GamePanel gamePanel;
     private GameLoop CurrentLoop;
-    public TetrisApp(int boardWidth, int boardHeight, int gameLevel, boolean Music, boolean Sound, boolean isAIPlayer,boolean isExternal ,long seed,String playerTag, String playerType){
+    public TetrisApp(int boardWidth, int boardHeight, int gameLevel, boolean Music, boolean Sound, boolean isAIPlayer,boolean isExternal ,long seed,String playerTag, String playerType, boolean ExtendMode){
         musicPlayer = new SoundPlayer();
         musicPlayer.loadSound("src/TetrisConfiguration/Aerial City, Chika - Menu Music.wav");
         effectPlayer = new SoundPlayer();
@@ -28,7 +28,7 @@ public class TetrisApp extends JPanel {
         this.music = Music;
         GameBoard gameBoard = new GameBoard(boardWidth, boardHeight, seed);
         GamePanel gamePanel = new GamePanel(gameBoard);
-        GameLoop gameLoop = new GameLoop(gameBoard, gamePanel, gameLevel, isAIPlayer, isExternal, this.effectPlayer, this);  // Pass both gameBoard and gamePanel
+        GameLoop gameLoop = new GameLoop(gameBoard, gamePanel, gameLevel, isAIPlayer, isExternal, this.effectPlayer, this, ExtendMode, playerType);  // Pass both gameBoard and gamePanel
         this.gamePanel = gamePanel;
         this.CurrentLoop = gameLoop;
 
