@@ -27,20 +27,13 @@ public class ExitScreen extends JFrame{
         add(buttonPanel, BorderLayout.SOUTH);
 
         // Button Actions
-        yesButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.exit(0);
-            }
+        yesButton.addActionListener(e -> System.exit(0)); //lambda
+
+        noButton.addActionListener(e -> { //lambda
+            new Main_menu();  // Go back to the main menu
+            dispose();
         });
 
-        noButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new Main_menu(); // Go back to the main menu
-                dispose();
-            }
-        });
 
         setVisible(true);
     }

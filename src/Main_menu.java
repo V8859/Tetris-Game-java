@@ -89,64 +89,57 @@ public class Main_menu {
         CardPanel.add(gameConfig,"Config");
         CardPanel.add(highscores, "highscore");
         // Add action listener to the play button
-        playButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println(gameConfig.getExtendModeState());
-                SwingUtilities.invokeLater(()->{
-                    long seed = (long) (Math.random()*100);
-                    TetrisMultiPlayer game = new TetrisMultiPlayer(gameConfig.getW(), gameConfig.getH(), gameConfig.getLvl(), gameConfig.getMusicState(), gameConfig.getSoundState(), gameConfig.getExtendModeState(), gameConfig.getP1Status(), gameConfig.getP2Status(), seed);
-                    CardPanel.add(game, "Tetris Game");
-                    cardLayout.show(CardPanel, "Tetris Game");
-                    game.setFocusable(true);
-                    game.requestFocusInWindow();
-                });
-//                For testing purposes
-//                System.out.println(gameConfig.getW());
-//                System.out.println(gameConfig.getH());
-//                System.out.println(gameConfig.getLvl());
-//                System.out.println(gameConfig.getMusicState());
-//                System.out.println(gameConfig.getSoundState());
-//                System.out.println(gameConfig.getAIState());
-            }
+        playButton.addActionListener(e -> { // Lambda
+            System.out.println(gameConfig.getExtendModeState());
+            SwingUtilities.invokeLater(() -> {
+                long seed = (long) (Math.random() * 100);
+                TetrisMultiPlayer game = new TetrisMultiPlayer(
+                        gameConfig.getW(),
+                        gameConfig.getH(),
+                        gameConfig.getLvl(),
+                        gameConfig.getMusicState(),
+                        gameConfig.getSoundState(),
+                        gameConfig.getExtendModeState(),
+                        gameConfig.getP1Status(),
+                        gameConfig.getP2Status(),
+                        seed
+                );
+                CardPanel.add(game, "Tetris Game");
+                cardLayout.show(CardPanel, "Tetris Game");
+                game.setFocusable(true);
+                game.requestFocusInWindow();
+            });
+            // For testing purposes
+            // System.out.println(gameConfig.getW());
+            // System.out.println(gameConfig.getH());
+            // System.out.println(gameConfig.getLvl());
+            // System.out.println(gameConfig.getMusicState());
+            // System.out.println(gameConfig.getSoundState());
+            // System.out.println(gameConfig.getAIState());
         });
 
 
-        configButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                cardLayout.show(CardPanel, "Config");
 
-            }
-        });
-        exitButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ExitScreen exit = new ExitScreen();
+        configButton.addActionListener(e -> cardLayout.show(CardPanel, "Config")); // Lambda
 
-            }
+        exitButton.addActionListener(e -> { // Lambda
+            ExitScreen exit = new ExitScreen();
         });
-        highscoresButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                cardLayout.show(CardPanel, "highscore");
-            }
-        });
+
+        highscoresButton.addActionListener(e -> cardLayout.show(CardPanel, "highscore")); // Lambda
+
         cardLayout.show(CardPanel, "Splash");
-        Timer timer = new Timer(10, new ActionListener() {
-            int progress = 0;
+        Timer timer = new Timer(10, e -> { // Lambda
+            int progress = splash.pbar.getValue();
+            progress++;
+            splash.pbar.setValue(progress);
 
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                progress++;
-                splash.pbar.setValue(progress);
-
-                if(progress>=100){
-                    ((Timer) e.getSource()).stop();
-                    cardLayout.show(CardPanel, "Main Menu");
-                }
+            if (progress >= 100) {
+                ((Timer) e.getSource()).stop();
+                cardLayout.show(CardPanel, "Main Menu");
             }
         });
+
         timer.start();
     }
 

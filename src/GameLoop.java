@@ -59,12 +59,7 @@ public class GameLoop {
 
         // Set up the game loop timer
         int time = (int) (500 / (gameLevel * 0.4));
-        timer = new Timer(time / stepsPerMove, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                updateGame();
-            }
-        });
+        timer = new Timer(time / stepsPerMove, e -> updateGame()); //lambda
         timer.start();
     }
 
@@ -192,16 +187,14 @@ public class GameLoop {
         isDialogOpen = true;
         JFrame frame = new JFrame("Error");
         JButton okButton = new JButton("Ok");
-        okButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                frame.dispose();
-                isDialogOpen = false;
-                if(!connected){
-                    ConnectToServer();
-                }
+        okButton.addActionListener(e -> { //lambda
+            frame.dispose();
+            isDialogOpen = false;
+            if (!connected) {
+                ConnectToServer();
             }
         });
+
 
         JPanel panel = new JPanel();
         panel.add(new JLabel(message));
