@@ -128,7 +128,7 @@ public class Main_menu {
         exitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ExitScreen exit = new exitScreen();
+                ExitScreen exit = new ExitScreen();
 
             }
         });
