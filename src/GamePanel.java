@@ -22,6 +22,7 @@ public class GamePanel extends JPanel {
     private int partialMoveStep;
     private int totalSteps;
     private String FontType = "HelveticaNeue";
+    private HighScoreManager scoreManager;
 
 
     public GamePanel(GameBoard gameBoard) {
@@ -276,4 +277,10 @@ public class GamePanel extends JPanel {
     public void setLines(int lines){
         this.lines = lines;
     }
+    public int getInitialLevel(){
+        return initialLevel;
+    }
+
+
+
 }

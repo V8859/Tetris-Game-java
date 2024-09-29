@@ -81,7 +81,8 @@ public class Main_menu {
 
         SplashScreen splash = new SplashScreen();
         Configuration gameConfig = new Configuration();
-        HighScoreScreen highscores = new HighScoreScreen();
+        HighScoreScreen highscores = HighScoreScreen.getInstance();
+        highscores.setBaseParameters(CardPanel, cardLayout, new HighScoreManager());
 
         // Add panels to the card panel
         CardPanel.add(main_menu, "Main Menu");
