@@ -40,12 +40,16 @@ public class GameLoop {
     private TetrisApp app;
     private PureGame game;
     private HighScoreManager ScoreManager;
+    private boolean ExtendMode;
+    private String playerType;
 
-    public GameLoop(GameBoard gameBoard, GamePanel gamePanel, int gameLevel, boolean isAIPlayer, boolean isExternalPlayer, SoundPlayer effectPlayer, TetrisApp app) {
+    public GameLoop(GameBoard gameBoard, GamePanel gamePanel, int gameLevel, boolean isAIPlayer, boolean isExternalPlayer, SoundPlayer effectPlayer, TetrisApp app, boolean ExtendMode, String playerType) {
         this.effectPlayer = effectPlayer;
         this.gameLevel = gameLevel;
         this.gameBoard = gameBoard;
         this.gamePanel = gamePanel;
+        this.ExtendMode = ExtendMode;
+        this.playerType = playerType;
         gamePanel.setLevel(gameLevel);
         gamePanel.setInitialLevel(gameLevel);
         this.maxGameLevel = 11;
@@ -106,12 +110,14 @@ public class GameLoop {
             if (!gameBoard.movePieceDown()) {
                 if (gameBoard.isGameOver()) {
                     timer.stop();
-                    gamePanel.setGameOver(true);
                     gamePanel.repaint();
+                    gamePanel.requestFocusInWindow();
+                    gamePanel.setGameOver(true);
                     updateScore();
                 } else {
                     if (!gameBoard.spawnNewPiece()) {
                         timer.stop();
+                        updateScore();
                         gamePanel.setGameOver(true);
                         gamePanel.repaint();
                     }
@@ -297,13 +303,47 @@ public class GameLoop {
     public void setSound(boolean sound){
         this.sound = sound;
     }
+
     private void updateScore(){
-        ScoreManager = new HighScoreManager();
-        HighScore[] ScoreArray = ScoreManager.getHighScores().toArray(new HighScore[0]);
-        for (HighScore score : ScoreArray){
-            System.out.println("Score :"+ score.getScore());
-
+        HighScoreScreen highScoreScreen = HighScoreScreen.getInstance();
+        HighScoreManager scoreManager = highScoreScreen.scoreManager();
+        ArrayList<HighScore> rr = (ArrayList<HighScore>) scoreManager.getHighScores();
+        if (rr.isEmpty() || rr.get(0).getScore() < gameBoard.getScore() ){
+            int GameType = (ExtendMode) ? 1:0;
+            String name = inputName();
+            GameConfig config = new GameConfig(gameBoard.getWidth(), gameBoard.getHeight(), gamePanel.getInitialLevel(), app.music(), app.sound(), ExtendMode, playerType, GameType );
+            scoreManager.addScore(name, gameBoard.getScore(), config);
+            highScoreScreen.updateScoreDisplay();
         }
-
     }
+
+    private String inputName() {
+        // Create a panel to hold the input field and button
+        JPanel panel = new JPanel(new FlowLayout());
+
+        // Create a label and text field for name input
+        JLabel nameLabel = new JLabel("Name:");
+        JTextField nameField = new JTextField(20);
+
+        // Add components to the panel
+        panel.add(nameLabel);
+        panel.add(nameField);
+
+        // Loop until a valid name is entered
+        while (true) {
+            int result = JOptionPane.showConfirmDialog(null, panel, "Enter Name", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+            if (result == JOptionPane.OK_OPTION) {
+                String name = nameField.getText().trim();
+                if (!name.isEmpty()) {
+                    return name;
+                } else {
+                    JOptionPane.showMessageDialog(null, "Name cannot be empty!", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            } else {
+                // Handle cancel action if needed
+                return null; // or you can throw an exception or handle it differently
+            }
+        }
+    }
+
 }

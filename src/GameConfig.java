@@ -7,11 +7,11 @@ public class GameConfig {
     boolean isMusicOn;
     boolean isSoundOn;
     boolean isExtendMode;
-    int playerOneType;
+    String playerOneType;
     int playerTwoType;
 
     public GameConfig(int fieldWidth, int fieldHeight, int initLevel, boolean isMusicOn, boolean isSoundOn,
-                      boolean isExtendMode, int playerOneType, int playerTwoType) {
+                      boolean isExtendMode, String playerOneType, int playerTwoType) {
         this.fieldWidth = fieldWidth;
         this.fieldHeight = fieldHeight;
         this.initLevel = initLevel;
@@ -19,6 +19,6 @@ public class GameConfig {
         this.isSoundOn = isSoundOn;
         this.isExtendMode = isExtendMode;
         this.playerOneType = playerOneType;
-        this.playerTwoType = playerTwoType;
+        this.playMode = playerTwoType;
     }
 }

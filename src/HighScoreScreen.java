@@ -17,15 +17,28 @@ public class HighScoreScreen extends JPanel {
     private JPanel parent;
     private CardLayout cardLayout;
 
-    public HighScoreScreen(JPanel parent, CardLayout cardLayout, HighScoreManager highScoreManager) {
+    private static HighScoreScreen instance;
+
+    private HighScoreScreen() {
+        initUI();  // Initialize the UI components
+    }
+
+    public static HighScoreScreen getInstance() {
+        if (instance == null) {
+            instance = new HighScoreScreen();
+        }
+        return instance;
+    }
+
+    public void setBaseParameters(JPanel parent, CardLayout cardLayout, HighScoreManager highScoreManager) {
         this.parent = parent;
         this.cardLayout = cardLayout;
-        this.highScoreManager = highScoreManager; // Assign highScoreManager directly
+        this.highScoreManager = highScoreManager;
         highScores = highScoreManager.getHighScores(); // Ensure this is not null
         if (highScores == null) {
             highScores = new ArrayList<>(); // Safeguard against null values
         }
-        initUI();  // Initialize the UI components
+        updateScoreDisplay(); // Refresh the display with the new high scores
     }
 
     private void initUI() {
@@ -77,11 +90,6 @@ public class HighScoreScreen extends JPanel {
 
         // Add the button container to the bottom of the HighScoreScreen
         this.add(buttonContainer, BorderLayout.SOUTH);
-
-        // Load and display the high scores
-        highScoreManager = new HighScoreManager();
-        loadHighScores();
-        updateScoreDisplay();
     }
 
     // Load the high scores from HighScoreManager
@@ -100,7 +108,8 @@ public class HighScoreScreen extends JPanel {
     }
 
     // Update the table with high scores
-    private void updateScoreDisplay() {
+    public void updateScoreDisplay() {
+        highScores = highScoreManager.getHighScores();
         tableModel.setRowCount(0);  // Clear existing rows
         for (int i = 0; i < highScores.size(); i++) {
             HighScore score = highScores.get(i);
@@ -112,7 +121,7 @@ public class HighScoreScreen extends JPanel {
 
     // Format the configuration to be displayed in the high score table
     private String formatConfig(GameConfig config) {
-        String playerType = (config.playerType == 1) ? "AI" : "Player";
+        String playerType = config.playerOneType;
         String playMode = (config.playMode == 1) ? "Double" : "Single";
         return String.format("%dx%d (Level %d) %s %s",
                 config.fieldWidth, config.fieldHeight, config.initLevel, playerType, playMode);
@@ -123,5 +132,8 @@ public class HighScoreScreen extends JPanel {
         highScoreManager.getHighScores().clear();  // Clear the local list of high scores
         highScoreManager.saveHighScores();  // Save the empty list to file
         updateScoreDisplay();  // Refresh the display
+    }
+    public HighScoreManager scoreManager(){
+        return highScoreManager;
     }
 }
