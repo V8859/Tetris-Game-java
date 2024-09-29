@@ -19,8 +19,11 @@ public class HighScoreScreen extends JPanel {
 
     private static HighScoreScreen instance;
 
-    private HighScoreScreen() {
+    HighScoreScreen() {
         initUI();  // Initialize the UI components
+    }
+
+    public HighScoreScreen(JPanel parentPanel, CardLayout cardLayout, HighScoreManager highScoreManager) {
     }
 
     public static HighScoreScreen getInstance() {
@@ -135,5 +138,8 @@ public class HighScoreScreen extends JPanel {
     }
     public HighScoreManager scoreManager(){
         return highScoreManager;
+    }
+    public DefaultTableModel getTableModel() {
+        return this.tableModel;
     }
 }
