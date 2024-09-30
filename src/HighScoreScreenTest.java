@@ -13,8 +13,8 @@ public class HighScoreScreenTest {
         CardLayout cardLayout = new CardLayout();
 
         // Initialize the HighScoreScreen with the correct constructor
-        HighScoreScreen highScoreScreen = new HighScoreScreen(parentPanel, cardLayout, highScoreManager);
-
+        HighScoreScreen highScoreScreen = HighScoreScreen.getInstance();
+        highScoreScreen.setBaseParameters(parentPanel, cardLayout, highScoreManager);
         // Add a score to the HighScoreManager
         GameConfig gameConfig = new GameConfig(10, 20, 1, true, true, false, "Player1", 0);
         highScoreManager.addScore("Player1", 5000, gameConfig);
