@@ -1,3 +1,4 @@
+import TetrisConfiguration.ComponentFactory;
 import TetrisConfiguration.SoundPlayer;
 import TetrisConfiguration.UtilityA;
 
@@ -22,8 +23,8 @@ public class MainMenuConfirmationScreen extends JFrame {
 
         // Buttons
         JPanel buttonPanel = new JPanel();
-        JButton yesButton = UtilityA.createButton("Yes");
-        JButton noButton = UtilityA.createButton("No");
+        JButton yesButton = ComponentFactory.generateButton("Yes");
+        JButton noButton = ComponentFactory.generateButton("No");
 
         buttonPanel.add(yesButton);
         buttonPanel.add(noButton);

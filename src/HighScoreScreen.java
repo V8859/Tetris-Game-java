@@ -1,3 +1,4 @@
+import TetrisConfiguration.ComponentFactory;
 import TetrisConfiguration.UtilityA;
 
 import javax.swing.*;
@@ -76,7 +77,7 @@ public class HighScoreScreen extends JPanel {
         });
 
         // Back Button to return to Main Menu
-        JButton backButton = UtilityA.createButton("Back");
+        JButton backButton = ComponentFactory.generateButton("Back");
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

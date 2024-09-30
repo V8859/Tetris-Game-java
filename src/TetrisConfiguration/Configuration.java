@@ -34,7 +34,7 @@ public class Configuration extends JPanel {
         c.gridx = 0;
         c.gridy = 1;
         c.anchor = GridBagConstraints.WEST;
-        JPanel widthSliderPanel = UtilityA.createCustomSlider("Field Width(No. of Cells):    ", 5, 15, 5);
+        JPanel widthSliderPanel =ComponentFactory.generateSliderComponent("Field Width(No. of Cells):    ", 5, 15, 5);
         JSlider widthSlider = (JSlider) widthSliderPanel.getComponent(2);
         widthSlider.setValue(10);
         this.add(widthSliderPanel, c);
@@ -42,7 +42,7 @@ public class Configuration extends JPanel {
         c.gridx=0;
         c.gridy=2;
         c.anchor = GridBagConstraints.WEST;
-        JPanel heightSliderPanel = UtilityA.createCustomSlider("Field Height (No. of cells):  ", 15,30,15);
+        JPanel heightSliderPanel = ComponentFactory.generateSliderComponent("Field Height (No. of cells):  ", 15,30,15);
         JSlider heightSlider = (JSlider) heightSliderPanel.getComponent(2);
         heightSlider.setValue(20);
         this.add(heightSliderPanel,c);
@@ -50,19 +50,19 @@ public class Configuration extends JPanel {
         c.gridx=0;
         c.gridy=3;
 //        c.anchor=GridBagConstraints.WEST;
-        JPanel GameLevel = UtilityA.createCustomSlider("Game  Level:", 1,10,1);
+        JPanel GameLevel = ComponentFactory.generateSliderComponent("Game  Level:", 1,10,1);
         this.add(GameLevel,c);
 
         c.gridx = 0;
         c.gridy = 4;
-        JPanel music = UtilityA.createOptions("Music(On/Off): ");
+        JPanel music = ComponentFactory.generateComponent("options","Music(On/Off): ");
         JCheckBox MusicState = (JCheckBox) music.getComponent(1);
         MusicState.setSelected(true);
         this.add(music, c);
 
         c.gridx = 0;
         c.gridy = 5;
-        JPanel soundEffect = UtilityA.createOptions("Sound(On/Off):");
+        JPanel soundEffect = ComponentFactory.generateComponent("Options","Sound(On/Off):");
         JCheckBox soundState =(JCheckBox) soundEffect.getComponent(1);
         soundState.setSelected(true);
         this.add(soundEffect, c);
@@ -72,24 +72,24 @@ public class Configuration extends JPanel {
 
         c.gridx = 0;
         c.gridy = 6;
-        JPanel AiPlay = UtilityA.createOptions("AI Play (On/Off):");
+        JPanel AiPlay = ComponentFactory.generateComponent("Options","AI Play (On/Off):");
 //        this.add(AiPlay, c);
 
 
         c.gridx = 0;
         c.gridy = 7;
-        JPanel extendMode = UtilityA.createOptions("Extend Mode(On/Off):");
+        JPanel extendMode = ComponentFactory.generateComponent("options","Extend Mode(On/Off):");
         JCheckBox ExtendModeState = (JCheckBox) extendMode.getComponent(1);
 
         this.add(extendMode, c);
         c.gridx = 0;
         c.gridy = 8;
-        JPanel playerOne = UtilityA.PlayerSetting("Player One");
+        JPanel playerOne = ComponentFactory.generateComponent("player","Player One");
         this.add(playerOne, c);
 
         c.gridx = 0;
         c.gridy = 9;
-        JPanel playerTwo = UtilityA.PlayerSetting("Player Two");
+        JPanel playerTwo = ComponentFactory.generateComponent("player","Player Two");
         disablePanel(playerTwo);
         this.add(playerTwo, c);
 
@@ -109,7 +109,7 @@ public class Configuration extends JPanel {
         c.gridwidth = 2; // Span across 2 columns
         c.fill = GridBagConstraints.HORIZONTAL;
 
-        JButton backButton = UtilityA.createButton("Back");
+        JButton backButton = ComponentFactory.generateButton("Back");
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
