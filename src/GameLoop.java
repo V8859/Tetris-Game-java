@@ -301,7 +301,7 @@ public class GameLoop {
         HighScoreScreen highScoreScreen = HighScoreScreen.getInstance();
         HighScoreManager scoreManager = highScoreScreen.scoreManager();
         ArrayList<HighScore> rr = (ArrayList<HighScore>) scoreManager.getHighScores();
-        if (rr.isEmpty() || rr.get(0).getScore() < gameBoard.getScore() ){
+        if (rr.size() < 10 || rr.get(rr.size() - 1).getScore() < gameBoard.getScore()){
             int GameType = (ExtendMode) ? 1:0;
             String name = inputName();
             GameConfig config = new GameConfig(gameBoard.getWidth(), gameBoard.getHeight(), gamePanel.getInitialLevel(), app.music(), app.sound(), ExtendMode, playerType, GameType );
