@@ -57,7 +57,9 @@ public class GameLoop {
         this.currentStep = 0;
         this.isAIPlayer = isAIPlayer;
         this.isExternalPlayer = isExternalPlayer;
-        this.handleMoveFacade = new HandleMoveFacade(gameBoard, effectPlayer, sound);
+        if (isAIPlayer || isExternalPlayer){
+            this.handleMoveFacade = new HandleMoveFacade(gameBoard, effectPlayer, sound);
+        }
         this.app = app;  // Assign the app reference
 
         if (isAIPlayer) {
@@ -106,18 +108,19 @@ public class GameLoop {
                 if (gameBoard.isGameOver()) {
                     timer.stop();
                     gamePanel.repaint();
-                    gamePanel.requestFocusInWindow();
                     gamePanel.setGameOver(true);
+//                    gamePanel.requestFocusInWindow();
                     updateScore();
                 } else {
                     if (!gameBoard.spawnNewPiece()) {
                         timer.stop();
-                        updateScore();
                         gamePanel.setGameOver(true);
                         gamePanel.repaint();
+                        updateScore();
                     }
-                    handleMoveFacade.resetMoveState();  // Reset state after spawning a new piece
-
+                    if (isExternalPlayer || isAIPlayer){
+                        handleMoveFacade.resetMoveState();  // Reset state after spawning a new piece
+                    }
                     int score = gameBoard.getScore();
                     int lines = gameBoard.getLines();
                     if ((lines - TotalLines) >= 10) {
@@ -301,7 +304,7 @@ public class GameLoop {
         HighScoreScreen highScoreScreen = HighScoreScreen.getInstance();
         HighScoreManager scoreManager = highScoreScreen.scoreManager();
         ArrayList<HighScore> rr = (ArrayList<HighScore>) scoreManager.getHighScores();
-        if (rr.size() < 10 || rr.get(rr.size() - 1).getScore() < gameBoard.getScore()){
+        if ((rr.size() < 10 || rr.get(rr.size() - 1).getScore() < gameBoard.getScore()) && gameBoard.getScore()>0) {
             int GameType = (ExtendMode) ? 1:0;
             String name = inputName();
             GameConfig config = new GameConfig(gameBoard.getWidth(), gameBoard.getHeight(), gamePanel.getInitialLevel(), app.music(), app.sound(), ExtendMode, playerType, GameType );
