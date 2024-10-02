@@ -42,6 +42,8 @@ public class GameLoop {
     private HighScoreManager ScoreManager;
     private boolean ExtendMode;
     private String playerType;
+    private int i = 0;
+
 
     public GameLoop(GameBoard gameBoard, GamePanel gamePanel, int gameLevel, boolean isAIPlayer, boolean isExternalPlayer, SoundPlayer effectPlayer, TetrisApp app, boolean ExtendMode, String playerType) {
         this.effectPlayer = effectPlayer;
@@ -98,26 +100,26 @@ public class GameLoop {
                 handleMoveFacade.handleEMove(null, currentTime);
             }
         }
-
         // Handle piece dropping logic as usual
         if (currentStep < stepsPerMove - 1 && gameBoard.canMovePieceDown()) {
             currentStep++;
         } else {
             currentStep = 0;
-            if (!gameBoard.movePieceDown()) {
-                if (gameBoard.isGameOver()) {
+            if (!gameBoard.movePieceDown() ) {
+                if (i==0 && !gameBoard.spawnNewPiece() && gameBoard.isGameOver()) {
                     timer.stop();
-                    gamePanel.repaint();
                     gamePanel.setGameOver(true);
-//                    gamePanel.requestFocusInWindow();
-                    updateScore();
-                } else {
-                    if (!gameBoard.spawnNewPiece()) {
-                        timer.stop();
-                        gamePanel.setGameOver(true);
-                        gamePanel.repaint();
+                    gamePanel.repaint();
+                    gamePanel.setFocusable(false);
+                    if (i == 0){
                         updateScore();
-                    }
+                    }i++;
+                } else {
+//                    if (!gameBoard.spawnNewPiece()) {
+//                        timer.stop();
+//                        gamePanel.setGameOver(true);
+//                        gamePanel.repaint();
+//                    }
                     if (isExternalPlayer || isAIPlayer){
                         handleMoveFacade.resetMoveState();  // Reset state after spawning a new piece
                     }
