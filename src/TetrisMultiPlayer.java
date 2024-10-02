@@ -1,3 +1,4 @@
+import TetrisConfiguration.ComponentFactory;
 import TetrisConfiguration.UtilityA;
 import jdk.nio.mapmode.ExtendedMapMode;
 
@@ -51,7 +52,7 @@ public class TetrisMultiPlayer extends JPanel {
         gameArea.setBounds(0,0, TWidth,THeight);
         layeredPane.add(gameArea, JLayeredPane.DEFAULT_LAYER);
         this.add(layeredPane, BorderLayout.CENTER);
-        JButton MainMenu = UtilityA.createButton("Main Menu");
+        JButton MainMenu = ComponentFactory.generateButton("Main Menu");
         this.add(MainMenu, BorderLayout.SOUTH);
 //        this.add(MainMenu, BorderLayout.SOUTH);
         MainMenu.addActionListener(new ActionListener() {

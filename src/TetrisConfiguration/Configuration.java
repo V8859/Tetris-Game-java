@@ -9,8 +9,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.jar.JarEntry;
+import com.google.gson.Gson;
 
 public class Configuration extends JPanel {
     public Configuration() {
@@ -30,7 +34,7 @@ public class Configuration extends JPanel {
         c.gridx = 0;
         c.gridy = 1;
         c.anchor = GridBagConstraints.WEST;
-        JPanel widthSliderPanel = UtilityA.createCustomSlider("Field Width(No. of Cells):    ", 5, 15, 5);
+        JPanel widthSliderPanel =ComponentFactory.generateSliderComponent("Field Width(No. of Cells):    ", 5, 15, 5);
         JSlider widthSlider = (JSlider) widthSliderPanel.getComponent(2);
         widthSlider.setValue(10);
         this.add(widthSliderPanel, c);
@@ -38,7 +42,7 @@ public class Configuration extends JPanel {
         c.gridx=0;
         c.gridy=2;
         c.anchor = GridBagConstraints.WEST;
-        JPanel heightSliderPanel = UtilityA.createCustomSlider("Field Height (No. of cells):  ", 15,30,15);
+        JPanel heightSliderPanel = ComponentFactory.generateSliderComponent("Field Height (No. of cells):  ", 15,30,15);
         JSlider heightSlider = (JSlider) heightSliderPanel.getComponent(2);
         heightSlider.setValue(20);
         this.add(heightSliderPanel,c);
@@ -46,19 +50,19 @@ public class Configuration extends JPanel {
         c.gridx=0;
         c.gridy=3;
 //        c.anchor=GridBagConstraints.WEST;
-        JPanel GameLevel = UtilityA.createCustomSlider("Game  Level:", 1,10,1);
+        JPanel GameLevel = ComponentFactory.generateSliderComponent("Game  Level:", 1,10,1);
         this.add(GameLevel,c);
 
         c.gridx = 0;
         c.gridy = 4;
-        JPanel music = UtilityA.createOptions("Music(On/Off): ");
+        JPanel music = ComponentFactory.generateComponent("options","Music(On/Off): ");
         JCheckBox MusicState = (JCheckBox) music.getComponent(1);
         MusicState.setSelected(true);
         this.add(music, c);
 
         c.gridx = 0;
         c.gridy = 5;
-        JPanel soundEffect = UtilityA.createOptions("Sound(On/Off):");
+        JPanel soundEffect = ComponentFactory.generateComponent("Options","Sound(On/Off):");
         JCheckBox soundState =(JCheckBox) soundEffect.getComponent(1);
         soundState.setSelected(true);
         this.add(soundEffect, c);
@@ -68,24 +72,24 @@ public class Configuration extends JPanel {
 
         c.gridx = 0;
         c.gridy = 6;
-        JPanel AiPlay = UtilityA.createOptions("AI Play (On/Off):");
+        JPanel AiPlay = ComponentFactory.generateComponent("Options","AI Play (On/Off):");
 //        this.add(AiPlay, c);
 
 
         c.gridx = 0;
         c.gridy = 7;
-        JPanel extendMode = UtilityA.createOptions("Extend Mode(On/Off):");
+        JPanel extendMode = ComponentFactory.generateComponent("options","Extend Mode(On/Off):");
         JCheckBox ExtendModeState = (JCheckBox) extendMode.getComponent(1);
 
         this.add(extendMode, c);
         c.gridx = 0;
         c.gridy = 8;
-        JPanel playerOne = UtilityA.PlayerSetting("Player One");
+        JPanel playerOne = ComponentFactory.generateComponent("player","Player One");
         this.add(playerOne, c);
 
         c.gridx = 0;
         c.gridy = 9;
-        JPanel playerTwo = UtilityA.PlayerSetting("Player Two");
+        JPanel playerTwo = ComponentFactory.generateComponent("player","Player Two");
         disablePanel(playerTwo);
         this.add(playerTwo, c);
 
@@ -105,15 +109,17 @@ public class Configuration extends JPanel {
         c.gridwidth = 2; // Span across 2 columns
         c.fill = GridBagConstraints.HORIZONTAL;
 
-        JButton backButton = UtilityA.createButton("Back");
+        JButton backButton = ComponentFactory.generateButton("Back");
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 CardLayout cardLayout = (CardLayout) getParent().getLayout();
                 cardLayout.show(getParent(), "Main Menu");
+                saveStateToFile("src/configuration.json");
             }
         });
         this.add(backButton, c);
+        loadStateFromFile("src/configuration.json");
     }
 
     public int getW() {
@@ -199,6 +205,119 @@ public class Configuration extends JPanel {
             }
 
         return "s";
+    }
+
+    public ConfigurationState getCurrentState() {
+        ConfigurationState state = new ConfigurationState();
+        state.setWidth(getW());
+        state.setHeight(getH());
+        state.setLevel(getLvl());
+        state.setMusicState(getMusicState());
+        state.setSoundState(getSoundState());
+        state.setExtendModeState(getExtendModeState());
+        state.setPlayerOneStatus(getP1Status());
+        state.setPlayerTwoStatus(getP2Status());
+        return state;
+    }
+
+    public void saveStateToFile(String filePath) {
+        ConfigurationState state = getCurrentState();
+        Gson gson = new Gson();
+        try (FileWriter writer = new FileWriter(filePath)) {
+            gson.toJson(state, writer);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public class ConfigurationState {
+        private int width;
+        private int height;
+        private int level;
+        private boolean musicState;
+        private boolean soundState;
+        private boolean extendModeState;
+        private String playerOneStatus;
+        private String playerTwoStatus;
+
+        // Getters and setters
+        public int getWidth() { return width; }
+        public void setWidth(int width) { this.width = width; }
+
+        public int getHeight() { return height; }
+        public void setHeight(int height) { this.height = height; }
+
+        public int getLevel() { return level; }
+        public void setLevel(int level) { this.level = level; }
+
+        public boolean isMusicState() { return musicState; }
+        public void setMusicState(boolean musicState) { this.musicState = musicState; }
+
+        public boolean isSoundState() { return soundState; }
+        public void setSoundState(boolean soundState) { this.soundState = soundState; }
+
+        public boolean isExtendModeState() { return extendModeState; }
+        public void setExtendModeState(boolean extendModeState) { this.extendModeState = extendModeState; }
+
+        public String getPlayerOneStatus() { return playerOneStatus; }
+        public void setPlayerOneStatus(String playerOneStatus) { this.playerOneStatus = playerOneStatus; }
+
+        public String getPlayerTwoStatus() { return playerTwoStatus; }
+        public void setPlayerTwoStatus(String playerTwoStatus) { this.playerTwoStatus = playerTwoStatus; }
+    }
+    public void loadStateFromFile(String filePath) {
+        Gson gson = new Gson();
+        try (FileReader reader = new FileReader(filePath)) {
+            ConfigurationState state = gson.fromJson(reader, ConfigurationState.class);
+            setConfigurationState(state);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setConfigurationState(ConfigurationState state) {
+        // Set the values from the state object
+        JPanel widthSliderPanel = (JPanel) this.getComponent(1);
+        JSlider widthSlider = (JSlider) widthSliderPanel.getComponent(2);
+        widthSlider.setValue(state.getWidth());
+
+        JPanel heightSliderPanel = (JPanel) this.getComponent(2);
+        JSlider heightSlider = (JSlider) heightSliderPanel.getComponent(2);
+        heightSlider.setValue(state.getHeight());
+
+        JPanel gameLevelPanel = (JPanel) this.getComponent(3);
+        JSlider gameLevelSlider = (JSlider) gameLevelPanel.getComponent(2);
+        gameLevelSlider.setValue(state.getLevel());
+
+        JPanel musicPanel = (JPanel) this.getComponent(4);
+        JCheckBox musicState = (JCheckBox) musicPanel.getComponent(1);
+        musicState.setSelected(state.isMusicState());
+
+        JPanel soundPanel = (JPanel) this.getComponent(5);
+        JCheckBox soundState = (JCheckBox) soundPanel.getComponent(1);
+        soundState.setSelected(state.isSoundState());
+
+        JPanel extendModePanel = (JPanel) this.getComponent(6);
+        JCheckBox extendModeState = (JCheckBox) extendModePanel.getComponent(1);
+        extendModeState.setSelected(state.isExtendModeState());
+
+        // Set player statuses
+        JPanel playerOnePanel = (JPanel) this.getComponent(7);
+        setPlayerStatus(playerOnePanel, state.getPlayerOneStatus());
+
+        JPanel playerTwoPanel = (JPanel) this.getComponent(8);
+        setPlayerStatus(playerTwoPanel, state.getPlayerTwoStatus());
+    }
+
+    private void setPlayerStatus(JPanel playerPanel, String status) {
+        Component[] components = playerPanel.getComponents();
+        for (Component component : components) {
+            if (component instanceof JRadioButton) {
+                JRadioButton radioButton = (JRadioButton) component;
+                if (radioButton.getText().equals(status)) {
+                    radioButton.setSelected(true);
+                }
+            }
+        }
     }
 
 

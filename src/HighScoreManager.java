@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.*;
 
 public class HighScoreManager {
-    private static final String FILE_PATH = "C:\\Users\\sbasi\\IdeaProjects\\Tetris\\src/highscores.json";
+    private static final String FILE_PATH = "src/highscores.json";
     private List<HighScore> highScores;
 
     public HighScoreManager() {

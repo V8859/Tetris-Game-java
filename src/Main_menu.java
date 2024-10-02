@@ -1,3 +1,4 @@
+import TetrisConfiguration.ComponentFactory;
 import TetrisConfiguration.Configuration;
 import TetrisConfiguration.UtilityA;
 
@@ -39,10 +40,10 @@ public class Main_menu {
         gbc.gridy = 0;
         main_menu.add(titleLabel, gbc);
 
-        JButton playButton = UtilityA.createButton("Play");
-        JButton configButton = UtilityA.createButton("Configuration");
-        JButton highscoresButton = UtilityA.createButton("Highscores");
-        JButton exitButton = UtilityA.createButton("Exit");
+        JButton playButton = ComponentFactory.generateButton("Play");
+        JButton configButton = ComponentFactory.generateButton("Configuration");
+        JButton highscoresButton = ComponentFactory.generateButton("Highscores");
+        JButton exitButton = ComponentFactory.generateButton("Exit");
 
         gbc.gridy++;
         main_menu.add(playButton, gbc);
