@@ -19,6 +19,6 @@ public class GameConfig {
         this.isSoundOn = isSoundOn;
         this.isExtendMode = isExtendMode;
         this.playerOneType = playerOneType;
-        this.playMode = playerTwoType;
+        this.playMode = playerThreeType;
     }
 }

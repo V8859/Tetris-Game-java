@@ -7,7 +7,7 @@ public class GameBoard {
     private TetrisPiece currentPiece;
     private TetrisPiece nextPiece;
     private int TotalScore;
-    private Color[][] colors;
+    private final Color[][] colors;
     private Random random;
     private int lines;
 
